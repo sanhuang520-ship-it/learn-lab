@@ -4,24 +4,30 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>学习实验室 · Learn Lab</title>
-<meta name="description" content="把课本变成可以玩的实验台 — 化学元素周期表、恒星核合成、配平挑战。每天更新一点点。">
+<meta name="description" content="把课本变成可以玩的实验台 — 元素周期表、恒星核合成、配平挑战。免费、免注册、手机可用。">
+<meta name="theme-color" content="#07090f">
 <meta property="og:title" content="学习实验室 · Learn Lab">
-<meta property="og:description" content="把课本变成可以玩的实验台。元素周期表 · 核时 · 配平大挑战。">
+<meta property="og:description" content="把课本变成可以玩的实验台。元素周期表 · 核时 · 元素番茄 · 配平大挑战。">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://sanhuang520-ship-it.github.io/learn-lab/">
+<meta property="og:image" content="https://sanhuang520-ship-it.github.io/learn-lab/assets/previews/periodic-table.webp">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://sanhuang520-ship-it.github.io/learn-lab/">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=JetBrains+Mono:wght@400;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<!-- 字体走 font.im 镜像：fonts.googleapis.com 在国内不可达，会拖慢首屏并回退成系统字体 -->
+<link rel="preconnect" href="https://fonts.font.im">
+<link rel="preconnect" href="https://fonts.gstatic.font.im" crossorigin>
+<link href="https://fonts.font.im/css2?family=Orbitron:wght@500;700;900&family=JetBrains+Mono:wght@400;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
+    color-scheme: dark;
     --void: #07090f;
-    --panel: #0d121c;
     --glass: rgba(18, 26, 40, 0.72);
     --line: rgba(140, 170, 220, 0.12);
-    --line-hi: rgba(140, 170, 220, 0.28);
+    --line-hi: rgba(140, 170, 220, 0.30);
     --text: #e8eef8;
-    --muted: #7a8aa3;
-    --dim: #4a5a72;
+    --muted: #99a8c0;   /* 正文次要色 · 对比度 7.4:1 */
+    --dim: #7f8fa8;     /* 标签/元信息 · 对比度 5.4:1，仍满足 WCAG AA */
     --phosphor: #5eead4;
     --amber: #f5b942;
     --rose: #fb7185;
@@ -29,7 +35,7 @@
     --sky: #38bdf8;
     --lime: #a3e635;
     --font-display: "Orbitron", "Noto Sans SC", sans-serif;
-    --font-body: "Noto Sans SC", system-ui, sans-serif;
+    --font-body: "Noto Sans SC", system-ui, -apple-system, sans-serif;
     --font-mono: "JetBrains Mono", ui-monospace, monospace;
   }
 
@@ -44,7 +50,14 @@
     overflow-x: hidden;
   }
 
-  /* ---------- 背景：轻微的星野 + 网格 ---------- */
+  /* 键盘焦点：全站统一，靠 :focus-visible 只在键盘操作时出现 */
+  a:focus-visible {
+    outline: 2px solid var(--accent, var(--phosphor));
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* ---------- 背景：星野 + 网格 ---------- */
   .bg {
     position: fixed; inset: 0; z-index: 0; pointer-events: none;
     background:
@@ -53,6 +66,7 @@
       linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 100% 64px,
       linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 64px 100%;
     opacity: .55;
+    -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 20%, #000 40%, transparent 100%);
     mask-image: radial-gradient(ellipse 90% 70% at 50% 20%, #000 40%, transparent 100%);
   }
   .bg::after {
@@ -86,7 +100,7 @@
   h1 {
     font-family: var(--font-display); font-weight: 900;
     font-size: clamp(34px, 6.4vw, 62px); line-height: 1.08; letter-spacing: -.01em;
-    margin: 22px 0 16px;
+    margin: 22px 0 16px; text-wrap: balance;
   }
   h1 .glow {
     background: linear-gradient(120deg, var(--phosphor), var(--sky) 45%, var(--violet));
@@ -109,37 +123,26 @@
   }
   .sec-head h2 { font-family: var(--font-display); font-size: 20px; font-weight: 700; letter-spacing: .04em; }
   .sec-head .sub { font-family: var(--font-mono); font-size: 12px; color: var(--dim); letter-spacing: .1em; }
-  .sec-head .count { margin-left: auto; font-family: var(--font-mono); font-size: 12px; color: var(--dim); }
+  .sec-head .note { margin-left: auto; font-family: var(--font-mono); font-size: 12px; color: var(--dim); }
 
-  /* ---------- 卡片网格 ---------- */
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
-
+  /* ---------- 卡片通用 ---------- */
   .card {
     position: relative; display: flex; flex-direction: column;
     background: var(--glass); border: 1px solid var(--line); border-radius: 14px;
-    padding: 22px 22px 20px; text-decoration: none; color: inherit; overflow: hidden;
+    text-decoration: none; color: inherit; overflow: hidden;
     transition: transform .22s cubic-bezier(.2,.8,.3,1), border-color .22s, box-shadow .22s;
   }
   .card::before {
-    content: ""; position: absolute; inset: 0 0 auto 0; height: 2px;
+    content: ""; position: absolute; inset: 0 0 auto 0; height: 2px; z-index: 2;
     background: linear-gradient(90deg, var(--accent, var(--phosphor)), transparent 70%);
-    opacity: .8;
-  }
-  .card::after {
-    content: ""; position: absolute; right: -60px; top: -60px;
-    width: 160px; height: 160px; border-radius: 50%;
-    background: radial-gradient(circle, var(--accent, var(--phosphor)), transparent 70%);
-    opacity: .07; transition: opacity .22s;
   }
   a.card:hover {
     transform: translateY(-4px);
     border-color: color-mix(in srgb, var(--accent, var(--phosphor)) 45%, transparent);
     box-shadow: 0 14px 40px -18px var(--accent, var(--phosphor));
   }
-  a.card:hover::after { opacity: .16; }
-  a.card:focus-visible { outline: 2px solid var(--accent, var(--phosphor)); outline-offset: 3px; }
 
-  .card .icon { font-size: 30px; line-height: 1; margin-bottom: 14px; }
+  .card .body { display: flex; flex-direction: column; flex: 1; padding: 20px 22px 20px; }
   .card h3 { font-family: var(--font-display); font-size: 19px; font-weight: 700; margin-bottom: 6px; }
   .card .en { font-family: var(--font-mono); font-size: 11px; color: var(--dim); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 12px; }
   .card p { font-size: 14px; color: var(--muted); flex: 1; }
@@ -147,24 +150,50 @@
   .card .tags i {
     font-style: normal; font-family: var(--font-mono); font-size: 11px;
     color: var(--accent, var(--phosphor)); border: 1px solid currentColor; border-radius: 999px;
-    padding: 3px 8px; opacity: .78;
+    padding: 3px 8px;
   }
   .card .go {
     margin-top: 16px; font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em;
     color: var(--accent, var(--phosphor)); display: flex; align-items: center; gap: 6px;
   }
-  a.card:hover .go .arr { transform: translateX(4px); }
   .go .arr { transition: transform .22s; }
+  a.card:hover .go .arr { transform: translateX(4px); }
 
-  /* 即将上线 */
-  .card.soon { border-style: dashed; opacity: .62; }
-  .card.soon .go { color: var(--dim); }
-  .card .badge {
-    position: absolute; top: 18px; right: 18px;
-    font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em;
-    color: var(--dim); border: 1px solid var(--line-hi); border-radius: 4px; padding: 2px 6px;
+  /* ---------- 预览图 ---------- */
+  .shot { position: relative; aspect-ratio: 8 / 5; overflow: hidden; background: #0b0f18; }
+  .shot img {
+    width: 100%; height: 100%; object-fit: cover; object-position: top center;
+    display: block; transition: transform .5s cubic-bezier(.2,.8,.3,1);
   }
-  .card .badge.live { color: var(--lime); border-color: color-mix(in srgb, var(--lime) 40%, transparent); }
+  a.card:hover .shot img { transform: scale(1.035); }
+  .shot::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(7,9,15,.20) 0%, transparent 35%, rgba(7,9,15,.55) 100%);
+  }
+  .badge {
+    position: absolute; top: 12px; right: 12px; z-index: 2;
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em;
+    padding: 3px 7px; border-radius: 4px;
+    background: rgba(7,9,15,.78); backdrop-filter: blur(6px);
+    color: var(--lime); border: 1px solid color-mix(in srgb, var(--lime) 45%, transparent);
+  }
+
+  /* ---------- 开发中卡片 ---------- */
+  .card.soon { border-style: dashed; background: rgba(13,18,28,.45); }
+  .card.soon::before { background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 45%, transparent), transparent 70%); }
+  .card.soon .badge { position: static; align-self: flex-start; color: var(--dim); border-color: var(--line-hi); background: none; backdrop-filter: none; }
+  .card.soon .icon { color: var(--accent); margin: 0 0 14px; }
+  .card.soon .icon svg { width: 30px; height: 30px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .card.soon .tags i { color: var(--dim); }
+  .card.soon .go { color: var(--dim); }
+  .card.soon .body { padding-top: 22px; }
+  .card.soon .head-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+
+  /* ---------- 网格：已上线 2×2，开发中 3 列 ---------- */
+  .grid { display: grid; gap: 18px; grid-template-columns: 1fr; }
+  @media (min-width: 720px)  { .grid.live { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 640px)  { .grid.soon { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 940px)  { .grid.soon { grid-template-columns: repeat(3, 1fr); } }
 
   /* ---------- 页脚 ---------- */
   footer {
@@ -179,127 +208,158 @@
   @media (max-width: 620px) {
     header { padding: 44px 0 28px; }
     .wrap { padding: 0 18px 64px; }
-    .grid { grid-template-columns: 1fr; }
+    .sec-head { margin: 44px 0 18px; }
+    .sec-head .note { display: none; }
   }
   @media (prefers-reduced-motion: reduce) {
-    * { animation: none !important; transition: none !important; }
+    *, *::before, *::after { animation: none !important; transition: none !important; }
   }
 </style>
 </head>
 <body>
-<div class="bg"></div>
+<div class="bg" aria-hidden="true"></div>
 
 <div class="wrap">
   <header>
-    <div class="brand"><span class="dot"></span>LEARN LAB · 学习实验室</div>
+    <div class="brand"><span class="dot" aria-hidden="true"></span>LEARN LAB · 学习实验室</div>
     <h1>把课本，<br>做成<span class="glow">可以玩的实验台</span></h1>
     <p class="lede">
-      这里收集我自己做的互动学习页面 — 每一个都能直接打开就用，<b>不用注册、不用下载、手机也能玩</b>。
+      这里收集我自己做的互动学习页面 —— 每一个都能直接打开就用，<b>不用注册、不用下载、手机也能玩</b>。
       目前从化学开始：一张会讲故事的元素周期表、一节可以播放的恒星核合成课、一块随时喊你上去做题的黑板。
     </p>
     <div class="stats">
       <span>已上线 <em id="statLive">4</em> 个</span>
       <span>覆盖 <em>初中 · 高中</em></span>
-      <span>持续更新中 · <em id="statDate">2026-07-26</em></span>
+      <span>免费 · 免注册 · <em>手机可用</em></span>
     </div>
   </header>
 
-  <section>
-    <div class="sec-head">
-      <h2>化学</h2>
-      <span class="sub">CHEMISTRY</span>
-      <span class="count">4 / 已上线</span>
-    </div>
-
-    <div class="grid">
-
-      <a class="card" style="--accent:#5eead4" href="chemistry/periodic-table/">
-        <span class="badge live">LIVE</span>
-        <div class="icon">⚗️</div>
-        <h3>元素周期表</h3>
-        <div class="en">Periodic Table</div>
-        <p>118 个元素，每一个都有实拍照片、发现故事和冷知识。还有焰色反应实验室、元素发现时间轴，和一个靠线索猜化合物的侦探小游戏。</p>
-        <div class="tags"><i>初中</i><i>高中</i><i>可查询</i><i>含小游戏</i></div>
-        <div class="go">打开 <span class="arr">→</span></div>
-      </a>
-
-      <a class="card" style="--accent:#a78bfa" href="chemistry/atomic-clock/">
-        <span class="badge live">LIVE</span>
-        <div class="icon">⚛️</div>
-        <h3>核时</h3>
-        <div class="en">Atomic Clock</div>
-        <p>一节可以按播放键的课：看恒星怎么把氢一步步烧成铁，元素周期表在眼前被一格格点亮。想安静看也行，当成一台叙事时钟摆着。</p>
-        <div class="tags"><i>高中</i><i>可播放</i><i>天体化学</i></div>
-        <div class="go">打开 <span class="arr">→</span></div>
-      </a>
-
-      <a class="card" style="--accent:#f5b942" href="chemistry/pomodoro/">
-        <span class="badge live">LIVE</span>
-        <div class="icon">⭐</div>
-        <h3>元素番茄</h3>
-        <div class="en">Element Pomodoro</div>
-        <p>一颗星的一生 = 一个番茄钟。专注的 25 分钟里，星球从氢云一路演化到超新星；休息时它慢慢冷却。自律第一，知识顺带记住。</p>
-        <div class="tags"><i>工具</i><i>专注</i><i>25 min</i></div>
-        <div class="go">打开 <span class="arr">→</span></div>
-      </a>
-
-      <a class="card" style="--accent:#fb7185" href="https://balance-game-771.pages.dev" target="_blank" rel="noopener">
-        <span class="badge live">LIVE</span>
-        <div class="icon">🧮</div>
-        <h3>配平大挑战</h3>
-        <div class="en">Balance Challenge</div>
-        <p>老师喊你上黑板配平方程式。粉笔手写风，两边天平实时倾斜，配错了它就塌一边。限时模式适合考前突击练手感。</p>
-        <div class="tags"><i>初中</i><i>高中</i><i>限时</i><i>外站</i></div>
-        <div class="go">打开 <span class="arr">↗</span></div>
-      </a>
-
-    </div>
-  </section>
-
-  <section>
-    <div class="sec-head">
-      <h2>正在做</h2>
-      <span class="sub">IN PROGRESS</span>
-      <span class="count">每天推进一点</span>
-    </div>
-
-    <div class="grid">
-
-      <div class="card soon" style="--accent:#38bdf8">
-        <span class="badge">开发中</span>
-        <div class="icon">🃏</div>
-        <h3>钔牌</h3>
-        <div class="en">Md Cards</div>
-        <p>用元素性质当出牌规则的卡牌对战 — 同族可接、同周期可接、金属性压非金属。规则页和对战界面已有雏形，正在合并成一个能真的打完一局的版本。</p>
-        <div class="tags"><i>卡牌</i><i>对战</i><i>规则待收敛</i></div>
-        <div class="go">敬请期待</div>
+  <main>
+    <section aria-labelledby="sec-chem">
+      <div class="sec-head">
+        <h2 id="sec-chem">化学</h2>
+        <span class="sub" aria-hidden="true">CHEMISTRY</span>
+        <span class="note">点开就能用</span>
       </div>
 
-      <div class="card soon" style="--accent:#a3e635">
-        <span class="badge">开发中</span>
-        <div class="icon">🦠</div>
-        <h3>消化卫士</h3>
-        <div class="en">Digestive Defense</div>
-        <p>生物课的塔防：在消化道各段布防，用酶和胃酸拦下病菌。每一关对应一个器官，打完一关就记住了那一段在干什么。</p>
-        <div class="tags"><i>生物</i><i>塔防</i><i>初中</i></div>
-        <div class="go">敬请期待</div>
+      <div class="grid live">
+
+        <a class="card" style="--accent:#5eead4" href="chemistry/periodic-table/">
+          <div class="shot">
+            <img src="assets/previews/periodic-table.webp" alt="" width="800" height="500" decoding="async" fetchpriority="high">
+            <span class="badge">已上线</span>
+          </div>
+          <div class="body">
+            <h3>元素周期表</h3>
+            <div class="en">Periodic Table</div>
+            <p>118 个元素，每一个都有实拍照片、发现故事和冷知识。还有焰色反应实验室、元素发现时间轴，和一个靠线索猜化合物的侦探小游戏。</p>
+            <div class="tags"><i>初中</i><i>高中</i><i>可查询</i><i>含小游戏</i></div>
+            <div class="go">打开 <span class="arr" aria-hidden="true">→</span></div>
+          </div>
+        </a>
+
+        <a class="card" style="--accent:#a78bfa" href="chemistry/atomic-clock/">
+          <div class="shot">
+            <img src="assets/previews/atomic-clock.webp" alt="" width="800" height="500" decoding="async">
+            <span class="badge">已上线</span>
+          </div>
+          <div class="body">
+            <h3>核时</h3>
+            <div class="en">Atomic Clock</div>
+            <p>一节可以按播放键的课：看恒星怎么把氢一步步烧成铁，元素周期表在眼前被一格格点亮。想安静看也行，当成一台叙事时钟摆着。</p>
+            <div class="tags"><i>高中</i><i>可播放</i><i>天体化学</i></div>
+            <div class="go">打开 <span class="arr" aria-hidden="true">→</span></div>
+          </div>
+        </a>
+
+        <a class="card" style="--accent:#f5b942" href="chemistry/pomodoro/">
+          <div class="shot">
+            <img src="assets/previews/pomodoro.webp" alt="" width="800" height="500" loading="lazy" decoding="async">
+            <span class="badge">已上线</span>
+          </div>
+          <div class="body">
+            <h3>元素番茄</h3>
+            <div class="en">Element Pomodoro</div>
+            <p>一颗星的一生 = 一个番茄钟。专注的 25 分钟里，星球从氢云一路演化到超新星；休息时它慢慢冷却。自律第一，知识顺带记住。</p>
+            <div class="tags"><i>工具</i><i>专注</i><i>25 min</i></div>
+            <div class="go">打开 <span class="arr" aria-hidden="true">→</span></div>
+          </div>
+        </a>
+
+        <a class="card" style="--accent:#fb7185" href="https://balance-game-771.pages.dev" target="_blank" rel="noopener">
+          <div class="shot">
+            <img src="assets/previews/balance.webp" alt="" width="800" height="500" loading="lazy" decoding="async">
+            <span class="badge">已上线</span>
+          </div>
+          <div class="body">
+            <h3>配平大挑战</h3>
+            <div class="en">Balance Challenge</div>
+            <p>老师喊你上黑板配平方程式。粉笔手写风，两边天平实时倾斜，配错了它就塌一边。限时模式适合考前突击练手感。</p>
+            <div class="tags"><i>初中</i><i>高中</i><i>限时</i><i>站外</i></div>
+            <div class="go">打开<span class="sr-only">（站外新窗口）</span> <span class="arr" aria-hidden="true">↗</span></div>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <section aria-labelledby="sec-wip">
+      <div class="sec-head">
+        <h2 id="sec-wip">正在做</h2>
+        <span class="sub" aria-hidden="true">IN PROGRESS</span>
+        <span class="note">每天推进一点</span>
       </div>
 
-      <div class="card soon" style="--accent:#7a8aa3">
-        <span class="badge">规划中</span>
-        <div class="icon">🔥</div>
-        <h3>磷的一生</h3>
-        <div class="en">The Phosphorus Story</div>
-        <p>从炼金术士煮尿看见绿光，到火柴厂的磷毒颚、白磷弹、DNA 骨架、瑙鲁岛的兴衰 — 一个元素串起来的九幕漫画式长图。</p>
-        <div class="tags"><i>科普</i><i>叙事</i><i>漫画</i></div>
-        <div class="go">敬请期待</div>
-      </div>
+      <div class="grid soon">
 
-    </div>
-  </section>
+        <div class="card soon" style="--accent:#38bdf8">
+          <div class="body">
+            <div class="head-row">
+              <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="11" height="15" rx="2"/><path d="M16.5 4.2l3.6 1.3a2 2 0 0 1 1.2 2.6l-4 11"/><path d="M6.5 12.5h4"/></svg></div>
+              <span class="badge">开发中</span>
+            </div>
+            <h3>钔牌</h3>
+            <div class="en">Md Cards</div>
+            <p>用元素性质当出牌规则的卡牌对战 —— 同族可接、同周期可接、金属性压非金属。规则页和对战界面已有雏形，正在合并成一个能真的打完一局的版本。</p>
+            <div class="tags"><i>卡牌</i><i>对战</i><i>规则待收敛</i></div>
+            <div class="go">敬请期待</div>
+          </div>
+        </div>
+
+        <div class="card soon" style="--accent:#a3e635">
+          <div class="body">
+            <div class="head-row">
+              <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5.5c0 4.3-2.9 8.2-7 9.5-4.1-1.3-7-5.2-7-9.5V6z"/><path d="M9.5 11.5l1.8 1.8 3.4-3.4"/></svg></div>
+              <span class="badge">开发中</span>
+            </div>
+            <h3>消化卫士</h3>
+            <div class="en">Digestive Defense</div>
+            <p>生物课的塔防：在消化道各段布防，用酶和胃酸拦下病菌。每一关对应一个器官，打完一关就记住了那一段在干什么。</p>
+            <div class="tags"><i>生物</i><i>塔防</i><i>初中</i></div>
+            <div class="go">敬请期待</div>
+          </div>
+        </div>
+
+        <div class="card soon" style="--accent:#fb923c">
+          <div class="body">
+            <div class="head-row">
+              <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2.5c.5 3.4 5 5.7 5 10.7a5 5 0 0 1-10 0c0-2.2 1-3.6 2-5 .3 1 .9 1.8 1.7 2.2.6-3 .1-5.6-.7-7.9z"/><path d="M12 21a2.6 2.6 0 0 1-2.6-2.6c0-1.8 2.6-3.4 2.6-3.4s2.6 1.6 2.6 3.4A2.6 2.6 0 0 1 12 21z" opacity=".55"/></svg></div>
+              <span class="badge">规划中</span>
+            </div>
+            <h3>磷的一生</h3>
+            <div class="en">The Phosphorus Story</div>
+            <p>从炼金术士煮尿看见绿光，到火柴厂的磷毒颚、白磷弹、DNA 骨架、瑙鲁岛的兴衰 —— 一个元素串起来的九幕漫画式长图。</p>
+            <div class="tags"><i>科普</i><i>叙事</i><i>漫画</i></div>
+            <div class="go">敬请期待</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
 
   <footer>
-    <span>© 2026 学习实验室</span>
+    <span>© <span id="year">2026</span> 学习实验室</span>
     <span>全部页面纯前端 · 无采集 · 无广告</span>
     <span class="spacer"></span>
     <a href="https://github.com/sanhuang520-ship-it/learn-lab" target="_blank" rel="noopener">GitHub</a>
@@ -307,10 +367,19 @@
   </footer>
 </div>
 
+<style>
+  /* 只给读屏用的补充说明 */
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
+</style>
 <script>
-  // 上线数量 = 实际带 LIVE 徽章的卡片数，避免手写数字和内容对不上
+  // 已上线数量 = 实际卡片数，避免手写数字和内容对不上
   document.getElementById('statLive').textContent =
-    document.querySelectorAll('.badge.live').length;
+    document.querySelectorAll('.grid.live > .card').length;
+  // 年份自动跟随，避免跨年后页面显示过期
+  document.getElementById('year').textContent = new Date().getFullYear();
 </script>
 </body>
 </html>
