@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>核时 · 元素番茄</title>
+<meta name="description" content="元素番茄钟：一颗星的一生 = 一个番茄。自律第一，星球演变作进度。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⭐</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@500;600&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #07090e;
+    --surface: rgba(16, 20, 28, 0.82);
+    --surface2: #161c26;
+    --line: rgba(255,255,255,0.07);
+    --text: #eef1f6;
+    --muted: #8b95a8;
+    --dim: #5c6678;
+    --accent: #e8a54b;
+    --accent-dim: rgba(232, 165, 75, 0.15);
+    --go: #3ecf8e;
+    --go-dim: rgba(62, 207, 142, 0.14);
+    --stop: #f07178;
+    --stop-dim: rgba(240, 113, 120, 0.12);
+    --break: #7aa2f7;
+    --break-dim: rgba(122, 162, 247, 0.14);
+    --star: #ffe6b0;
+    --halo: rgba(255, 200, 120, 0.45);
+    --nebula: rgba(120, 90, 200, 0.12);
+    --font: "DM Sans", "Noto Sans SC", system-ui, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, monospace;
+    --radius: 16px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { min-height: 100%; color: var(--text); font-family: var(--font); }
+  body {
+    background: var(--bg);
+    overflow-x: hidden;
+  }
+
+  /* 深空底 */
+  .space {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 90% 60% at 50% -10%, var(--nebula), transparent 55%),
+      radial-gradient(ellipse 50% 40% at 90% 80%, rgba(80, 120, 200, 0.08), transparent 50%),
+      radial-gradient(ellipse 40% 35% at 10% 70%, rgba(232, 165, 75, 0.05), transparent 45%),
+      #07090e;
+  }
+  #stars {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+  }
+
+  .app {
+    position: relative;
+    z-index: 1;
+    max-width: 440px;
+    margin: 0 auto;
+    padding: 20px 16px 48px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand .name { font-weight: 700; font-size: 17px; letter-spacing: 0.02em; }
+  .brand .tag { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .today-pill {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    backdrop-filter: blur(10px);
+    padding: 6px 10px;
+    border-radius: 999px;
+  }
+  .today-pill b { color: var(--accent); font-weight: 600; }
+
+  /* ===== Timer + star ===== */
+  .timer-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 28px;
+    padding: 20px 18px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(16px);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+  }
+
+  .phase-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+    position: relative;
+    z-index: 2;
+  }
+  .phase-label.work { color: var(--accent); }
+  .phase-label.break { color: var(--break); }
+
+  /* 恒星舞台 */
+  .cosmos {
+    position: relative;
+    width: min(100%, 300px);
+    height: 220px;
+    margin: 0 auto 4px;
+    z-index: 1;
+  }
+  .cosmos .orbit {
+    position: absolute;
+    left: 50%; top: 50%;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  .cosmos .orbit.o1 { width: 140px; height: 140px; }
+  .cosmos .orbit.o2 { width: 190px; height: 190px; opacity: 0.7; }
+  .cosmos .orbit.o3 {
+    width: 240px; height: 240px;
+    opacity: 0.4;
+    border-style: dashed;
+  }
+
+  /* 进度环 */
+  .ring-wrap {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 200px; height: 200px;
+    transform: translate(-50%, -50%);
+  }
+  .ring-wrap svg {
+    width: 100%; height: 100%;
+    transform: rotate(-90deg);
+  }
+  .ring-wrap .track {
+    fill: none;
+    stroke: rgba(255,255,255,0.06);
+    stroke-width: 3;
+  }
+  .ring-wrap .arc {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 565.5;
+    stroke-dashoffset: 565.5;
+    transition: stroke 0.5s ease;
+    filter: drop-shadow(0 0 6px var(--halo));
+  }
+  .timer-card[data-kind="break"] .ring-wrap .arc {
+    stroke: var(--break);
+    filter: drop-shadow(0 0 6px rgba(122,162,247,0.5));
+  }
+
+  /* 星体 */
+  .star {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 48px; height: 48px;
+    margin: -24px 0 0 -24px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 35% 30%, #fffef5 0%, var(--star) 35%, var(--halo) 70%, transparent 75%);
+    box-shadow:
+      0 0 20px var(--halo),
+      0 0 48px color-mix(in srgb, var(--halo) 60%, transparent),
+      0 0 80px color-mix(in srgb, var(--halo) 30%, transparent);
+    transition:
+      width 0.6s ease, height 0.6s ease, margin 0.6s ease,
+      box-shadow 0.6s ease, filter 0.6s ease, opacity 0.4s ease;
+    z-index: 2;
+  }
+  .star::after {
+    content: "";
+    position: absolute;
+    inset: -30%;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--halo) 0%, transparent 70%);
+    opacity: 0.5;
+    animation: breathe 4s ease-in-out infinite;
+    pointer-events: none;
+  }
+  .timer-card[data-phase="running"] .star::after {
+    animation-duration: 2.8s;
+  }
+  .timer-card[data-phase="idle"] .star {
+    opacity: 0.85;
+    filter: brightness(0.9);
+  }
+  .timer-card[data-kind="break"] .star {
+    background:
+      radial-gradient(circle at 35% 30%, #e8f0ff 0%, #9bb8ff 40%, rgba(122,162,247,0.5) 70%, transparent 75%);
+    box-shadow:
+      0 0 16px rgba(122,162,247,0.5),
+      0 0 40px rgba(122,162,247,0.25);
+  }
+  .timer-card[data-phase="complete"] .star {
+    animation: peak 0.9s ease-out;
+  }
+
+  @keyframes breathe {
+    0%, 100% { transform: scale(1); opacity: 0.4; }
+    50% { transform: scale(1.12); opacity: 0.65; }
+  }
+  @keyframes peak {
+    0% { transform: scale(1); filter: brightness(1); }
+    40% { transform: scale(1.35); filter: brightness(1.6); }
+    100% { transform: scale(1); filter: brightness(1.1); }
+  }
+
+  /* 倒计时叠在星上 */
+  .countdown-layer {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+    text-align: center;
+    pointer-events: none;
+    width: 100%;
+  }
+  .countdown {
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: clamp(40px, 11vw, 48px);
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    text-shadow: 0 2px 24px rgba(0,0,0,0.65), 0 0 40px rgba(0,0,0,0.3);
+  }
+
+  .element-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 2px 0 14px;
+    position: relative;
+    z-index: 2;
+  }
+  .element-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(0,0,0,0.35);
+    border: 1px solid var(--line);
+  }
+  .element-badge .sym {
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--accent);
+  }
+  .timer-card[data-kind="break"] .element-badge .sym { color: var(--break); }
+  .element-badge .meta {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .element-badge .meta b {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+  .actions button {
+    appearance: none;
+    border: 0;
+    font-family: var(--font);
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 22px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.12s ease, filter 0.12s;
+  }
+  .actions button:active { transform: scale(0.97); }
+  .actions .primary {
+    background: var(--accent);
+    color: #1a1206;
+    min-width: 132px;
+  }
+  .timer-card[data-kind="break"] .actions .primary {
+    background: var(--break);
+    color: #0c1424;
+  }
+  .actions .ghost {
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--line);
+  }
+  .actions .danger {
+    background: var(--stop-dim);
+    color: var(--stop);
+    border: 1px solid rgba(240,113,120,0.25);
+  }
+
+  .done-banner {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: var(--go-dim);
+    border: 1px solid rgba(62,207,142,0.28);
+    font-size: 13px;
+    color: #b6f0d2;
+  }
+  .done-banner.show { display: flex; }
+  .done-banner strong { color: var(--go); }
+
+  .section-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--dim);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .quicks { display: flex; flex-wrap: wrap; gap: 8px; }
+  .quicks button {
+    appearance: none;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    backdrop-filter: blur(8px);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+  }
+  .quicks button:hover { border-color: rgba(232,165,75,0.4); }
+  .quicks button.active {
+    border-color: rgba(232,165,75,0.55);
+    background: var(--accent-dim);
+    color: var(--accent);
+  }
+  .quicks button.break-btn.active {
+    border-color: rgba(122,162,247,0.5);
+    background: var(--break-dim);
+    color: var(--break);
+  }
+  .quicks button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .picker {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    backdrop-filter: blur(12px);
+  }
+  .picker-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .picker-head h2 { font-size: 13px; font-weight: 600; }
+  .picker-head span { font-size: 12px; color: var(--muted); }
+  .picker-head .chev { color: var(--dim); font-size: 12px; transition: transform 0.2s; }
+  .picker.open .picker-head .chev { transform: rotate(180deg); }
+  .picker-body {
+    display: none;
+    border-top: 1px solid var(--line);
+    padding: 10px;
+    max-height: 260px;
+    overflow: auto;
+  }
+  .picker.open .picker-body { display: block; }
+
+  .el-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
+    gap: 6px;
+  }
+  .el-cell {
+    appearance: none;
+    border: 1px solid var(--line);
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 8px 4px;
+    cursor: pointer;
+    text-align: center;
+    color: var(--text);
+    position: relative;
+  }
+  .el-cell:hover { border-color: rgba(232,165,75,0.45); }
+  .el-cell.active {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+  }
+  .el-cell.lit::after {
+    content: "";
+    position: absolute;
+    top: 4px; right: 4px;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--go);
+    box-shadow: 0 0 6px var(--go);
+  }
+  .el-cell .z { font-family: var(--mono); font-size: 9px; color: var(--dim); display: block; }
+  .el-cell .s { font-family: var(--mono); font-weight: 600; font-size: 14px; display: block; }
+  .el-cell .m { font-size: 10px; color: var(--muted); }
+  .el-cell:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  .stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 12px 10px;
+    text-align: center;
+    backdrop-filter: blur(8px);
+  }
+  .stat .v { font-family: var(--mono); font-size: 20px; font-weight: 600; }
+  .stat .k { font-size: 11px; color: var(--dim); margin-top: 2px; }
+
+  footer.note {
+    text-align: center;
+    font-size: 11px;
+    color: var(--dim);
+    line-height: 1.55;
+    margin-top: auto;
+    padding-top: 4px;
+  }
+
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 28px;
+    transform: translateX(-50%) translateY(12px);
+    background: var(--surface2);
+    border: 1px solid var(--line);
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 10px 16px;
+    border-radius: 999px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s, transform 0.25s;
+    z-index: 50;
+    max-width: 90vw;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .star::after { animation: none; }
+    .star { transition: none; }
+  }
+</style>
+</head>
+<body>
+<div class="space" id="space"></div>
+<canvas id="stars"></canvas>
+<div class="toast" id="toast" role="status"></div>
+
+<div class="app">
+  <style>
+    .ll-back{display:inline-flex;align-items:center;gap:6px;margin:0 0 12px;padding:5px 12px;border:1px solid rgba(140,170,220,.22);border-radius:999px;background:rgba(13,18,28,.6);color:#7a8aa3;font:600 12px/1 "JetBrains Mono",ui-monospace,monospace;letter-spacing:.08em;text-decoration:none;transition:color .2s,border-color .2s}
+    .ll-back:hover{color:#5eead4;border-color:#5eead4}
+  </style>
+  <a class="ll-back" href="../../">← 学习实验室</a>
+  <header>
+    <div class="brand">
+      <div class="name">核时 · 元素番茄</div>
+      <div class="tag">一颗星的一生 · 一个番茄</div>
+    </div>
+    <div class="today-pill">今日 <b id="todayCount">0</b> 番茄</div>
+  </header>
+
+  <div class="timer-card" id="timerCard" data-kind="work" data-phase="idle">
+    <div class="phase-label work" id="phaseLabel">准备专注</div>
+
+    <div class="cosmos" id="cosmos" aria-hidden="true">
+      <div class="orbit o1"></div>
+      <div class="orbit o2"></div>
+      <div class="orbit o3"></div>
+      <div class="ring-wrap">
+        <svg viewBox="0 0 200 200">
+          <circle class="track" cx="100" cy="100" r="90"/>
+          <circle class="arc" id="ringArc" cx="100" cy="100" r="90"/>
+        </svg>
+      </div>
+      <div class="star" id="star"></div>
+      <div class="countdown-layer">
+        <div class="countdown" id="countdown">25:00</div>
+      </div>
+    </div>
+
+    <div class="element-row">
+      <div class="element-badge">
+        <span class="sym" id="elSym">Mn</span>
+        <span class="meta"><b id="elCn">锰</b> · <span id="elSub">25 分钟</span></span>
+      </div>
+    </div>
+
+    <div class="actions" id="actions">
+      <button type="button" class="primary" id="btnPrimary">开始</button>
+      <button type="button" class="ghost" id="btnSecondary" hidden>暂停</button>
+      <button type="button" class="danger" id="btnAbort" hidden>放弃</button>
+    </div>
+  </div>
+
+  <div class="done-banner" id="doneBanner">
+    <span>✦</span>
+    <span id="doneText">恒星抵达稳态 · 元素已点亮</span>
+  </div>
+
+  <div>
+    <div class="section-label">
+      <span>快捷时长</span>
+      <span style="font-weight:500;text-transform:none;letter-spacing:0">星的寿命</span>
+    </div>
+    <div class="quicks" id="quicks">
+      <button type="button" data-z="5" data-kind="work">B 5′</button>
+      <button type="button" data-z="15" data-kind="work">P 15′</button>
+      <button type="button" data-z="25" data-kind="work" class="active">Mn 25′</button>
+      <button type="button" data-z="40" data-kind="work">Zr 40′</button>
+      <button type="button" data-z="5" data-kind="break" class="break-btn">休 5′</button>
+      <button type="button" data-z="10" data-kind="break" class="break-btn">休 10′</button>
+    </div>
+  </div>
+
+  <div class="picker" id="picker">
+    <div class="picker-head" id="pickerHead">
+      <div>
+        <h2>周期表选时</h2>
+        <span>Z = 分钟（1–60）</span>
+      </div>
+      <span class="chev">▼</span>
+    </div>
+    <div class="picker-body">
+      <div class="el-grid" id="elGrid"></div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="v" id="statRounds">0</div><div class="k">今日轮数</div></div>
+    <div class="stat"><div class="v" id="statMinutes">0</div><div class="k">专注分钟</div></div>
+    <div class="stat"><div class="v" id="statLit">0</div><div class="k">已点亮</div></div>
+  </div>
+
+  <footer class="note">
+    专注时，星从点燃走向稳态 · 无讲解，只演变<br>
+    休息时星冷却 · 数据仅存本机
+  </footer>
+</div>
+
+<script>
+const ELEMENTS = [
+  [1,"H","氢"],[2,"He","氦"],[3,"Li","锂"],[4,"Be","铍"],[5,"B","硼"],
+  [6,"C","碳"],[7,"N","氮"],[8,"O","氧"],[9,"F","氟"],[10,"Ne","氖"],
+  [11,"Na","钠"],[12,"Mg","镁"],[13,"Al","铝"],[14,"Si","硅"],[15,"P","磷"],
+  [16,"S","硫"],[17,"Cl","氯"],[18,"Ar","氩"],[19,"K","钾"],[20,"Ca","钙"],
+  [21,"Sc","钪"],[22,"Ti","钛"],[23,"V","钒"],[24,"Cr","铬"],[25,"Mn","锰"],
+  [26,"Fe","铁"],[27,"Co","钴"],[28,"Ni","镍"],[29,"Cu","铜"],[30,"Zn","锌"],
+  [31,"Ga","镓"],[32,"Ge","锗"],[33,"As","砷"],[34,"Se","硒"],[35,"Br","溴"],
+  [36,"Kr","氪"],[37,"Rb","铷"],[38,"Sr","锶"],[39,"Y","钇"],[40,"Zr","锆"],
+  [41,"Nb","铌"],[42,"Mo","钼"],[43,"Tc","锝"],[44,"Ru","钌"],[45,"Rh","铑"],
+  [46,"Pd","钯"],[47,"Ag","银"],[48,"Cd","镉"],[49,"In","铟"],[50,"Sn","锡"],
+  [51,"Sb","锑"],[52,"Te","碲"],[53,"I","碘"],[54,"Xe","氙"],[55,"Cs","铯"],
+  [56,"Ba","钡"],[57,"La","镧"],[58,"Ce","铈"],[59,"Pr","镨"],[60,"Nd","钕"],
+];
+const byZ = new Map(ELEMENTS.map(([z, sym, cn]) => [z, { z, sym, cn }]));
+const MAX_Z = 60;
+const STORAGE = "element-pomodoro-v1";
+const RING = 2 * Math.PI * 90;
+
+function todayKey() {
+  const d = new Date();
+  return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+}
+function loadStats() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(STORAGE) || "{}");
+    if (raw.day !== todayKey()) {
+      return { day: todayKey(), rounds: 0, minutes: 0, lit: raw.lit || [], lastZ: 25 };
+    }
+    return { day: raw.day, rounds: raw.rounds||0, minutes: raw.minutes||0, lit: raw.lit||[], lastZ: raw.lastZ||25 };
+  } catch {
+    return { day: todayKey(), rounds: 0, minutes: 0, lit: [], lastZ: 25 };
+  }
+}
+function saveStats() {
+  localStorage.setItem(STORAGE, JSON.stringify({
+    day: stats.day, rounds: stats.rounds, minutes: stats.minutes,
+    lit: [...litSet], lastZ: state.kind === "work" ? state.z : stats.lastZ,
+  }));
+}
+
+const stats = loadStats();
+const litSet = new Set(stats.lit);
+const state = {
+  phase: "idle",
+  kind: "work",
+  z: Math.min(stats.lastZ || 25, MAX_Z),
+  displayZ: 25,
+  durationMs: 0,
+  remainingMs: 0,
+  endsAt: 0,
+};
+state.durationMs = state.z * 60 * 1000;
+state.remainingMs = state.durationMs;
+state.displayZ = state.z;
+
+function pad(n) { return String(n).padStart(2, "0"); }
+function fmt(ms) {
+  const s = Math.max(0, Math.ceil(ms / 1000));
+  return pad(Math.floor(s / 60)) + ":" + pad(s % 60);
+}
+function toast(msg) {
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.classList.add("show");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => el.classList.remove("show"), 2200);
+}
+function displayEl() {
+  return byZ.get(state.kind === "break" ? (state.displayZ || 2) : state.z) || byZ.get(25);
+}
+
+/** 进度 0–1 → 星体视觉（无文字阶段名） */
+function applyStarVisual(progress, kind) {
+  const star = document.getElementById("star");
+  const space = document.getElementById("space");
+  const root = document.documentElement;
+  const p = Math.min(1, Math.max(0, progress));
+  const card = document.getElementById("timerCard");
+
+  if (kind === "break") {
+    // 冷却：缩小、偏蓝、光晕弱
+    const cool = 1 - p * 0.35;
+    const size = 36 + cool * 10;
+    star.style.width = size + "px";
+    star.style.height = size + "px";
+    star.style.margin = (-size/2) + "px 0 0 " + (-size/2) + "px";
+    root.style.setProperty("--star", "#b8c9f0");
+    root.style.setProperty("--halo", `rgba(122,162,247,${0.25 + cool * 0.25})`);
+    root.style.setProperty("--nebula", `rgba(80,120,200,${0.06 + p * 0.04})`);
+    space.style.setProperty("--nebula", `rgba(80,120,200,${0.06 + p * 0.05})`);
+    return;
+  }
+
+  // 工作：尘云点燃 → 主序 → 膨胀 → 铁峰稳态
+  // 尺寸 40 → 72
+  const size = 40 + p * 32;
+  star.style.width = size + "px";
+  star.style.height = size + "px";
+  star.style.margin = (-size/2) + "px 0 0 " + (-size/2) + "px";
+
+  // 色相：冷白蓝 → 暖黄 → 琥珀 → 微红铁
+  let core, halo, neb;
+  if (p < 0.25) {
+    const t = p / 0.25;
+    core = lerpColor("#c8d4ff", "#fff4d0", t);
+    halo = `rgba(${Math.round(180+t*50)}, ${Math.round(190+t*30)}, ${Math.round(255-t*80)}, ${0.3 + t * 0.2})`;
+    neb = `rgba(100, 90, 180, ${0.08 + t * 0.06})`;
+  } else if (p < 0.55) {
+    const t = (p - 0.25) / 0.3;
+    core = lerpColor("#fff4d0", "#ffe08a", t);
+    halo = `rgba(255, ${Math.round(210-t*30)}, ${Math.round(120-t*20)}, ${0.45 + t * 0.1})`;
+    neb = `rgba(120, 80, 160, ${0.1 + t * 0.04})`;
+  } else if (p < 0.85) {
+    const t = (p - 0.55) / 0.3;
+    core = lerpColor("#ffe08a", "#ffb14a", t);
+    halo = `rgba(255, ${Math.round(170-t*40)}, ${Math.round(80-t*20)}, ${0.5 + t * 0.08})`;
+    neb = `rgba(160, 70, 100, ${0.1 + t * 0.06})`;
+  } else {
+    const t = (p - 0.85) / 0.15;
+    core = lerpColor("#ffb14a", "#e8a090", t);
+    halo = `rgba(${Math.round(255-t*30)}, ${Math.round(140-t*40)}, ${Math.round(90+t*20)}, ${0.55 - t * 0.1})`;
+    neb = `rgba(180, 60, 80, ${0.12 + t * 0.06})`;
+  }
+
+  root.style.setProperty("--star", core);
+  root.style.setProperty("--halo", halo);
+  space.style.background = `
+    radial-gradient(ellipse 90% 60% at 50% -10%, ${neb}, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 90% 80%, rgba(80, 120, 200, ${0.05 + p * 0.06}), transparent 50%),
+    radial-gradient(ellipse 40% 35% at 10% 70%, rgba(232, 165, 75, ${0.04 + p * 0.05}), transparent 45%),
+    #07090e`;
+
+  // 近终点：环更亮
+  const arc = document.getElementById("ringArc");
+  if (p > 0.85) {
+    arc.style.filter = `drop-shadow(0 0 ${8 + (p-0.85)*40}px ${halo})`;
+  } else {
+    arc.style.filter = `drop-shadow(0 0 6px ${halo})`;
+  }
+}
+
+function lerpColor(a, b, t) {
+  const pa = hexToRgb(a), pb = hexToRgb(b);
+  const r = Math.round(pa.r + (pb.r - pa.r) * t);
+  const g = Math.round(pa.g + (pb.g - pa.g) * t);
+  const bl = Math.round(pa.b + (pb.b - pa.b) * t);
+  return `rgb(${r},${g},${bl})`;
+}
+function hexToRgb(hex) {
+  const h = hex.replace("#", "");
+  return {
+    r: parseInt(h.slice(0,2), 16),
+    g: parseInt(h.slice(2,4), 16),
+    b: parseInt(h.slice(4,6), 16),
+  };
+}
+
+function setRing(progress) {
+  const arc = document.getElementById("ringArc");
+  const p = Math.min(1, Math.max(0, progress));
+  arc.style.strokeDasharray = String(RING);
+  arc.style.strokeDashoffset = String(RING * (1 - p));
+}
+
+function setSelection(z, kind) {
+  if (state.phase === "running" || state.phase === "paused") return false;
+  const el = byZ.get(z);
+  if (!el && kind === "work") return false;
+
+  state.kind = kind;
+  state.z = z;
+  if (kind === "break") {
+    state.durationMs = z * 60 * 1000;
+    state.displayZ = z === 10 ? 10 : 2;
+  } else {
+    state.durationMs = z * 60 * 1000;
+    state.displayZ = z;
+  }
+  state.remainingMs = state.durationMs;
+  state.phase = "idle";
+  hideDone();
+  document.getElementById("timerCard").dataset.phase = "idle";
+  render();
+  return true;
+}
+
+function start() {
+  if (state.phase === "running") return;
+  if (state.phase === "paused") {
+    state.endsAt = Date.now() + state.remainingMs;
+    state.phase = "running";
+    document.getElementById("timerCard").dataset.phase = "running";
+    render();
+    toast(state.kind === "break" ? "继续冷却" : "继续燃烧");
+    return;
+  }
+  state.remainingMs = state.durationMs;
+  state.endsAt = Date.now() + state.remainingMs;
+  state.phase = "running";
+  document.getElementById("timerCard").dataset.phase = "running";
+  hideDone();
+  render();
+  toast(state.kind === "break" ? "休息 · 星在冷却" : "点燃 · " + displayEl().sym);
+  try { if (Notification.permission === "default") Notification.requestPermission(); } catch {}
+}
+
+function pause() {
+  if (state.phase !== "running") return;
+  state.remainingMs = Math.max(0, state.endsAt - Date.now());
+  state.phase = "paused";
+  document.getElementById("timerCard").dataset.phase = "paused";
+  render();
+  toast("时间冻结");
+}
+
+function abort() {
+  if (state.phase !== "running" && state.phase !== "paused") return;
+  state.phase = "idle";
+  state.remainingMs = state.durationMs;
+  state.endsAt = 0;
+  document.title = "核时 · 元素番茄";
+  document.getElementById("timerCard").dataset.phase = "idle";
+  render();
+  toast(state.kind === "break" ? "休息取消" : "本轮放弃 · 星未成形");
+}
+
+function complete() {
+  const kind = state.kind;
+  const z = state.z;
+  const mins = Math.round(state.durationMs / 60000);
+  const el = byZ.get(kind === "work" ? z : (state.displayZ || 2));
+
+  state.phase = "idle";
+  state.remainingMs = 0;
+  state.endsAt = 0;
+  document.title = "核时 · 元素番茄";
+
+  const card = document.getElementById("timerCard");
+  card.dataset.phase = "complete";
+  applyStarVisual(1, kind);
+  setRing(1);
+
+  if (kind === "work") {
+    if (stats.day !== todayKey()) {
+      stats.day = todayKey();
+      stats.rounds = 0;
+      stats.minutes = 0;
+    }
+    stats.rounds += 1;
+    stats.minutes += mins;
+    litSet.add(z);
+    stats.lastZ = z;
+    saveStats();
+    showDone(`稳态达成 · 点亮 ${el.sym} ${el.cn} · 今日第 ${stats.rounds} 番茄`);
+    toast(`完成 · ${el.sym} 已点亮`);
+    chime();
+    notify("番茄完成", `${el.sym} ${el.cn} · ${mins} 分钟`);
+    setTimeout(() => {
+      card.dataset.phase = "idle";
+      setSelection(5, "break");
+      toast("建议休息 5′ · 点开始让星冷却");
+    }, 900);
+  } else {
+    showDone("冷却结束 · 可以开始下一轮");
+    toast("休息结束");
+    chime(true);
+    notify("休息结束", "准备下一轮？");
+    setTimeout(() => {
+      card.dataset.phase = "idle";
+      setSelection(stats.lastZ || 25, "work");
+    }, 500);
+  }
+  render(true);
+}
+
+function showDone(text) {
+  document.getElementById("doneText").textContent = text;
+  document.getElementById("doneBanner").classList.add("show");
+}
+function hideDone() {
+  document.getElementById("doneBanner").classList.remove("show");
+}
+function chime(soft) {
+  try {
+    const ac = new (window.AudioContext || window.webkitAudioContext)();
+    const o = ac.createOscillator();
+    const g = ac.createGain();
+    o.type = "sine";
+    o.frequency.setValueAtTime(soft ? 520 : 660, ac.currentTime);
+    o.frequency.exponentialRampToValueAtTime(soft ? 660 : 880, ac.currentTime + 0.1);
+    g.gain.setValueAtTime(0.0001, ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.07, ac.currentTime + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + 0.45);
+    o.connect(g); g.connect(ac.destination);
+    o.start(); o.stop(ac.currentTime + 0.5);
+  } catch {}
+}
+function notify(title, body) {
+  try { if (Notification.permission === "granted") new Notification(title, { body }); } catch {}
+}
+
+function progressNow() {
+  let remain = state.remainingMs;
+  if (state.phase === "running") remain = Math.max(0, state.endsAt - Date.now());
+  if (state.durationMs <= 0) return 0;
+  if (state.phase === "idle" && remain === 0) return 1;
+  return Math.min(1, Math.max(0, (state.durationMs - remain) / state.durationMs));
+}
+
+function render(skipStarPeak) {
+  const el = displayEl();
+  const card = document.getElementById("timerCard");
+  const busy = state.phase === "running" || state.phase === "paused";
+  card.dataset.kind = state.kind;
+  if (!skipStarPeak && state.phase !== "complete") {
+    card.dataset.phase = state.phase;
+  }
+
+  let remain = state.remainingMs;
+  if (state.phase === "running") remain = Math.max(0, state.endsAt - Date.now());
+
+  document.getElementById("countdown").textContent = fmt(remain);
+  document.getElementById("elSym").textContent = el.sym;
+  document.getElementById("elCn").textContent = el.cn;
+  document.getElementById("elSub").textContent =
+    state.kind === "break"
+      ? `休息 ${Math.round(state.durationMs/60000)}′`
+      : `${state.z} 分钟`;
+
+  const p = progressNow();
+  setRing(state.phase === "idle" && remain === state.durationMs ? 0 : p);
+  if (state.phase === "idle" && remain === state.durationMs) {
+    applyStarVisual(0.08, state.kind); // 待命：微燃
+  } else if (state.phase !== "complete") {
+    applyStarVisual(p, state.kind);
+  }
+
+  const phaseLabel = document.getElementById("phaseLabel");
+  phaseLabel.className = "phase-label " + state.kind;
+  if (state.phase === "idle") phaseLabel.textContent = state.kind === "break" ? "准备休息" : "准备专注";
+  else if (state.phase === "running") phaseLabel.textContent = state.kind === "break" ? "冷却中" : "燃烧中";
+  else if (state.phase === "paused") phaseLabel.textContent = "已冻结";
+  else phaseLabel.textContent = "稳态";
+
+  const btnP = document.getElementById("btnPrimary");
+  const btnS = document.getElementById("btnSecondary");
+  const btnA = document.getElementById("btnAbort");
+  if (state.phase === "idle") {
+    btnP.hidden = false;
+    btnP.textContent = state.kind === "break" ? "开始休息" : "开始";
+    btnS.hidden = true;
+    btnA.hidden = true;
+  } else if (state.phase === "running") {
+    btnP.hidden = true;
+    btnS.hidden = false;
+    btnS.textContent = "暂停";
+    btnA.hidden = false;
+  } else if (state.phase === "paused") {
+    btnP.hidden = false;
+    btnP.textContent = "继续";
+    btnS.hidden = true;
+    btnA.hidden = false;
+  }
+
+  if (state.phase === "running") {
+    document.title = fmt(remain) + " · " + el.sym + " · 元素番茄";
+  }
+
+  document.getElementById("todayCount").textContent = stats.rounds;
+  document.getElementById("statRounds").textContent = stats.rounds;
+  document.getElementById("statMinutes").textContent = stats.minutes;
+  document.getElementById("statLit").textContent = litSet.size;
+
+  document.querySelectorAll("#quicks button").forEach((b) => {
+    const z = Number(b.dataset.z);
+    const k = b.dataset.kind;
+    b.classList.toggle("active", !busy && k === state.kind && z === state.z);
+    b.disabled = busy;
+  });
+  document.querySelectorAll(".el-cell").forEach((b) => {
+    const z = Number(b.dataset.z);
+    b.classList.toggle("active", state.kind === "work" && z === state.z);
+    b.classList.toggle("lit", litSet.has(z));
+    b.disabled = busy;
+  });
+}
+
+function tick() {
+  if (state.phase === "running") {
+    const remain = state.endsAt - Date.now();
+    if (remain <= 0) {
+      complete();
+    } else {
+      state.remainingMs = remain;
+      document.getElementById("countdown").textContent = fmt(remain);
+      const p = (state.durationMs - remain) / state.durationMs;
+      setRing(p);
+      applyStarVisual(p, state.kind);
+      document.title = fmt(remain) + " · " + displayEl().sym + " · 元素番茄";
+    }
+  }
+  requestAnimationFrame(tick);
+}
+
+/* 星空粒子 */
+(function starsBg() {
+  const c = document.getElementById("stars");
+  const ctx = c.getContext("2d");
+  let w, h, dots = [];
+  function resize() {
+    w = c.width = window.innerWidth * devicePixelRatio;
+    h = c.height = window.innerHeight * devicePixelRatio;
+    c.style.width = window.innerWidth + "px";
+    c.style.height = window.innerHeight + "px";
+    ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+    dots = Array.from({ length: 80 }, () => ({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      r: Math.random() * 1.2 + 0.3,
+      a: Math.random() * 0.5 + 0.15,
+      s: Math.random() * 0.15 + 0.02,
+    }));
+  }
+  window.addEventListener("resize", resize);
+  resize();
+  function loop() {
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    for (const d of dots) {
+      d.y -= d.s;
+      if (d.y < 0) d.y = window.innerHeight;
+      ctx.beginPath();
+      ctx.fillStyle = `rgba(255,255,255,${d.a})`;
+      ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    requestAnimationFrame(loop);
+  }
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) loop();
+  else {
+    // 静态星点
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    for (const d of dots) {
+      ctx.beginPath();
+      ctx.fillStyle = `rgba(255,255,255,${d.a})`;
+      ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+})();
+
+function buildGrid() {
+  const grid = document.getElementById("elGrid");
+  grid.innerHTML = ELEMENTS.map(([z, sym]) =>
+    `<button type="button" class="el-cell${litSet.has(z)?" lit":""}" data-z="${z}" title="${z} 分钟">
+      <span class="z">${z}</span><span class="s">${sym}</span><span class="m">${z}′</span>
+    </button>`
+  ).join("");
+  grid.addEventListener("click", (e) => {
+    const btn = e.target.closest(".el-cell");
+    if (!btn || btn.disabled) return;
+    const z = Number(btn.dataset.z);
+    setSelection(z, "work");
+    toast(`${byZ.get(z).sym} · ${z} 分钟`);
+  });
+}
+
+document.getElementById("btnPrimary").addEventListener("click", () => start());
+document.getElementById("btnSecondary").addEventListener("click", () => pause());
+document.getElementById("btnAbort").addEventListener("click", () => abort());
+document.getElementById("quicks").addEventListener("click", (e) => {
+  const btn = e.target.closest("button[data-z]");
+  if (!btn || btn.disabled) return;
+  setSelection(Number(btn.dataset.z), btn.dataset.kind === "break" ? "break" : "work");
+});
+document.getElementById("pickerHead").addEventListener("click", () => {
+  document.getElementById("picker").classList.toggle("open");
+});
+document.addEventListener("keydown", (e) => {
+  if (e.target.matches("input, textarea")) return;
+  if (e.code === "Space") {
+    e.preventDefault();
+    if (state.phase === "running") pause();
+    else start();
+  } else if (e.code === "Escape") {
+    if (state.phase === "running" || state.phase === "paused") abort();
+  }
+});
+
+buildGrid();
+setSelection(state.z, "work");
+render();
+requestAnimationFrame(tick);
+</script>
+</body>
+</html>

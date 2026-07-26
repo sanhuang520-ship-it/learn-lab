@@ -1,0 +1,3400 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>核时 · Atomic Clock</title>
+<meta name="description" content="核时 · 可播放的恒星核合成课 — 看氢如何一步步变成铁；亦可作叙事专注钟">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚛️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=JetBrains+Mono:wght@400;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #07090f;
+    --panel: #0d121c;
+    --glass: rgba(18, 26, 40, 0.72);
+    --line: rgba(140, 170, 220, 0.12);
+    --text: #e8eef8;
+    --muted: #7a8aa3;
+    --dim: #4a5a72;
+    --phosphor: #5eead4;
+    --amber: #f5b942;
+    --rose: #fb7185;
+    --violet: #a78bfa;
+    --sky: #38bdf8;
+    --lime: #a3e635;
+    --cell: 52px;
+    --gap: 3px;
+    --radius: 6px;
+    --font-display: "Orbitron", "Noto Sans SC", sans-serif;
+    --font-body: "Noto Sans SC", system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    min-height: 100%;
+    background: var(--void);
+    color: var(--text);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(56, 189, 248, 0.12), transparent 55%),
+      radial-gradient(ellipse 40% 40% at 90% 80%, rgba(167, 139, 250, 0.08), transparent 50%),
+      radial-gradient(ellipse 35% 35% at 10% 70%, rgba(94, 234, 212, 0.06), transparent 50%),
+      linear-gradient(180deg, #07090f 0%, #0a0e18 50%, #07090f 100%);
+  }
+
+  /* subtle grain */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .app {
+    position: relative;
+    z-index: 1;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 20px 16px 48px;
+  }
+
+  /* ===== Header / Readout ===== */
+  header.top {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: end;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+
+  .brand {
+    min-width: 0;
+  }
+  .brand .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--phosphor);
+    margin-bottom: 6px;
+  }
+  .brand .tag::before {
+    content: "";
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--phosphor);
+    box-shadow: 0 0 10px var(--phosphor);
+    animation: blink 2.4s ease-in-out infinite;
+  }
+  .brand h1 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(22px, 3vw, 32px);
+    letter-spacing: 0.06em;
+    line-height: 1.1;
+  }
+  .brand h1 span {
+    color: var(--muted);
+    font-weight: 500;
+    font-size: 0.55em;
+    letter-spacing: 0.2em;
+    display: block;
+    margin-top: 4px;
+  }
+
+  .readout {
+    text-align: center;
+    padding: 10px 20px 14px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: linear-gradient(180deg, rgba(20, 30, 48, 0.9), rgba(10, 14, 24, 0.85));
+    box-shadow:
+      0 0 0 1px rgba(94, 234, 212, 0.05) inset,
+      0 20px 50px rgba(0, 0, 0, 0.45);
+    min-width: min(100%, 420px);
+  }
+  .digital {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(36px, 6vw, 56px);
+    letter-spacing: 0.08em;
+    line-height: 1;
+    background: linear-gradient(180deg, #f8fbff 20%, #8ec8ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 40px rgba(56, 189, 248, 0.25);
+    font-variant-numeric: tabular-nums;
+  }
+  .digital .colon {
+    color: var(--phosphor);
+    opacity: 0.85;
+    animation: colonPulse 1s steps(1) infinite;
+    -webkit-text-fill-color: var(--phosphor);
+  }
+
+  .triad {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .triad-card {
+    padding: 8px 6px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: rgba(0, 0, 0, 0.25);
+    transition: transform 0.25s ease, border-color 0.25s, box-shadow 0.25s;
+  }
+  .triad-card.live {
+    border-color: color-mix(in srgb, var(--role) 55%, transparent);
+    box-shadow: 0 0 18px color-mix(in srgb, var(--role) 25%, transparent);
+  }
+  .triad-card .role {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+  .triad-card .sym {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--role, var(--text));
+    line-height: 1.1;
+  }
+  .triad-card .meta {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .triad-card[data-role="h"] { --role: var(--rose); }
+  .triad-card[data-role="m"] { --role: var(--amber); }
+  .triad-card[data-role="s"] { --role: var(--phosphor); }
+
+  .side-meta {
+    text-align: right;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .side-meta strong {
+    display: block;
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  /* ===== Controls ===== */
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .modes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 4px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: rgba(8, 12, 20, 0.65);
+  }
+  .modes button {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 8px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .modes button:hover { color: var(--text); }
+  .modes button.active {
+    background: linear-gradient(180deg, rgba(94, 234, 212, 0.2), rgba(56, 189, 248, 0.12));
+    color: var(--phosphor);
+    box-shadow: 0 0 0 1px rgba(94, 234, 212, 0.25);
+  }
+  .hint {
+    font-size: 12px;
+    color: var(--dim);
+    font-family: var(--font-mono);
+  }
+
+  /* ===== Shell: 观展 / 自律 ===== */
+  .shell-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .shell-switch {
+    display: inline-flex;
+    padding: 4px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: rgba(8, 12, 20, 0.75);
+  }
+  .shell-switch button {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 9px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .shell-switch button:hover { color: var(--text); }
+  .shell-switch button.active[data-shell="display"] {
+    background: linear-gradient(180deg, rgba(56, 189, 248, 0.22), rgba(56, 189, 248, 0.1));
+    color: var(--sky);
+    box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.3);
+  }
+  .shell-switch button.active[data-shell="focus"] {
+    background: linear-gradient(180deg, rgba(245, 185, 66, 0.25), rgba(251, 113, 133, 0.12));
+    color: var(--amber);
+    box-shadow: 0 0 0 1px rgba(245, 185, 66, 0.35);
+  }
+  .shell-note {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--dim);
+  }
+
+  /* 正式自律：克制动效 */
+  body.intensity-calm .el.fusion-now {
+    animation: none;
+  }
+  body.intensity-calm .toast {
+    /* 正式模式几乎不用 toast 刷屏 */
+  }
+  body.intensity-demo .el.fusion-now {
+    animation: focusPulse 1.6s ease-in-out infinite;
+  }
+
+  .iron-preview {
+    display: none;
+    grid-column: 1 / -1;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(251, 113, 133, 0.35);
+    background: linear-gradient(90deg, rgba(251, 113, 133, 0.12), rgba(245, 185, 66, 0.06));
+    font-size: 12px;
+    color: #fecdd3;
+    line-height: 1.4;
+  }
+  .iron-preview.on { display: flex; }
+  .iron-preview strong { color: var(--rose); font-weight: 700; }
+  .iron-preview .ip-bar {
+    flex: 1;
+    height: 3px;
+    border-radius: 99px;
+    background: rgba(255,255,255,0.08);
+    overflow: hidden;
+    min-width: 48px;
+  }
+  .iron-preview .ip-bar > i {
+    display: block;
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--amber), var(--rose));
+    transition: width 0.4s linear;
+  }
+
+  .science-note {
+    grid-column: 1 / -1;
+    font-size: 11px;
+    line-height: 1.45;
+    color: var(--dim);
+    font-family: var(--font-mono);
+    padding-top: 2px;
+  }
+  .science-note em {
+    font-style: normal;
+    color: var(--muted);
+  }
+
+  .era-rail {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .era-chip {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    padding: 3px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    color: var(--dim);
+    background: rgba(0,0,0,0.25);
+    transition: all 0.35s ease;
+  }
+  .era-chip.on {
+    color: var(--sky);
+    border-color: rgba(56, 189, 248, 0.4);
+    background: rgba(56, 189, 248, 0.1);
+  }
+  .era-chip.peak.on {
+    color: #fecdd3;
+    border-color: rgba(251, 113, 133, 0.45);
+    background: rgba(251, 113, 133, 0.12);
+  }
+
+  .focus-panel {
+    display: none;
+    margin-bottom: 14px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(30, 22, 12, 0.65), rgba(12, 16, 28, 0.85));
+    padding: 12px 14px;
+    gap: 12px;
+    align-items: stretch;
+  }
+  body.shell-learn .focus-panel,
+  body.shell-focus .focus-panel { display: grid; }
+  body.shell-learn .modes-display,
+  body.shell-focus .modes-display { display: none; }
+  body.shell-learn .brand .tag { color: var(--sky); }
+  body.shell-learn .brand .tag::before { background: var(--sky); box-shadow: 0 0 10px var(--sky); }
+  body.shell-focus .brand .tag { color: var(--amber); }
+  body.shell-focus .brand .tag::before { background: var(--amber); box-shadow: 0 0 10px var(--amber); }
+  body.shell-learn .readout {
+    border-color: rgba(56, 189, 248, 0.28);
+    box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.06) inset, 0 20px 50px rgba(0, 0, 0, 0.45);
+  }
+  body.shell-focus .readout {
+    border-color: rgba(245, 185, 66, 0.25);
+    box-shadow: 0 0 0 1px rgba(245, 185, 66, 0.06) inset, 0 20px 50px rgba(0, 0, 0, 0.45);
+  }
+  body.shell-learn .digital {
+    background: linear-gradient(180deg, #f0f9ff 15%, #38bdf8 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  body.shell-focus .digital {
+    background: linear-gradient(180deg, #fff8e8 15%, #f5b942 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  body.shell-learn .digital .colon {
+    color: var(--sky);
+    -webkit-text-fill-color: var(--sky);
+  }
+  body.shell-focus .digital .colon {
+    color: var(--amber);
+    -webkit-text-fill-color: var(--amber);
+  }
+  body.shell-learn .stage { border-color: rgba(56, 189, 248, 0.15); }
+  body.shell-focus .stage { border-color: rgba(245, 185, 66, 0.15); }
+
+  /* 观课 / 自律 分区控件 */
+  body.shell-learn .picks-focus-only { display: none !important; }
+  body.shell-focus .picks-learn-only { display: none !important; }
+  body.shell-learn .focus-stat-focus { display: none !important; }
+  body.shell-focus .focus-stat-learn { display: none !important; }
+
+  .hero-cta {
+    grid-column: 1 / -1;
+    display: none;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    background: linear-gradient(135deg, rgba(14, 40, 60, 0.75), rgba(12, 16, 28, 0.9));
+  }
+  body.shell-learn.phase-idle .hero-cta,
+  body.shell-learn.phase-armed .hero-cta { display: flex; }
+  body.shell-learn.phase-done .hero-cta.recap-hero { display: flex; }
+  .hero-cta .hero-copy { flex: 1; min-width: 200px; }
+  .hero-cta .hero-copy h2 {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+  .hero-cta .hero-copy p {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .hero-cta .hero-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .hero-cta .hero-btns button {
+    appearance: none;
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    background: linear-gradient(180deg, rgba(56, 189, 248, 0.28), rgba(56, 189, 248, 0.1));
+    color: #7dd3fc;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 700;
+    padding: 12px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+  }
+  .hero-cta .hero-btns button.ghost {
+    background: transparent;
+    border-color: var(--line);
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 12px;
+    padding: 10px 14px;
+  }
+  .hero-cta .hero-btns button:hover { filter: brightness(1.1); }
+
+  .lesson-card {
+    grid-column: 1 / -1;
+    display: none;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    background: rgba(8, 14, 24, 0.65);
+  }
+  body.shell-learn .lesson-card { display: block; }
+  .lesson-card .lc-kicker {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--sky);
+    margin-bottom: 6px;
+  }
+  .lesson-card .lc-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+  .lesson-card .lc-body {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+  .lesson-card .lc-takeaway {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--line);
+    font-size: 12px;
+    color: #bae6fd;
+    line-height: 1.5;
+  }
+  .lesson-card .lc-takeaway b { color: var(--text); }
+
+  .recap-panel {
+    grid-column: 1 / -1;
+    display: none;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(251, 113, 133, 0.3);
+    background: linear-gradient(135deg, rgba(40, 16, 24, 0.5), rgba(12, 16, 28, 0.85));
+  }
+  .recap-panel.on { display: block; }
+  .recap-panel h3 {
+    font-size: 15px;
+    margin-bottom: 8px;
+    color: #fecdd3;
+  }
+  .recap-list {
+    display: grid;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.45;
+    margin-bottom: 10px;
+  }
+  .recap-list div {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    gap: 8px;
+  }
+  .recap-list strong {
+    color: var(--sky);
+    font-family: var(--font-display);
+    font-size: 12px;
+  }
+  .recap-next {
+    font-size: 12px;
+    color: var(--dim);
+    line-height: 1.5;
+  }
+
+  /* 投影模式：藏壳层与页脚，放大叙事 */
+  body.present-mode .shell-bar,
+  body.present-mode footer.bar,
+  body.present-mode .science-note,
+  body.present-mode .quick-picks,
+  body.present-mode .hero-cta { display: none !important; }
+  body.present-mode .lesson-card .lc-title { font-size: 22px; }
+  body.present-mode .lesson-card .lc-body { font-size: 15px; }
+  body.present-mode .app { max-width: 1400px; padding-top: 12px; }
+  body.present-mode .focus-panel {
+    border-color: rgba(56, 189, 248, 0.25);
+  }
+  .present-hint {
+    display: none;
+    position: fixed;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 60;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--dim);
+    background: rgba(0,0,0,0.55);
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+  }
+  body.present-mode .present-hint { display: block; }
+
+  .shell-switch button.active[data-shell="learn"] {
+    background: linear-gradient(180deg, rgba(56, 189, 248, 0.25), rgba(56, 189, 248, 0.1));
+    color: var(--sky);
+    box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.35);
+  }
+
+  .focus-panel-grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px 16px;
+    align-items: center;
+  }
+  @media (max-width: 720px) {
+    .focus-panel-grid { grid-template-columns: 1fr; }
+  }
+  .focus-status {
+    min-width: 0;
+  }
+  .focus-status .label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 4px;
+  }
+  .focus-status .title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .focus-status .sub {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .focus-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+  .focus-actions button,
+  .quick-picks button {
+    appearance: none;
+    border: 1px solid var(--line);
+    background: rgba(0, 0, 0, 0.28);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+  }
+  .focus-actions button:hover,
+  .quick-picks button:hover {
+    border-color: rgba(245, 185, 66, 0.45);
+    color: var(--amber);
+  }
+  .focus-actions button.primary {
+    background: linear-gradient(180deg, rgba(245, 185, 66, 0.28), rgba(245, 185, 66, 0.12));
+    border-color: rgba(245, 185, 66, 0.45);
+    color: var(--amber);
+  }
+  .focus-actions button.danger {
+    border-color: rgba(251, 113, 133, 0.35);
+    color: var(--rose);
+  }
+  .focus-actions button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .quick-picks {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+  }
+  .quick-picks .qp-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--dim);
+    letter-spacing: 0.12em;
+    margin-right: 4px;
+  }
+  .quick-picks button.active {
+    border-color: rgba(245, 185, 66, 0.55);
+    background: rgba(245, 185, 66, 0.12);
+    color: var(--amber);
+  }
+  .quick-picks button.break-pick {
+    border-color: rgba(244, 114, 182, 0.35);
+    color: #f9a8d4;
+  }
+  .quick-picks button[data-demo-sec] {
+    border-color: rgba(56, 189, 248, 0.45);
+    color: var(--sky);
+    background: rgba(56, 189, 248, 0.08);
+  }
+  .quick-picks button[data-demo-sec].active {
+    border-color: rgba(56, 189, 248, 0.7);
+    background: rgba(56, 189, 248, 0.18);
+    color: #7dd3fc;
+  }
+  .progress-track {
+    grid-column: 1 / -1;
+    height: 4px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    overflow: hidden;
+    display: none;
+  }
+  .progress-track.on { display: block; }
+  .progress-track > i {
+    display: block;
+    height: 100%;
+    width: 0%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #38bdf8, #f5b942, #fb7185);
+    box-shadow: 0 0 12px rgba(245, 185, 66, 0.5);
+    transition: width 0.35s linear;
+  }
+
+  /* ===== 宇宙成核路径 ===== */
+  .cosmos-strip {
+    grid-column: 1 / -1;
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 4px;
+    border-top: 1px solid var(--line);
+  }
+  body.shell-focus .cosmos-strip { display: flex; }
+  .cosmos-era {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--sky);
+    text-transform: uppercase;
+  }
+  .cosmos-story {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--muted);
+    min-height: 2.8em;
+  }
+  .cosmos-story strong {
+    color: var(--text);
+    font-weight: 700;
+  }
+  .fusion-path {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    align-items: center;
+  }
+  .fusion-node {
+    appearance: none;
+    border: 1px solid var(--line);
+    background: rgba(0, 0, 0, 0.35);
+    color: var(--dim);
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    min-width: 36px;
+    height: auto;
+    padding: 4px 6px 3px;
+    border-radius: 8px;
+    cursor: default;
+    transition: all 0.45s ease;
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+    line-height: 1.1;
+  }
+  .fusion-node .fn-sym { font-size: 12px; }
+  .fusion-node .fn-tag {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    opacity: 0.75;
+    max-width: 42px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .fusion-node.done {
+    color: #e0f2fe;
+    border-color: rgba(56, 189, 248, 0.45);
+    background: rgba(56, 189, 248, 0.12);
+  }
+  .fusion-node.now {
+    color: var(--amber);
+    border-color: rgba(245, 185, 66, 0.7);
+    background: rgba(245, 185, 66, 0.18);
+    box-shadow: 0 0 16px rgba(245, 185, 66, 0.35);
+    transform: scale(1.06);
+  }
+  .fusion-node.incoming {
+    color: #fde68a;
+    border-color: rgba(245, 185, 66, 0.35);
+    background: rgba(245, 185, 66, calc(0.06 + var(--fuse, 0) * 0.14));
+    box-shadow: 0 0 calc(4px + var(--fuse, 0) * 12px) rgba(245, 185, 66, calc(var(--fuse, 0) * 0.35));
+  }
+  .fusion-node.peak.now,
+  .fusion-node.peak.done {
+    color: #fecdd3;
+    border-color: rgba(251, 113, 133, 0.65);
+    background: rgba(251, 113, 133, 0.16);
+    box-shadow: 0 0 18px rgba(251, 113, 133, 0.35);
+  }
+  .fusion-node.peak.incoming {
+    color: #fecdd3;
+    border-color: rgba(251, 113, 133, calc(0.25 + var(--fuse, 0) * 0.4));
+  }
+  .fusion-arrow {
+    color: var(--dim);
+    font-size: 10px;
+    opacity: 0.5;
+    user-select: none;
+  }
+  .fusion-arrow.lit { color: var(--sky); opacity: 0.9; }
+
+  .el.fusion-done {
+    filter: brightness(1.12);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--cat) 35%, transparent);
+    border-color: color-mix(in srgb, var(--cat) 65%, white);
+    transition: filter 0.5s ease, box-shadow 0.5s ease, opacity 0.5s ease, border-color 0.5s ease;
+  }
+  .el.fusion-now {
+    z-index: 9;
+    border-color: var(--amber) !important;
+    /* --fuse 0→1 阶段内渐亮，像慢慢熔融 */
+    box-shadow:
+      0 0 0 2px rgba(245, 185, 66, calc(0.25 + var(--fuse, 0.5) * 0.45)),
+      0 0 calc(12px + var(--fuse, 0.5) * 28px) rgba(245, 185, 66, calc(0.2 + var(--fuse, 0.5) * 0.4)) !important;
+    filter: brightness(calc(1.05 + var(--fuse, 0.5) * 0.35));
+    opacity: 1;
+    transition: filter 0.45s linear, box-shadow 0.45s linear, opacity 0.45s linear;
+  }
+  .el.fusion-now .sym { color: var(--amber); }
+  .el.fusion-incoming {
+    z-index: 7;
+    opacity: calc(0.22 + var(--fuse, 0) * 0.55) !important;
+    filter: grayscale(calc(0.4 - var(--fuse, 0) * 0.4)) brightness(calc(0.95 + var(--fuse, 0) * 0.25));
+    border-color: color-mix(in srgb, var(--amber) calc(var(--fuse, 0) * 70%), transparent) !important;
+    box-shadow: 0 0 calc(var(--fuse, 0) * 18px) rgba(245, 185, 66, calc(var(--fuse, 0) * 0.35));
+    transition: opacity 0.45s linear, filter 0.45s linear, box-shadow 0.45s linear, border-color 0.45s linear;
+  }
+  .el.fusion-peak {
+    border-color: var(--rose) !important;
+    box-shadow:
+      0 0 0 2px rgba(251, 113, 133, calc(0.3 + var(--fuse, 0.5) * 0.4)),
+      0 0 calc(16px + var(--fuse, 0.5) * 30px) rgba(251, 113, 133, calc(0.25 + var(--fuse, 0.5) * 0.4)) !important;
+  }
+  .el.fusion-peak .sym { color: var(--rose); }
+  .el.fusion-peak-glow {
+    /* 铁峰预告：Fe 提前微微呼吸 */
+    opacity: calc(0.15 + var(--peak, 0) * 0.55) !important;
+    filter: grayscale(calc(0.5 - var(--peak, 0) * 0.5)) brightness(calc(1 + var(--peak, 0) * 0.2));
+    border-color: rgba(251, 113, 133, calc(0.15 + var(--peak, 0) * 0.55)) !important;
+    box-shadow: 0 0 calc(8px + var(--peak, 0) * 22px) rgba(251, 113, 133, calc(var(--peak, 0) * 0.4));
+    transition: opacity 0.6s linear, filter 0.6s linear, box-shadow 0.6s linear;
+  }
+  .el.fusion-future {
+    opacity: 0.28;
+    filter: grayscale(0.35);
+    transition: opacity 0.5s ease, filter 0.5s ease;
+  }
+  .el.fusion-offpath {
+    opacity: 0.1;
+    filter: grayscale(0.75);
+  }
+  body.intensity-calm .el.fusion-offpath {
+    opacity: 0.08;
+  }
+  body.shell-focus.phase-running .el:not(.fusion-now):not(.fusion-done):not(.focus-break),
+  body.shell-focus.phase-paused .el:not(.fusion-now):not(.fusion-done):not(.focus-break) {
+    /* 覆盖旧的全局压暗，改由 fusion 类控制 */
+    opacity: unset;
+    filter: unset;
+  }
+  body.shell-focus.phase-running .el.fusion-offpath,
+  body.shell-focus.phase-paused .el.fusion-offpath {
+    opacity: 0.12;
+    filter: grayscale(0.7);
+  }
+  body.shell-focus.phase-running .el.fusion-future,
+  body.shell-focus.phase-paused .el.fusion-future {
+    opacity: 0.28;
+    filter: grayscale(0.35);
+  }
+  body.shell-focus.phase-running .el.fusion-done,
+  body.shell-focus.phase-paused .el.fusion-done {
+    opacity: 1;
+    filter: brightness(1.15);
+  }
+
+  /* focus element states */
+  .el.focus-reacting {
+    z-index: 8;
+    border-color: var(--amber) !important;
+    box-shadow:
+      0 0 0 2px rgba(245, 185, 66, 0.45),
+      0 0 32px rgba(245, 185, 66, 0.4) !important;
+    animation: focusPulse 1.8s ease-in-out infinite;
+  }
+  .el.focus-reacting .sym { color: var(--amber); }
+  .el.focus-break {
+    z-index: 8;
+    border-color: #f472b6 !important;
+    box-shadow: 0 0 0 2px rgba(244, 114, 182, 0.4), 0 0 28px rgba(244, 114, 182, 0.35) !important;
+  }
+  .el.focus-break .sym { color: #f9a8d4; }
+  .el.stable-iso {
+    outline: 1px solid rgba(163, 230, 53, 0.55);
+  }
+  .el.stable-iso::before {
+    content: "";
+    position: absolute;
+    bottom: 3px; right: 3px;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--lime);
+    box-shadow: 0 0 6px var(--lime);
+  }
+  .el.focus-disabled {
+    opacity: 0.18;
+    filter: grayscale(0.6);
+    pointer-events: none;
+  }
+  body.shell-focus.phase-running .el:not(.focus-reacting):not(.focus-break),
+  body.shell-focus.phase-paused .el:not(.focus-reacting):not(.focus-break) {
+    opacity: 0.18;
+    filter: grayscale(0.5);
+  }
+  body.shell-focus.phase-running .el:not(.focus-reacting):not(.focus-break):hover,
+  body.shell-focus.phase-paused .el:not(.focus-reacting):not(.focus-break):hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .toast {
+    position: fixed;
+    left: 50%;
+    top: 24px;
+    transform: translateX(-50%) translateY(-12px);
+    z-index: 80;
+    padding: 10px 18px;
+    border-radius: 999px;
+    border: 1px solid rgba(245, 185, 66, 0.35);
+    background: rgba(12, 14, 20, 0.92);
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    max-width: min(92vw, 420px);
+    text-align: center;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .toast.ok { border-color: rgba(163, 230, 53, 0.4); color: #d9f99d; }
+  .toast.warn { border-color: rgba(251, 113, 133, 0.4); color: #fecdd3; }
+
+  @keyframes focusPulse {
+    0%, 100% { filter: brightness(1.05); }
+    50% { filter: brightness(1.35); }
+  }
+
+  /* ===== Table stage ===== */
+  .stage {
+    position: relative;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 14px 12px 18px;
+    background:
+      linear-gradient(180deg, rgba(16, 24, 38, 0.85), rgba(8, 12, 20, 0.92));
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.02) inset,
+      0 30px 80px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+  }
+  .stage::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(94, 234, 212, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(94, 234, 212, 0.03) 1px, transparent 1px);
+    background-size: 28px 28px;
+    mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black, transparent);
+    pointer-events: none;
+  }
+
+  .table-wrap {
+    position: relative;
+    overflow-x: auto;
+    overflow-y: visible;
+    padding-bottom: 4px;
+  }
+
+  .ptable {
+    display: grid;
+    grid-template-columns: repeat(18, var(--cell));
+    grid-template-rows: repeat(10, var(--cell));
+    gap: var(--gap);
+    width: max-content;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .el {
+    position: relative;
+    width: var(--cell);
+    height: var(--cell);
+    border-radius: var(--radius);
+    border: 1px solid color-mix(in srgb, var(--cat) 35%, transparent);
+    background:
+      linear-gradient(145deg,
+        color-mix(in srgb, var(--cat) 18%, transparent),
+        rgba(8, 12, 20, 0.9) 70%);
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition:
+      transform 0.18s ease,
+      box-shadow 0.25s ease,
+      border-color 0.25s,
+      filter 0.25s,
+      opacity 0.3s;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .el:hover {
+    transform: translateY(-2px) scale(1.06);
+    z-index: 5;
+    border-color: color-mix(in srgb, var(--cat) 80%, white);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 16px color-mix(in srgb, var(--cat) 35%, transparent);
+  }
+  .el .z {
+    position: absolute;
+    top: 3px; left: 4px;
+    font-family: var(--font-mono);
+    font-size: 8px;
+    color: var(--muted);
+    line-height: 1;
+  }
+  .el .sym {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+  .el .cn {
+    font-size: 9px;
+    color: var(--muted);
+    margin-top: 2px;
+    line-height: 1;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0 2px;
+  }
+
+  /* time roles */
+  .el.role-h {
+    border-color: var(--rose);
+    box-shadow: 0 0 0 1px rgba(251, 113, 133, 0.4), 0 0 22px rgba(251, 113, 133, 0.35);
+    z-index: 4;
+  }
+  .el.role-m {
+    border-color: var(--amber);
+    box-shadow: 0 0 0 1px rgba(245, 185, 66, 0.4), 0 0 22px rgba(245, 185, 66, 0.35);
+    z-index: 4;
+  }
+  .el.role-s {
+    border-color: var(--phosphor);
+    box-shadow: 0 0 0 1px rgba(94, 234, 212, 0.5), 0 0 28px rgba(94, 234, 212, 0.45);
+    z-index: 6;
+    animation: secondPulse 1s ease-in-out infinite;
+  }
+  .el.role-h .sym { color: var(--rose); }
+  .el.role-m .sym { color: var(--amber); }
+  .el.role-s .sym { color: var(--phosphor); }
+
+  .el.lit {
+    filter: brightness(1.25);
+    box-shadow: 0 0 18px color-mix(in srgb, var(--cat) 45%, transparent);
+  }
+  .el.dimmed { opacity: 0.22; filter: grayscale(0.4); }
+  .el.wave {
+    animation: waveFlash 0.55s ease-out;
+  }
+  .el.spark {
+    animation: spark 0.7s ease-out;
+  }
+  .el.collected {
+    outline: 1px solid color-mix(in srgb, var(--cat) 60%, white);
+  }
+  .el.collected::after {
+    content: "";
+    position: absolute;
+    top: 3px; right: 3px;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--cat);
+    box-shadow: 0 0 6px var(--cat);
+  }
+
+  /* category colors */
+  .cat-alkali { --cat: #fb7185; }
+  .cat-alkaline { --cat: #fb923c; }
+  .cat-transition { --cat: #fbbf24; }
+  .cat-post { --cat: #a3e635; }
+  .cat-metalloid { --cat: #34d399; }
+  .cat-nonmetal { --cat: #38bdf8; }
+  .cat-halogen { --cat: #a78bfa; }
+  .cat-noble { --cat: #f472b6; }
+  .cat-lanth { --cat: #f87171; }
+  .cat-actin { --cat: #fdba74; }
+  .cat-unknown { --cat: #64748b; }
+
+  .legend-slot {
+    grid-column: 3 / span 10;
+    grid-row: 1 / span 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8px 16px;
+    pointer-events: none;
+  }
+  .legend-title {
+    font-family: var(--font-display);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--dim);
+    margin-bottom: 8px;
+  }
+  .legend-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 10px;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .chip i {
+    width: 8px; height: 8px;
+    border-radius: 2px;
+    background: var(--c);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--c) 50%, transparent);
+  }
+
+  .f-block-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--dim);
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 0.15em;
+  }
+
+  /* ===== Detail panel ===== */
+  .detail {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    width: min(340px, calc(100vw - 32px));
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    background: rgba(10, 14, 22, 0.92);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255,255,255,0.03) inset;
+    padding: 16px 16px 14px;
+    transform: translateY(20px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 50;
+  }
+  .detail.open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .detail-head {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .detail-badge {
+    width: 64px; height: 64px;
+    border-radius: 12px;
+    border: 1px solid color-mix(in srgb, var(--cat) 50%, transparent);
+    background: linear-gradient(145deg, color-mix(in srgb, var(--cat) 25%, transparent), rgba(0,0,0,0.4));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .detail-badge .dz {
+    position: absolute; top: 5px; left: 7px;
+    font-family: var(--font-mono); font-size: 10px; color: var(--muted);
+  }
+  .detail-badge .dsym {
+    font-family: var(--font-display);
+    font-size: 26px; font-weight: 700;
+    color: var(--cat);
+  }
+  .detail-info h2 {
+    font-size: 18px; font-weight: 700; margin-bottom: 2px;
+  }
+  .detail-info .en {
+    font-family: var(--font-mono);
+    font-size: 12px; color: var(--muted);
+  }
+  .detail-info .cat-name {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--cat) 18%, transparent);
+    color: color-mix(in srgb, var(--cat) 85%, white);
+    border: 1px solid color-mix(in srgb, var(--cat) 30%, transparent);
+  }
+  .orbit {
+    height: 72px;
+    margin: 8px 0 10px;
+    position: relative;
+  }
+  .orbit svg { width: 100%; height: 100%; }
+  .detail-facts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    font-size: 12px;
+  }
+  .detail-facts div {
+    padding: 8px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--line);
+  }
+  .detail-facts span {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--dim);
+    margin-bottom: 2px;
+  }
+  .detail-blurb {
+    margin-top: 10px;
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+  .detail-close {
+    position: absolute;
+    top: 10px; right: 10px;
+    width: 28px; height: 28px;
+    border: 0;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.05);
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+  }
+  .detail-close:hover { color: var(--text); background: rgba(255,255,255,0.1); }
+
+  /* ===== Footer ===== */
+  footer.bar {
+    margin-top: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--dim);
+    font-family: var(--font-mono);
+  }
+  .stats {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .stats b { color: var(--phosphor); font-weight: 600; }
+
+  /* particles canvas */
+  #fx {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 40;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+  }
+  @keyframes colonPulse {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0.25; }
+  }
+  @keyframes secondPulse {
+    0%, 100% { filter: brightness(1.1); }
+    50% { filter: brightness(1.45); }
+  }
+  @keyframes waveFlash {
+    0% { filter: brightness(2.2); box-shadow: 0 0 24px var(--cat); }
+    100% { filter: brightness(1); }
+  }
+  @keyframes spark {
+    0% { transform: scale(1); filter: brightness(2); }
+    40% { transform: scale(1.15); filter: brightness(1.8); }
+    100% { transform: scale(1); filter: brightness(1); }
+  }
+
+  @media (max-width: 900px) {
+    :root { --cell: 42px; }
+    header.top {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      text-align: center;
+    }
+    .side-meta { text-align: center; }
+    .brand { text-align: center; }
+    .el .cn { display: none; }
+    .el .sym { font-size: 13px; }
+  }
+  @media (max-width: 560px) {
+    :root { --cell: 34px; --gap: 2px; }
+    .el .z { font-size: 7px; }
+    .el .sym { font-size: 11px; }
+    .legend-slot { display: none; }
+    .digital { font-size: 32px; }
+  }
+</style>
+</head>
+<body class="shell-learn intensity-demo">
+<canvas id="fx"></canvas>
+<div class="toast" id="toast" role="status"></div>
+<div class="present-hint">投影中 · 按 F 退出 · 空格暂停</div>
+<div class="app">
+  <style>
+    .ll-back{display:inline-flex;align-items:center;gap:6px;margin:0 0 12px;padding:5px 12px;border:1px solid rgba(140,170,220,.22);border-radius:999px;background:rgba(13,18,28,.6);color:#7a8aa3;font:600 12px/1 "JetBrains Mono",ui-monospace,monospace;letter-spacing:.08em;text-decoration:none;transition:color .2s,border-color .2s}
+    .ll-back:hover{color:#5eead4;border-color:#5eead4}
+  </style>
+  <a class="ll-back" href="../../">← 学习实验室</a>
+  <div class="shell-bar">
+    <div class="shell-switch" id="shellSwitch" role="tablist" aria-label="用途模式">
+      <button type="button" data-shell="learn" class="active">观课</button>
+      <button type="button" data-shell="focus">自律</button>
+      <button type="button" data-shell="display">观展</button>
+    </div>
+    <div class="shell-note" id="shellNote">主用途 · 可播放的恒星核合成课</div>
+  </div>
+
+  <header class="top">
+    <div class="brand">
+      <div class="tag" id="brandTag">Stellar Nucleosynthesis · Lesson</div>
+      <h1>核时 ATOMIC<span id="brandSub">恒星如何制造元素 · H → Fe</span></h1>
+    </div>
+    <div class="readout" id="readout">
+      <div class="digital" id="digital">00<span class="colon">:</span>00<span class="colon">:</span>00</div>
+      <div class="triad" id="triad">
+        <div class="triad-card" data-role="h"><div class="role" id="roleH">NOW</div><div class="sym">—</div><div class="meta">—</div></div>
+        <div class="triad-card" data-role="m"><div class="role" id="roleM">LEFT</div><div class="sym">—</div><div class="meta">—</div></div>
+        <div class="triad-card" data-role="s"><div class="role" id="roleS">ERA</div><div class="sym">—</div><div class="meta">—</div></div>
+      </div>
+    </div>
+    <div class="side-meta">
+      <strong id="dateLine">—</strong>
+      <div id="phaseLine">era · 就绪</div>
+      <div id="modeLine">观课 · 待命</div>
+    </div>
+  </header>
+
+  <div class="focus-panel" id="focusPanel" aria-label="恒星核合成">
+    <div class="focus-panel-grid">
+      <div class="hero-cta" id="heroCta">
+        <div class="hero-copy">
+          <h2 id="heroTitle">恒星如何把氢变成铁？</h2>
+          <p id="heroDesc">一节可播放的核合成课：路径点亮 + 周期表熔融。适合课堂导入、科普讲解，或自己先看懂再讲。</p>
+        </div>
+        <div class="hero-btns">
+          <button type="button" id="btnHeroWatch">开始观课 · 90″</button>
+          <button type="button" class="ghost" id="btnHeroFast">45″ 快进</button>
+          <button type="button" class="ghost" id="btnPresent" title="隐藏顶栏，适合投影">投影 F</button>
+        </div>
+      </div>
+
+      <div class="focus-status">
+        <div class="label" id="focusLabel">LESSON</div>
+        <div class="title" id="focusTitle">恒星核合成 · 氢走向铁</div>
+        <div class="sub" id="focusSub">教学简化版：看清主线，不必一次记全。观完可用「自律」把同一路径变成专注钟。</div>
+      </div>
+      <div class="focus-actions" id="focusActions">
+        <button type="button" class="primary" id="btnWatch" title="观看恒星核合成">开始观课</button>
+        <button type="button" class="primary" id="btnStart" hidden>点燃</button>
+        <button type="button" id="btnPause" hidden>暂停</button>
+        <button type="button" id="btnResume" hidden>继续</button>
+        <button type="button" class="danger" id="btnQuench" hidden>结束</button>
+        <button type="button" class="primary" id="btnBreak" hidden>休息 5′</button>
+        <button type="button" id="btnAgain" hidden>再看一遍</button>
+        <button type="button" id="btnToFocus" hidden>转为 25′ 自律</button>
+      </div>
+
+      <div class="quick-picks" id="quickPicks">
+        <span class="qp-label picks-learn-only">课时</span>
+        <button type="button" class="picks-learn-only active" data-demo-sec="90" title="课堂导入推荐">90″ 标准</button>
+        <button type="button" class="picks-learn-only" data-demo-sec="45" title="快速过一遍">45″ 快进</button>
+        <button type="button" class="picks-learn-only" data-demo-sec="180" title="讲解更从容">3′ 精讲</button>
+        <button type="button" class="picks-learn-only" data-demo-sec="300" title="边播边讲">5′ 课堂</button>
+
+        <span class="qp-label picks-focus-only">专注</span>
+        <button type="button" class="picks-focus-only" data-z="15" title="15 分钟">P 15′</button>
+        <button type="button" class="picks-focus-only active" data-z="25" title="25 分钟番茄">Mn 25′</button>
+        <button type="button" class="picks-focus-only" data-z="40" title="40 分钟">Zr 40′</button>
+        <button type="button" class="picks-focus-only" data-z="5" title="5 分钟热身">B 5′</button>
+        <span class="qp-label picks-focus-only">休息</span>
+        <button type="button" class="picks-focus-only break-pick" data-z="2" data-kind="break">He 2′</button>
+        <button type="button" class="picks-focus-only break-pick" data-z="5" data-kind="break" data-break-min="5">休 5′</button>
+        <button type="button" class="picks-focus-only break-pick" data-z="10" data-kind="break">Ne 10′</button>
+      </div>
+
+      <div class="lesson-card" id="lessonCard">
+        <div class="lc-kicker" id="lcKicker">CHAPTER · 待命</div>
+        <div class="lc-title" id="lcTitle">准备开课</div>
+        <div class="lc-body" id="lcBody">点击「开始观课」，周期表将沿 H→Fe 缓慢点亮。建议先看 90 秒建立整体图景，再用 3–5 分钟精讲关键节点。</div>
+        <div class="lc-takeaway" id="lcTakeaway"><b>记住一句：</b>恒星聚变放能到铁为止；比铁更重的元素，多要靠超新星等剧烈过程。</div>
+      </div>
+
+      <div class="recap-panel" id="recapPanel">
+        <h3>本节复盘 · 你刚走完的路</h3>
+        <div class="recap-list" id="recapList"></div>
+        <p class="recap-next" id="recapNext">下一步：再看一遍巩固，或切换到「自律」用 25 分钟把同一故事走慢。</p>
+      </div>
+
+      <div class="cosmos-strip" id="cosmosStrip">
+        <div class="era-rail" id="eraRail" aria-label="宇宙时代"></div>
+        <div class="cosmos-era" id="cosmosEra">就绪 · 等待点燃</div>
+        <div class="cosmos-story" id="cosmosStory">主线：<strong>H → He → C → … → Fe</strong>。下方周期表是舞台，路径条是剧本。</div>
+        <div class="fusion-path" id="fusionPath" aria-label="恒星核合成路径"></div>
+        <div class="iron-preview" id="ironPreview" aria-live="polite">
+          <strong>铁峰将近</strong>
+          <span id="ironPreviewText">结合能顶点在前方…</span>
+          <span class="ip-bar"><i id="ironPreviewBar"></i></span>
+        </div>
+        <p class="science-note" id="scienceNote">
+          <em>教学简化</em>：非严格核天体物理时间线；略去 Li/Be/B 稀少与真实质量阶，止于铁峰。金、铀等比铁重的元素 → 超新星 / 中子俘获等。
+        </p>
+      </div>
+      <div class="progress-track" id="progressTrack"><i id="progressBar"></i></div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="modes modes-display" id="modes" role="tablist">
+      <button type="button" data-mode="clock" class="active">时钟</button>
+      <button type="button" data-mode="orbit">轨道</button>
+      <button type="button" data-mode="wave">波扫</button>
+      <button type="button" data-mode="synth">点亮</button>
+    </div>
+    <div class="hint" id="hint">观课：看恒星造元素 · 自律：专注时钟 · 观展：装饰时钟</div>
+  </div>
+
+  <section class="stage">
+    <div class="table-wrap">
+      <div class="ptable" id="ptable" aria-label="元素周期表"></div>
+    </div>
+  </section>
+
+  <footer class="bar">
+    <div class="stats" id="footerStats">
+      <span class="focus-stat-learn">用途 <b>观课</b></span>
+      <span class="focus-stat-learn">路径 <b>H→Fe · 14 站</b></span>
+      <span class="focus-stat-focus">今日专注 <b id="focusSessions">0</b> 轮</span>
+      <span class="focus-stat-focus">累计 <b id="focusMinutes">0</b> 分钟</span>
+      <span>同位素 <b id="stableCount">0</b></span>
+      <span class="display-only-stat" style="display:none">点亮 <b id="litCount">0</b>/118</span>
+    </div>
+    <div id="footerNote">lesson · H→Fe · 核合成课</div>
+  </footer>
+</div>
+
+<aside class="detail" id="detail" aria-live="polite">
+  <button class="detail-close" id="detailClose" aria-label="关闭">×</button>
+  <div class="detail-head">
+    <div class="detail-badge" id="dBadge">
+      <span class="dz" id="dZ">1</span>
+      <span class="dsym" id="dSym">H</span>
+    </div>
+    <div class="detail-info">
+      <h2 id="dName">氢</h2>
+      <div class="en" id="dEn">Hydrogen</div>
+      <div class="cat-name" id="dCat">非金属</div>
+    </div>
+  </div>
+  <div class="orbit" id="orbitBox" aria-hidden="true"></div>
+  <div class="detail-facts">
+    <div><span>Z</span><b id="dZ2">1</b></div>
+    <div><span>TIME ROLE</span><b id="dRole">—</b></div>
+    <div><span>PERIOD</span><b id="dPeriod">1</b></div>
+    <div><span>GROUP</span><b id="dGroup">1</b></div>
+  </div>
+  <p class="detail-blurb" id="dBlurb"></p>
+</aside>
+
+<script>
+/* ========== Element data (Z, symbol, cn, en, category, period, group, blurb) ========== */
+const CATS = {
+  alkali: { key: "cat-alkali", name: "碱金属", color: "#fb7185" },
+  alkaline: { key: "cat-alkaline", name: "碱土金属", color: "#fb923c" },
+  transition: { key: "cat-transition", name: "过渡金属", color: "#fbbf24" },
+  post: { key: "cat-post", name: "主族金属", color: "#a3e635" },
+  metalloid: { key: "cat-metalloid", name: "类金属", color: "#34d399" },
+  nonmetal: { key: "cat-nonmetal", name: "非金属", color: "#38bdf8" },
+  halogen: { key: "cat-halogen", name: "卤素", color: "#a78bfa" },
+  noble: { key: "cat-noble", name: "惰性气体", color: "#f472b6" },
+  lanth: { key: "cat-lanth", name: "镧系", color: "#f87171" },
+  actin: { key: "cat-actin", name: "锕系", color: "#fdba74" },
+  unknown: { key: "cat-unknown", name: "未知", color: "#64748b" },
+};
+
+// Compact layout positions: [period row 1-7, group col 1-18]; f-block on rows 9-10
+// Standard short form: La/Ac in d-block placeholders, full f-block below
+const ELEMENTS = [
+  [1,"H","氢","Hydrogen","nonmetal",1,1,"宇宙里最轻的一缕呼吸，时间从它开始计数。"],
+  [2,"He","氦","Helium","noble",1,18,"太阳芯的低语，惰性却最会发光。"],
+  [3,"Li","锂","Lithium","alkali",2,1,"情绪的金属，电池里跳动的脉搏。"],
+  [4,"Be","铍","Beryllium","alkaline",2,2,"翡翠的骨架，轻而坚韧。"],
+  [5,"B","硼","Boron","metalloid",2,13,"玻璃与半导体之间的边界守卫。"],
+  [6,"C","碳","Carbon","nonmetal",2,14,"生命的骨架，也是钻石的决心。"],
+  [7,"N","氮","Nitrogen","nonmetal",2,15,"空气的主旋律，沉默的保护者。"],
+  [8,"O","氧","Oxygen","nonmetal",2,16,"每一次呼吸的倒计时燃料。"],
+  [9,"F","氟","Fluorine","halogen",2,17,"最饿的卤素，几乎什么都想氧化。"],
+  [10,"Ne","氖","Neon","noble",2,18,"霓虹夜里最熟悉的粉红签名。"],
+  [11,"Na","钠","Sodium","alkali",3,1,"街头小贩的焰火，咸味的金属。"],
+  [12,"Mg","镁","Magnesium","alkaline",3,2,"摄影闪光灯里炸开的白昼。"],
+  [13,"Al","铝","Aluminium","post",3,13,"现代外壳的银白皮肤。"],
+  [14,"Si","硅","Silicon","metalloid",3,14,"芯片文明的沙粒王座。"],
+  [15,"P","磷","Phosphorus","nonmetal",3,15,"骨头与火柴的双面幽灵。"],
+  [16,"S","硫","Sulfur","nonmetal",3,16,"火山口那抹刺鼻的黄。"],
+  [17,"Cl","氯","Chlorine","halogen",3,17,"泳池与消毒的锐利气味。"],
+  [18,"Ar","氩","Argon","noble",3,18,"焊接火光旁安静的旁观者。"],
+  [19,"K","钾","Potassium","alkali",4,1,"香蕉与焰色里的紫光心跳。"],
+  [20,"Ca","钙","Calcium","alkaline",4,2,"骨骼与石灰岩的建筑师。"],
+  [21,"Sc","钪","Scandium","transition",4,3,"航空合金里的稀有亮点。"],
+  [22,"Ti","钛","Titanium","transition",4,4,"航天器与球拍的轻甲。"],
+  [23,"V","钒","Vanadium","transition",4,5,"钢的强化剂，彩虹氧化物。"],
+  [24,"Cr","铬","Chromium","transition",4,6,"镜子般的镀层，硬度与光泽。"],
+  [25,"Mn","锰","Manganese","transition",4,7,"番茄钟最爱的 25 分钟象征。"],
+  [26,"Fe","铁","Iron","transition",4,8,"血红素与行星核心的双料主角。"],
+  [27,"Co","钴","Cobalt","transition",4,9,"蓝玻璃与锂电的深蓝灵魂。"],
+  [28,"Ni","镍","Nickel","transition",4,10,"硬币与合金的稳定伙伴。"],
+  [29,"Cu","铜","Copper","transition",4,11,"导电公路，时光氧化成铜绿。"],
+  [30,"Zn","锌","Zinc","transition",4,12,"镀层盾牌，伤口愈合的微量元素。"],
+  [31,"Ga","镓","Gallium","post",4,13,"手心融化的金属奇迹。"],
+  [32,"Ge","锗","Germanium","metalloid",4,14,"早期晶体管的沉默先驱。"],
+  [33,"As","砷","Arsenic","metalloid",4,15,"毒药与半导体的危险优雅。"],
+  [34,"Se","硒","Selenium","nonmetal",4,16,"光敏的红，护目的微量元素。"],
+  [35,"Br","溴","Bromine","halogen",4,17,"室温下的红棕液体。"],
+  [36,"Kr","氪","Krypton","noble",4,18,"超人之名，真实的稀有气体。"],
+  [37,"Rb","铷","Rubidium","alkali",5,1,"原子钟里最准的心跳之一。"],
+  [38,"Sr","锶","Strontium","alkaline",5,2,"烟花里那抹红色署名。"],
+  [39,"Y","钇","Yttrium","transition",5,3,"激光与超导的配角明星。"],
+  [40,"Zr","锆","Zirconium","transition",5,4,"核反应堆的抗腐蚀外壳。"],
+  [41,"Nb","铌","Niobium","transition",5,5,"超导磁体的冷静骨架。"],
+  [42,"Mo","钼","Molybdenum","transition",5,6,"酶与高强钢的微量关键。"],
+  [43,"Tc","锝","Technetium","transition",5,7,"人造放射性，医学造影的旅人。"],
+  [44,"Ru","钌","Ruthenium","transition",5,8,"触点与催化的稀有工匠。"],
+  [45,"Rh","铑","Rhodium","transition",5,9,"汽车尾气催化的白银贵族。"],
+  [46,"Pd","钯","Palladium","transition",5,10,"氢的海绵，首饰的灰白光。"],
+  [47,"Ag","银","Silver","transition",5,11,"月光金属，最会导电的那个。"],
+  [48,"Cd","镉","Cadmium","transition",5,12,"电池与颜料里的危险黄。"],
+  [49,"In","铟","Indium","post",5,13,"触摸屏透明电极的灵魂。"],
+  [50,"Sn","锡","Tin","post",5,14,"青铜时代的合谋者。"],
+  [51,"Sb","锑","Antimony","metalloid",5,15,"铅字与阻燃剂的古老伙伴。"],
+  [52,"Te","碲","Tellurium","metalloid",5,16,"半导与合金里的稀有气味。"],
+  [53,"I","碘","Iodine","halogen",5,17,"紫烟与甲状腺的守护色。"],
+  [54,"Xe","氙","Xenon","noble",5,18,"闪光灯与离子推进的蓝白光。"],
+  [55,"Cs","铯","Caesium","alkali",6,1,"定义「秒」的原子标准。"],
+  [56,"Ba","钡","Barium","alkaline",6,2,"焰色里的苹果绿，造影的白。"],
+  [57,"La","镧","Lanthanum","lanth",6,3,"光学玻璃的稀土之门。"],
+  [58,"Ce","铈","Cerium","lanth",8,4,"打火石火花的源头之一。"],
+  [59,"Pr","镨","Praseodymium","lanth",8,5,"黄绿色玻璃的染色师。"],
+  [60,"Nd","钕","Neodymium","lanth",8,6,"强磁铁里的紫色力量。"],
+  [61,"Pm","钷","Promethium","lanth",8,7,"几乎不存在于自然的放射性鬼影。"],
+  [62,"Sm","钐","Samarium","lanth",8,8,"永久磁体与核控制棒。"],
+  [63,"Eu","铕","Europium","lanth",8,9,"欧元防伪荧光的签名。"],
+  [64,"Gd","钆","Gadolinium","lanth",8,10,"MRI 造影的金属信使。"],
+  [65,"Tb","铽","Terbium","lanth",8,11,"绿色荧光粉的秘密配方。"],
+  [66,"Dy","镝","Dysprosium","lanth",8,12,"高温磁体的稳定剂。"],
+  [67,"Ho","钬","Holmium","lanth",8,13,"激光手术刀的波长选择。"],
+  [68,"Er","铒","Erbium","lanth",8,14,"光纤放大器的粉红增益。"],
+  [69,"Tm","铥","Thulium","lanth",8,15,"便携 X 光的稀土火种。"],
+  [70,"Yb","镱","Ytterbium","lanth",8,16,"原子钟候选与不锈钢合金。"],
+  [71,"Lu","镥","Lutetium","lanth",8,17,"最重的稳定稀土，催化终点。"],
+  [72,"Hf","铪","Hafnium","transition",6,4,"核潜艇控制棒的耐高温芯。"],
+  [73,"Ta","钽","Tantalum","transition",6,5,"手机电容里的沉默心脏。"],
+  [74,"W","钨","Tungsten","transition",6,6,"灯丝与熔点之王。"],
+  [75,"Re","铼","Rhenium","transition",6,7,"喷气发动机的高温合金。"],
+  [76,"Os","锇","Osmium","transition",6,8,"密度冠军，蓝黑色的沉重。"],
+  [77,"Ir","铱","Iridium","transition",6,9,"陨石与铂金笔尖的稀有签名。"],
+  [78,"Pt","铂","Platinum","transition",6,10,"催化与婚礼的永恒金属。"],
+  [79,"Au","金","Gold","transition",6,11,"不朽的软金属，文明的诱饵。"],
+  [80,"Hg","汞","Mercury","transition",6,12,"液态银，温度计里的游魂。"],
+  [81,"Tl","铊","Thallium","post",6,13,"剧毒的柔软，光谱里的绿线。"],
+  [82,"Pb","铅","Lead","post",6,14,"屋顶、子弹与沉重的历史。"],
+  [83,"Bi","铋","Bismuth","post",6,15,"阶梯晶体的彩虹金属。"],
+  [84,"Po","钋","Polonium","metalloid",6,16,"居里夫妇的放射性遗产。"],
+  [85,"At","砹","Astatine","halogen",6,17,"地球上最稀有的卤素幽灵。"],
+  [86,"Rn","氡","Radon","noble",6,18,"地下室里无形的放射性雾。"],
+  [87,"Fr","钫","Francium","alkali",7,1,"最不稳定的碱金属幻影。"],
+  [88,"Ra","镭","Radium","alkaline",7,2,"夜光表盘的致命浪漫。"],
+  [89,"Ac","锕","Actinium","actin",7,3,"锕系的起点，蓝光的名字。"],
+  [90,"Th","钍","Thorium","actin",9,4,"未来核燃料的候选人。"],
+  [91,"Pa","镤","Protactinium","actin",9,5,"铀衰变链上的稀有驿站。"],
+  [92,"U","铀","Uranium","actin",9,6,"核时代的双刃之剑。"],
+  [93,"Np","镎","Neptunium","actin",9,7,"海王星之外的人造邻居。"],
+  [94,"Pu","钚","Plutonium","actin",9,8,"战争与堆芯的沉重同位素。"],
+  [95,"Am","镅","Americium","actin",9,9,"烟雾报警器里的微弱射线。"],
+  [96,"Cm","锔","Curium","actin",9,10,"以居里夫妇命名的人造星。"],
+  [97,"Bk","锫","Berkelium","actin",9,11,"伯克利实验室的合成足迹。"],
+  [98,"Cf","锎","Californium","actin",9,12,"中子源与探矿的强光。"],
+  [99,"Es","锿","Einsteinium","actin",9,13,"热核试验尘埃里的惊喜。"],
+  [100,"Fm","镄","Fermium","actin",9,14,"费米之名，仅以原子计。"],
+  [101,"Md","钔","Mendelevium","actin",9,15,"周期表之父的名字，也是一张牌。"],
+  [102,"No","锘","Nobelium","actin",9,16,"诺贝尔的荣耀刻在核素上。"],
+  [103,"Lr","铹","Lawrencium","actin",9,17,"回旋加速器时代的终点站。"],
+  [104,"Rf","𬬻","Rutherfordium","transition",7,4,"卢瑟福散射之后的超重延续。"],
+  [105,"Db"," душа","Dubnium","transition",7,5,"杜布纳与伯克利的命名之争。"],
+  [106,"Sg"," Complementary","Seaborgium","transition",7,6,"西博格：把人工元素写进周期表。"],
+  [107,"Bh"," outright","Bohrium","transition",7,7,"玻尔模型在超重区的回声。"],
+  [108,"Hs"," Combined","Hassium","transition",7,8,"黑森州的实验室坐标。"],
+  [109,"Mt","鿏","Meitnerium","transition",7,9,"迈特纳：核裂变的隐秘功臣。"],
+  [110,"Ds","𫟼","Darmstadtium","transition",7,10,"达姆施塔特加速器的产物。"],
+  [111,"Rg","𬬭","Roentgenium","transition",7,11,"以发现 X 射线者命名。"],
+  [112,"Cn","鿔","Copernicium","transition",7,12,"哥白尼：把太阳放回中心。"],
+  [113,"Nh","鿭","Nihonium","post",7,13,"日本合成的亚洲之声。"],
+  [114,"Fl","𫓧","Flerovium","post",7,14,"弗廖罗夫实验室的超重岛。"],
+  [115,"Mc","镆","Moscovium","post",7,15,"莫斯科州的核合成签名。"],
+  [116,"Lv","鉝","Livermorium","post",7,16,"利弗莫尔国家实验室坐标。"],
+  [117,"Ts","鿬","Tennessine","halogen",7,17,"田纳西：卤素家族最后一员。"],
+  [118,"Og","鿫","Oganesson","noble",7,18,"周期表右上角的人造终点。"],
+];
+
+const byZ = new Map(ELEMENTS.map(e => {
+  const [z, sym, cn, en, cat, period, group, blurb] = e;
+  return [z, { z, sym, cn, en, cat, period, group, blurb }];
+}));
+
+/* grid placement for standard table + f-block */
+function gridPos(el) {
+  // Main table rows 1-7, f-block rows 9-10 (with spacer row 8)
+  if (el.period <= 7 && !(el.cat === "lanth" && el.z >= 58) && !(el.cat === "actin" && el.z >= 90)) {
+    // La (57) and Ac (89) sit in group 3 of periods 6/7
+    return { row: el.period, col: el.group };
+  }
+  if (el.cat === "lanth") {
+    // Ce-Lu: row 9, cols 4-17 (Z 58-71)
+    return { row: 9, col: el.z - 54 }; // 58->4 ... 71->17
+  }
+  if (el.cat === "actin") {
+    // Th-Lr: row 10, cols 4-17 (Z 90-103)
+    return { row: 10, col: el.z - 86 }; // 90->4 ... 103->17
+  }
+  return { row: el.period, col: el.group };
+}
+
+/* ========== State ========== */
+const MAX_FOCUS_Z = 90; // 最长 90 分钟（钍）
+const STORAGE_FOCUS = "atomic-clock-focus-v1";
+
+function todayKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
+function loadFocusStats() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(STORAGE_FOCUS) || "{}");
+    const day = todayKey();
+    if (raw.day !== day) {
+      return { day, sessions: 0, minutes: 0, stable: raw.stable || [], streak: 0, lastZ: 25 };
+    }
+    return {
+      day,
+      sessions: raw.sessions || 0,
+      minutes: raw.minutes || 0,
+      stable: raw.stable || [],
+      streak: raw.streak || 0,
+      lastZ: raw.lastZ || 25,
+    };
+  } catch {
+    return { day: todayKey(), sessions: 0, minutes: 0, stable: [], streak: 0, lastZ: 25 };
+  }
+}
+
+function saveFocusStats() {
+  localStorage.setItem(STORAGE_FOCUS, JSON.stringify({
+    day: focus.stats.day,
+    sessions: focus.stats.sessions,
+    minutes: focus.stats.minutes,
+    stable: [...focus.stable],
+    streak: focus.stats.streak,
+    lastZ: focus.stats.lastZ,
+  }));
+}
+
+const focus = {
+  phase: "idle", // idle | armed | running | paused | break | done
+  kind: "work",  // work | break
+  z: null,
+  durationMs: 0,
+  remainingMs: 0,
+  endsAt: 0,
+  armedZ: 25,
+  armedKind: "work",
+  stats: loadFocusStats(),
+  stable: new Set(),
+  stageIndex: 0,
+  lastStageIndex: -1,
+};
+
+focus.stable = new Set(focus.stats.stable || []);
+
+function isDemoIntensity() {
+  // 观课 = 教学演示强度；自律正式 = 克制
+  return state.shell === "learn" || focus.demoSec != null;
+}
+
+function isLearnShell() {
+  return state.shell === "learn";
+}
+
+function syncIntensityClass() {
+  const useDemo = isDemoIntensity();
+  document.body.classList.toggle("intensity-demo", useDemo);
+  document.body.classList.toggle("intensity-calm", !useDemo && state.shell === "focus");
+}
+
+function updateLessonCard(stageIdx, progress) {
+  if (!isLearnShell()) return;
+  const stage = FUSION_PATH[stageIdx] || FUSION_PATH[0];
+  const el = byZ.get(stage.z);
+  const kicker = document.getElementById("lcKicker");
+  const title = document.getElementById("lcTitle");
+  const body = document.getElementById("lcBody");
+  const take = document.getElementById("lcTakeaway");
+  if (!kicker) return;
+
+  if (focus.phase === "idle" || focus.phase === "armed") {
+    kicker.textContent = "CHAPTER · 待命";
+    title.textContent = "恒星如何制造元素？";
+    body.textContent = "从氢到铁共 14 站（教学简化）。播放时请同时看：①时代轨 ②路径条 ③周期表高亮 ④本卡片要点。";
+    take.innerHTML = "<b>课前一句：</b>普通恒星聚变放能到铁为止；金、铀等更重元素要另寻「暴力剧场」。";
+    return;
+  }
+  if (focus.phase === "done") {
+    kicker.textContent = "CHAPTER · 结课";
+    title.textContent = "铁峰 · 本课终点";
+    body.textContent = stage.note;
+    take.innerHTML = `<b>带走：</b>${stage.takeaway} 更重元素 → 超新星 / r-过程等。`;
+    return;
+  }
+
+  const n = FUSION_PATH.length;
+  kicker.textContent = `CHAPTER ${stageIdx + 1}/${n} · ${stage.epoch} · ${stage.tag}`;
+  title.textContent = `${el.sym} ${el.cn} · ${stage.process}`;
+  body.textContent = stage.note;
+  take.innerHTML = `<b>记住：</b>${stage.takeaway}`;
+
+  // 观课阶段切换时轻提示（避免每帧）
+  if (stageIdx !== state.lastLessonIdx && focus.phase === "running") {
+    state.lastLessonIdx = stageIdx;
+  }
+}
+
+function buildRecap() {
+  const list = document.getElementById("recapList");
+  const panel = document.getElementById("recapPanel");
+  if (!list || !panel) return;
+  const lines = [
+    ["H–He", "大爆炸留下氢氦原料"],
+    ["C–O", "巨星 3α 与氦燃：生命与呼吸的根"],
+    ["Ne–Si", "大质量恒星晚期燃烧爬阶"],
+    ["S–Cr", "硅燃冲向铁峰"],
+    ["Fe", "结合能顶点 · 普通聚变到此为止"],
+  ];
+  list.innerHTML = lines.map(([a, b]) => `<div><strong>${a}</strong><span>${b}</span></div>`).join("");
+  panel.classList.add("on");
+}
+
+function hideRecap() {
+  document.getElementById("recapPanel")?.classList.remove("on");
+}
+
+function setPresentMode(on) {
+  state.present = !!on;
+  document.body.classList.toggle("present-mode", state.present);
+  if (state.present) toast("投影模式 · 按 F 退出", "ok");
+}
+
+function fusionProgress() {
+  if (focus.durationMs <= 0) return 0;
+  if (focus.phase === "done" && focus.kind === "work") return 1;
+  const remain = focus.phase === "paused" || focus.phase === "armed" || focus.phase === "idle"
+    ? focus.remainingMs
+    : Math.max(0, focus.endsAt - Date.now());
+  const p = 1 - remain / focus.durationMs;
+  return Math.min(1, Math.max(0, p));
+}
+
+function stageIndexFromProgress(p) {
+  // 进度均匀映射到路径；终点铁峰只在接近完成时到达
+  const n = FUSION_PATH.length;
+  if (p >= 0.999) return n - 1;
+  return Math.min(n - 2, Math.floor(p * (n - 1)));
+}
+
+/** 当前阶段内进度 0→1，用于「慢慢熔融」 */
+function stageLocalProgress(p) {
+  const n = FUSION_PATH.length;
+  if (p >= 0.999) return 1;
+  const span = 1 / (n - 1);
+  const idx = stageIndexFromProgress(p);
+  const start = idx * span;
+  if (span <= 0) return 1;
+  return Math.min(1, Math.max(0, (p - start) / span));
+}
+
+function currentFusionStage() {
+  return FUSION_PATH[Math.max(0, Math.min(FUSION_PATH.length - 1, focus.stageIndex))];
+}
+
+function buildFusionPathUI() {
+  const box = document.getElementById("fusionPath");
+  if (!box) return;
+  box.innerHTML = FUSION_PATH.map((s, i) => {
+    const el = byZ.get(s.z);
+    const peak = s.z === IRON_Z ? " peak" : "";
+    const arrow = i < FUSION_PATH.length - 1
+      ? `<span class="fusion-arrow" data-arrow="${i}">→</span>`
+      : "";
+    return `<button type="button" class="fusion-node${peak}" data-stage="${i}" title="${el.cn} · ${s.era} · ${s.process}" style="--fuse:0">
+      <span class="fn-sym">${el.sym}</span>
+      <span class="fn-tag">${s.tag}</span>
+    </button>${arrow}`;
+  }).join("");
+
+  const rail = document.getElementById("eraRail");
+  if (rail) {
+    rail.innerHTML = EPOCH_ORDER.map((ep) =>
+      `<span class="era-chip${ep === "铁峰" ? " peak" : ""}" data-epoch="${ep}">${ep}</span>`
+    ).join("");
+  }
+}
+
+function updateEraRail(stageIdx) {
+  const epoch = (FUSION_PATH[stageIdx] || FUSION_PATH[0]).epoch;
+  const reached = new Set();
+  for (let i = 0; i <= stageIdx; i++) reached.add(FUSION_PATH[i].epoch);
+  document.querySelectorAll(".era-chip").forEach((chip) => {
+    const ep = chip.dataset.epoch;
+    chip.classList.toggle("on", reached.has(ep) || ep === epoch);
+  });
+}
+
+function updateIronPreview(progress, stageIdx) {
+  const box = document.getElementById("ironPreview");
+  const bar = document.getElementById("ironPreviewBar");
+  const text = document.getElementById("ironPreviewText");
+  if (!box) return;
+
+  const nearIron = progress >= IRON_PREVIEW_FROM && progress < 0.999
+    && focus.phase !== "idle" && focus.phase !== "armed"
+    && focus.kind === "work"
+    && (focus.phase === "running" || focus.phase === "paused");
+
+  box.classList.toggle("on", nearIron || (focus.phase === "done" && focus.kind === "work"));
+
+  if (focus.phase === "done" && focus.kind === "work") {
+    if (text) text.textContent = "铁峰到达 · 结合能顶点 · 恒星聚变到此为止。";
+    if (bar) bar.style.width = "100%";
+    return;
+  }
+
+  if (nearIron) {
+    const peakT = Math.min(1, (progress - IRON_PREVIEW_FROM) / (1 - IRON_PREVIEW_FROM));
+    if (bar) bar.style.width = Math.round(peakT * 100) + "%";
+    const stage = FUSION_PATH[stageIdx];
+    if (text) {
+      text.textContent = stageIdx >= FUSION_PATH.length - 2
+        ? `即将抵达 Fe · 当前 ${byZ.get(stage.z).sym} · 结合能曲线顶端在望`
+        : `铁核正在成形（${Math.round(peakT * 100)}%）· 硅燃烧末段，聚变终点临近`;
+    }
+    if (peakT > 0.15 && !state.ironPreviewShown) {
+      state.ironPreviewShown = true;
+      if (isDemoIntensity()) toast("铁峰将近 · 结合能顶点在前方", "ok");
+    }
+  } else {
+    if (bar) bar.style.width = "0%";
+  }
+}
+
+function updateFusionPathUI(stageIdx, progress) {
+  const local = stageLocalProgress(progress);
+  const n = FUSION_PATH.length;
+
+  document.querySelectorAll(".fusion-node").forEach((node) => {
+    const i = Number(node.dataset.stage);
+    const isPeakEnd = stageIdx === n - 1 && progress >= 0.999;
+    node.classList.toggle("done", i < stageIdx || isPeakEnd);
+    node.classList.toggle("now", i === stageIdx && !isPeakEnd || (isPeakEnd && i === stageIdx));
+    node.classList.toggle("incoming", i === stageIdx + 1 && local > 0.35 && stageIdx < n - 1);
+    if (i === stageIdx) node.style.setProperty("--fuse", local.toFixed(3));
+    else if (i === stageIdx + 1) node.style.setProperty("--fuse", Math.max(0, (local - 0.35) / 0.65).toFixed(3));
+    else node.style.setProperty("--fuse", "0");
+    if (isPeakEnd && i === n - 1) {
+      node.classList.add("now", "done");
+      node.style.setProperty("--fuse", "1");
+    }
+  });
+  document.querySelectorAll(".fusion-arrow").forEach((a) => {
+    const i = Number(a.dataset.arrow);
+    a.classList.toggle("lit", i < stageIdx || (i === stageIdx && local > 0.5));
+  });
+
+  updateEraRail(stageIdx);
+  updateIronPreview(progress, stageIdx);
+
+  const stage = FUSION_PATH[stageIdx] || FUSION_PATH[0];
+  const el = byZ.get(stage.z);
+  const eraEl = document.getElementById("cosmosEra");
+  const storyEl = document.getElementById("cosmosStory");
+  if (eraEl) {
+    eraEl.textContent = `${stage.epoch} · ${stage.era} · ${stage.process} · ${el.sym}`;
+  }
+  if (storyEl) {
+    const pct = Math.round(progress * 100);
+    const melt = Math.round(local * 100);
+    storyEl.innerHTML = `<strong>${el.sym} ${el.cn}</strong> — ${stage.note} <span style="color:var(--dim)">（总进度 ${pct}% · 本层熔融 ${melt}%）</span>`;
+  }
+}
+
+function paintFusionTable(stageIdx, progress) {
+  if (state.shell !== "focus" && state.shell !== "learn") return;
+
+  // 降频：相同视觉状态不重绘 class 风暴
+  const local = stageLocalProgress(progress);
+  const fuseBucket = Math.round(local * 12); // 约 8% 一档，保持「慢慢变」
+  const peakBucket = progress >= IRON_PREVIEW_FROM
+    ? Math.round(((progress - IRON_PREVIEW_FROM) / (1 - IRON_PREVIEW_FROM)) * 10)
+    : -1;
+  const paintKey = `${focus.phase}|${stageIdx}|${fuseBucket}|${peakBucket}|${focus.kind}|${focus.z}`;
+  // 阶段切换或 fuse 档变化时再清 class；同一档只更新 CSS 变量
+  const stageChanged = paintKey.split("|").slice(0, 2).join("|") !== (state.lastPaintKey || "").split("|").slice(0, 2).join("|");
+  const needFull = stageChanged || paintKey !== state.lastPaintKey;
+
+  if (!needFull && (focus.phase === "running" || focus.phase === "paused")) {
+    const nowZ = FUSION_PATH[stageIdx].z;
+    const nowNode = elNodes.get(nowZ);
+    if (nowNode) nowNode.style.setProperty("--fuse", local.toFixed(3));
+    const next = FUSION_PATH[stageIdx + 1];
+    if (next) {
+      const nn = elNodes.get(next.z);
+      if (nn) {
+        const inc = Math.max(0, (local - 0.35) / 0.65);
+        nn.style.setProperty("--fuse", inc.toFixed(3));
+      }
+    }
+    if (progress >= IRON_PREVIEW_FROM && nowZ !== IRON_Z) {
+      const fe = elNodes.get(IRON_Z);
+      if (fe) {
+        const peakT = Math.min(1, (progress - IRON_PREVIEW_FROM) / (1 - IRON_PREVIEW_FROM));
+        fe.style.setProperty("--peak", peakT.toFixed(3));
+      }
+    }
+    return;
+  }
+  state.lastPaintKey = paintKey;
+
+  clearFocusTableClasses();
+
+  if (focus.kind === "break" || focus.phase === "break") {
+    for (const [z, node] of elNodes) {
+      if (z !== focus.z) node.classList.add("fusion-offpath");
+      node.style.removeProperty("--fuse");
+      node.style.removeProperty("--peak");
+    }
+    elNodes.get(focus.z)?.classList.add("focus-break");
+    return;
+  }
+
+  const pathSet = FUSION_ZS;
+  const nowZ = FUSION_PATH[stageIdx].z;
+  const nextStage = FUSION_PATH[stageIdx + 1];
+  const peakT = progress >= IRON_PREVIEW_FROM
+    ? Math.min(1, (progress - IRON_PREVIEW_FROM) / (1 - IRON_PREVIEW_FROM))
+    : 0;
+
+  // armed 预览
+  if (focus.phase === "armed" || focus.phase === "idle") {
+    for (const [z, node] of elNodes) {
+      node.style.removeProperty("--fuse");
+      node.style.removeProperty("--peak");
+      if (pathSet.has(z)) {
+        node.classList.add(z === 1 ? "fusion-now" : "fusion-future");
+        if (z === 1) node.style.setProperty("--fuse", "0.35");
+      } else {
+        node.classList.add("fusion-offpath");
+      }
+    }
+    if (focus.armedZ && focus.armedZ !== 1) {
+      elNodes.get(focus.armedZ)?.classList.add("focus-reacting");
+    }
+    return;
+  }
+
+  for (const [z, node] of elNodes) {
+    node.style.removeProperty("--fuse");
+    node.style.removeProperty("--peak");
+    if (!pathSet.has(z)) {
+      node.classList.add("fusion-offpath");
+      continue;
+    }
+
+    if (focus.phase === "done" || progress >= 0.999) {
+      node.classList.add("fusion-done");
+      if (z === IRON_Z) {
+        node.classList.add("fusion-now", "fusion-peak");
+        node.style.setProperty("--fuse", "1");
+      }
+      continue;
+    }
+
+    if (z === nowZ) {
+      node.classList.add("fusion-now");
+      node.style.setProperty("--fuse", local.toFixed(3));
+      if (z === IRON_Z) node.classList.add("fusion-peak");
+    } else if (FUSION_PATH.findIndex(s => s.z === z) < stageIdx) {
+      node.classList.add("fusion-done");
+    } else if (nextStage && z === nextStage.z && local > 0.35) {
+      node.classList.add("fusion-incoming");
+      node.style.setProperty("--fuse", Math.max(0, (local - 0.35) / 0.65).toFixed(3));
+    } else if (z === IRON_Z && peakT > 0.05 && nowZ !== IRON_Z) {
+      node.classList.add("fusion-peak-glow");
+      node.style.setProperty("--peak", peakT.toFixed(3));
+    } else {
+      node.classList.add("fusion-future");
+    }
+  }
+}
+
+const state = {
+  shell: "learn", // learn(主) | focus(次) | display(次)
+  mode: "clock",
+  present: false,
+  collected: new Set(JSON.parse(localStorage.getItem("atomic-clock-collected") || "[]")),
+  sparks: Number(localStorage.getItem("atomic-clock-sparks") || 0),
+  lastH: -1, lastM: -1, lastS: -1,
+  selected: null,
+  waveToken: 0,
+  lastPaintKey: "",
+  ironPreviewShown: false,
+  lastLessonIdx: -1,
+};
+
+/* 恒星核合成简化路径：大爆炸 → 主序/巨星燃烧 → 铁峰
+   一节自律课 = 压缩的元素起源史，进度 0→1 从 H 走到 Fe
+   tag = 路径旁短标签；epoch = 时代轨芯片 */
+const FUSION_PATH = [
+  { z: 1,  era: "大爆炸余烬",   process: "质子时代",   tag: "起点", epoch: "大爆炸", note: "宇宙早期几乎全是氢。观课的起点，也是周期表的起点。", takeaway: "氢是宇宙最丰富的原料。" },
+  { z: 2,  era: "大爆炸核合成", process: "BBN",       tag: "BBN",  epoch: "大爆炸", note: "大爆炸后几分钟内，氢融成氦——第一批「合成元素」。", takeaway: "氦主要来自大爆炸，不只来自恒星。" },
+  { z: 6,  era: "红巨星核心",   process: "3α 过程",   tag: "3α",   epoch: "巨星",   note: "三颗氦核合成碳。没有这一步，就没有有机生命的骨架。", takeaway: "碳来自恒星内部的 3α 过程。" },
+  { z: 7,  era: "CNO 循环",     process: "催化氢燃",   tag: "CNO",  epoch: "巨星",   note: "氮在 CNO 循环里当「催化剂」，帮更热的恒星继续烧氢。", takeaway: "氮是中转站，不一定是终点产物。" },
+  { z: 8,  era: "氦燃烧层",     process: "α 俘获",    tag: "α+",   epoch: "巨星",   note: "碳再俘获氦变成氧。你呼吸的氧，故事写在巨星里。", takeaway: "氧是恒星氦燃烧的重要产物。" },
+  { z: 10, era: "碳燃烧",       process: "重核融合",   tag: "C燃",  epoch: "晚期",   note: "大质量恒星核心更热，开始烧碳，氖等出现。", takeaway: "质量越大的恒星，能烧的核越重。" },
+  { z: 12, era: "氖燃烧",       process: "α 梯",      tag: "Ne",   epoch: "晚期",   note: "沿 α 粒子阶梯继续变重，镁出现。", takeaway: "晚期燃烧一层层「爬楼梯」。" },
+  { z: 14, era: "氧燃烧",       process: "氧燃烧",     tag: "O燃",  epoch: "晚期",   note: "氧燃烧逼近硅燃烧。铁峰前的最后冲刺开始蓄力。", takeaway: "越接近铁，阶段越短、越剧烈（真实恒星中）。" },
+  { z: 16, era: "硅燃烧前夜",   process: "α 过程",    tag: "S",    epoch: "硅燃",   note: "硫等核素在通往铁峰的准平衡路上。", takeaway: "结合能仍在上升，聚变仍放能。" },
+  { z: 18, era: "硅燃烧",       process: "α 阶梯",    tag: "Ar",   epoch: "硅燃",   note: "硅燃烧极快，氩是台阶之一。", takeaway: "硅燃烧在真实恒星中可短至一天量级。" },
+  { z: 20, era: "硅燃烧",       process: "α 阶梯",    tag: "Ca",   epoch: "硅燃",   note: "钙：你的骨头与地壳，都连着这段恒星史。", takeaway: "人体元素与恒星产物重叠。" },
+  { z: 22, era: "准平衡",       process: "硅燃烧尾声", tag: "Ti",   epoch: "硅燃",   note: "钛在铁核边缘闪过，终点临近。", takeaway: "即将到达结合能曲线的峰。" },
+  { z: 24, era: "铁峰将至",     process: "准平衡",    tag: "Cr",   epoch: "铁峰",   note: "铬之后就是铁。聚变放能的路快到头了。", takeaway: "下一步：铁峰。" },
+  { z: 26, era: "铁峰",         process: "结合能顶点", tag: "铁峰", epoch: "铁峰",   note: "铁：恒星稳定聚变的终点。再融合要吸能——恒星会走向坍缩与更剧烈结局。", takeaway: "比铁重的元素，主要不靠普通恒星聚变。" },
+];
+const FUSION_ZS = new Set(FUSION_PATH.map(s => s.z));
+const IRON_Z = 26;
+const EPOCH_ORDER = ["大爆炸", "巨星", "晚期", "硅燃", "铁峰"];
+const IRON_PREVIEW_FROM = 0.82; // 全局进度超过此值开始铁峰预告
+
+const hints = {
+  clock: "时 / 分 / 秒 → 对应原子序数的元素会发光",
+  orbit: "秒元素成为「核」，轨道电子按秒数旋转",
+  wave: "每秒一道能量波扫过周期表",
+  synth: "点击元素点亮收集 · 目标点亮全表",
+  decay: "秒在「衰变」：已流逝秒数逐渐黯淡",
+  learn_idle: "观课模式 · 点「开始观课」看 H→Fe · F 投影",
+  learn_run: "观课中 · 看路径与课程卡 · 空格暂停",
+  focus_idle: "自律模式 · 选时长后点燃 · 安静走完同一条 H→Fe",
+  focus_run: "专注中 · 路径轻量提示 · 少打扰",
+  focus_run_demo: "观课特效 · 阶段提示开",
+  focus_break: "休息中",
+  focus_done: "铁峰到达 · 可再看或转自律",
+  display_idle: "观展 · 时分秒映射元素 · 装饰用途",
+};
+
+function pad(n) { return String(n).padStart(2, "0"); }
+
+function toast(msg, type = "") {
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.className = "toast show" + (type ? " " + type : "");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => el.classList.remove("show"), 2600);
+}
+
+function minutesForElement(el, kind) {
+  if (kind === "break") {
+    // He2, Ne10 use Z; "休 5′" button passes break-min
+    return el.z;
+  }
+  return Math.min(el.z, MAX_FOCUS_Z);
+}
+
+/* ========== Build table ========== */
+const ptable = document.getElementById("ptable");
+const elNodes = new Map();
+
+function buildTable() {
+  ptable.innerHTML = "";
+  elNodes.clear();
+
+  // legend
+  const legend = document.createElement("div");
+  legend.className = "legend-slot";
+  legend.innerHTML = `
+    <div class="legend-title">SPECTRAL LEGEND</div>
+    <div class="legend-chips">
+      ${Object.entries(CATS).filter(([k]) => k !== "unknown").map(([k, v]) =>
+        `<span class="chip"><i style="--c:${v.color}"></i>${v.name}</span>`
+      ).join("")}
+    </div>
+  `;
+  ptable.appendChild(legend);
+
+  // f-block labels
+  const l1 = document.createElement("div");
+  l1.className = "f-block-label";
+  l1.style.gridRow = "9";
+  l1.style.gridColumn = "3";
+  l1.textContent = "镧系";
+  ptable.appendChild(l1);
+
+  const l2 = document.createElement("div");
+  l2.className = "f-block-label";
+  l2.style.gridRow = "10";
+  l2.style.gridColumn = "3";
+  l2.textContent = "锕系";
+  ptable.appendChild(l2);
+
+  for (const raw of ELEMENTS) {
+    const el = byZ.get(raw[0]);
+    const { row, col } = gridPos(el);
+    const node = document.createElement("button");
+    node.type = "button";
+    node.className = `el ${CATS[el.cat].key}`;
+    node.style.gridRow = row;
+    node.style.gridColumn = col;
+    node.dataset.z = el.z;
+    node.innerHTML = `
+      <span class="z">${el.z}</span>
+      <span class="sym">${el.sym}</span>
+      <span class="cn">${el.cn}</span>
+    `;
+    node.addEventListener("click", () => onElementClick(el, node));
+    ptable.appendChild(node);
+    elNodes.set(el.z, node);
+  }
+  refreshCollected();
+}
+
+function refreshCollected() {
+  for (const [z, node] of elNodes) {
+    node.classList.toggle("collected", state.collected.has(z));
+    node.classList.toggle("stable-iso", focus.stable.has(z));
+  }
+  const lit = document.getElementById("litCount");
+  if (lit) lit.textContent = state.collected.size;
+  const fs = document.getElementById("focusSessions");
+  const fm = document.getElementById("focusMinutes");
+  const sc = document.getElementById("stableCount");
+  if (fs) fs.textContent = focus.stats.sessions;
+  if (fm) fm.textContent = focus.stats.minutes;
+  if (sc) sc.textContent = focus.stable.size;
+}
+
+/* ========== Time mapping ========== */
+function hourZ(h24) {
+  // Map 0-23 → prefer 1-12 feel but support 24h: use h if 1-23, 0 → 118 (Og) as midnight easter egg
+  if (h24 === 0) return 118;
+  return h24; // 1..23 exist as elements
+}
+function minuteZ(m) {
+  // 0 → 54 Xe (noble zero vibe) or 118; use 54 for 0, else m (1-59)
+  if (m === 0) return 54;
+  return m;
+}
+function secondZ(s) {
+  if (s === 0) return 2; // He — full cycle noble "reset"
+  return s;
+}
+
+function roleOfZ(z, h, m, s) {
+  const roles = [];
+  if (z === hourZ(h)) roles.push("时");
+  if (z === minuteZ(m)) roles.push("分");
+  if (z === secondZ(s)) roles.push("秒");
+  return roles.length ? roles.join(" · ") : "旁观";
+}
+
+/* ========== Focus (自律) ========== */
+function setShell(shell, force = false) {
+  if (!force && state.shell === shell) return;
+  // 运行中离开观课/自律 → 暂停
+  if ((state.shell === "learn" || state.shell === "focus")
+    && shell === "display"
+    && (focus.phase === "running" || focus.phase === "break")) {
+    pauseFocus(true);
+    toast("已暂停 · 回到观课/自律可继续", "warn");
+  }
+  // 观课 ↔ 自律 切换时，若在跑则暂停
+  if ((state.shell === "learn" || state.shell === "focus")
+    && (shell === "learn" || shell === "focus")
+    && state.shell !== shell
+    && (focus.phase === "running" || focus.phase === "break")) {
+    pauseFocus(true);
+  }
+
+  state.shell = shell;
+  document.body.classList.remove("shell-learn", "shell-focus", "shell-display");
+  document.body.classList.add("shell-" + shell);
+  document.querySelectorAll("#shellSwitch button").forEach(b => {
+    b.classList.toggle("active", b.dataset.shell === shell);
+  });
+
+  const day = todayKey();
+  if (focus.stats.day !== day) {
+    focus.stats.day = day;
+    focus.stats.sessions = 0;
+    focus.stats.minutes = 0;
+    focus.stats.streak = 0;
+    saveFocusStats();
+  }
+
+  if (shell === "learn") {
+    document.getElementById("brandTag").textContent = "Stellar Nucleosynthesis · Lesson";
+    document.getElementById("brandSub").textContent = "恒星如何制造元素 · H → Fe";
+    document.getElementById("shellNote").textContent = "主用途 · 可播放的恒星核合成课";
+    document.getElementById("footerNote").textContent = "lesson · H→Fe · 观课";
+    document.getElementById("roleH").textContent = "NOW";
+    document.getElementById("roleM").textContent = "LEFT";
+    document.getElementById("roleS").textContent = "ERA";
+    document.getElementById("hint").textContent = hints.learn_idle;
+    // 默认备好 90″ 观课
+    if (focus.phase === "idle" || focus.phase === "armed" || focus.phase === "done") {
+      if (focus.phase !== "paused") armFocus(1, "work", null, focus.demoSec || 90);
+    }
+    hideRecap();
+    if (focus.phase === "done" && focus.lastWasDemo) buildRecap();
+    syncIntensityClass();
+    syncFocusUI();
+    document.getElementById("modeLine").textContent = `观课 · ${focus.phase}`;
+  } else if (shell === "focus") {
+    document.getElementById("brandTag").textContent = "Narrative Focus · Calm";
+    document.getElementById("brandSub").textContent = "叙事专注钟 · 安静 H→Fe";
+    document.getElementById("shellNote").textContent = "次用途 · 专注时用同一路径作时间轴";
+    document.getElementById("footerNote").textContent = "focus · calm · Mn25";
+    document.getElementById("roleH").textContent = "NOW";
+    document.getElementById("roleM").textContent = "LEFT";
+    document.getElementById("roleS").textContent = "ERA";
+    document.getElementById("hint").textContent = hints.focus_idle;
+    hideRecap();
+    if (focus.phase === "idle" || (focus.phase === "armed" && focus.demoSec != null) || focus.phase === "done") {
+      armFocus(focus.stats.lastZ || 25, "work");
+    }
+    syncIntensityClass();
+    syncFocusUI();
+    document.getElementById("modeLine").textContent = `自律 · ${focus.phase}`;
+  } else {
+    document.getElementById("brandTag").textContent = "Display Clock";
+    document.getElementById("brandSub").textContent = "观展时钟 · 装饰";
+    document.getElementById("shellNote").textContent = "次用途 · 时分秒映射元素";
+    document.getElementById("footerNote").textContent = "display · ambient";
+    document.getElementById("roleH").textContent = "HOUR";
+    document.getElementById("roleM").textContent = "MINUTE";
+    document.getElementById("roleS").textContent = "SECOND";
+    document.getElementById("hint").textContent = hints.display_idle;
+    hideRecap();
+    clearFocusTableClasses();
+    document.body.classList.remove("phase-running", "phase-paused", "phase-break", "phase-done", "phase-idle", "phase-armed");
+    document.getElementById("ironPreview")?.classList.remove("on");
+    document.getElementById("modeLine").textContent = `观展 · ${state.mode}`;
+  }
+
+  // footer 统计显隐
+  document.querySelectorAll(".display-only-stat").forEach(n => {
+    n.style.display = shell === "display" ? "" : "none";
+  });
+}
+
+function clearFocusTableClasses() {
+  for (const node of elNodes.values()) {
+    node.classList.remove(
+      "focus-reacting", "focus-break", "focus-disabled",
+      "fusion-done", "fusion-now", "fusion-future", "fusion-offpath", "fusion-peak",
+      "fusion-incoming", "fusion-peak-glow"
+    );
+  }
+  state.lastPaintKey = "";
+}
+
+function armFocus(z, kind = "work", breakMin = null, demoSec = null) {
+  // demoSec：秒级试看（非 Z 分钟），仍走完整 H→Fe
+  if (demoSec != null) {
+    if (focus.phase === "running" || focus.phase === "break" || focus.phase === "paused") return;
+    focus.armedKind = "work";
+    focus.breakOverrideMin = null;
+    focus.demoSec = demoSec;
+    focus.armedZ = 1; // 视觉锚在氢
+    focus.phase = "armed";
+    focus.z = 1;
+    focus.kind = "work";
+    focus.durationMs = demoSec * 1000;
+    focus.remainingMs = focus.durationMs;
+    state.ironPreviewShown = false;
+    document.querySelectorAll("#quickPicks button").forEach(b => {
+      b.classList.toggle("active", b.dataset.demoSec === String(demoSec));
+    });
+    syncIntensityClass();
+    syncFocusUI();
+    toast(`演示模式 · ${demoSec}″ 快进 · 动效全开`);
+    return;
+  }
+
+  const el = byZ.get(z);
+  if (!el) return;
+  if (kind === "work" && el.z > MAX_FOCUS_Z) {
+    toast(`最长 ${MAX_FOCUS_Z} 分钟（Th）`, "warn");
+    return;
+  }
+  focus.armedKind = kind;
+  focus.breakOverrideMin = breakMin;
+  focus.demoSec = null;
+  state.ironPreviewShown = false;
+  // 工作：Z 即分钟；休息 5′ 视觉落在 He，He/Ne 用自身
+  if (kind === "work") focus.armedZ = Math.min(el.z, MAX_FOCUS_Z);
+  else focus.armedZ = breakMin === 5 ? 2 : el.z;
+  if (focus.phase === "idle" || focus.phase === "armed" || focus.phase === "done") {
+    focus.phase = "armed";
+    focus.z = focus.armedZ;
+    focus.kind = kind;
+    const mins = breakMin || minutesForElement(el, kind);
+    focus.durationMs = mins * 60 * 1000;
+    focus.remainingMs = focus.durationMs;
+  }
+  document.querySelectorAll("#quickPicks button").forEach(b => {
+    if (b.dataset.demoSec) {
+      b.classList.remove("active");
+      return;
+    }
+    const bz = Number(b.dataset.z);
+    const bk = b.dataset.kind === "break" ? "break" : "work";
+    const isBreak5 = b.dataset.breakMin === "5";
+    let active = false;
+    if (kind === "break" && bk === "break") {
+      if (breakMin === 5 && isBreak5) active = true;
+      else if (!breakMin && !isBreak5 && bz === z) active = true;
+    } else if (kind === "work" && bk === "work" && bz === z) active = true;
+    b.classList.toggle("active", active);
+  });
+  syncIntensityClass();
+  syncFocusUI();
+}
+
+function startFocus(fromArmed = true) {
+  if (fromArmed && focus.phase !== "armed" && focus.phase !== "done" && focus.phase !== "idle") {
+    // allow restart from done via again
+  }
+  const z = focus.armedZ;
+  const kind = focus.armedKind;
+  const el = byZ.get(z);
+  if (!el) return;
+  if (kind === "work" && z > MAX_FOCUS_Z) return;
+
+  const isDemo = focus.demoSec != null && kind === "work";
+  const mins = focus.breakOverrideMin || minutesForElement(el, kind);
+  focus.kind = kind;
+  focus.z = kind === "work" ? z : (z === 5 && focus.breakOverrideMin === 5 ? 2 : z);
+  if (kind === "break" && focus.breakOverrideMin === 5) focus.z = 2;
+  if (isDemo) {
+    focus.durationMs = focus.demoSec * 1000;
+    focus.z = 1;
+  } else {
+    focus.durationMs = mins * 60 * 1000;
+  }
+  focus.remainingMs = focus.durationMs;
+  focus.endsAt = Date.now() + focus.remainingMs;
+  focus.phase = kind === "break" ? "break" : "running";
+  focus.stats.lastZ = kind === "work" && !isDemo ? z : focus.stats.lastZ;
+  focus.stageIndex = 0;
+  focus.lastStageIndex = -1;
+  state.ironPreviewShown = false;
+  state.lastPaintKey = "";
+  saveFocusStats();
+  closeDetail();
+  syncIntensityClass();
+  syncFocusUI();
+  if (kind === "work") {
+    if (isDemo) {
+      toast(`演示点燃 · ${focus.demoSec}″ 全特效 · 看 H→Fe`);
+      const hNode = elNodes.get(1);
+      if (hNode) burstAtNode(hNode, "#38bdf8", 28);
+    } else {
+      // 正式：安静开场，一条提示即可
+      toast(`已点燃 · ${mins}′ · 氢开始走向铁峰`);
+      const hNode = elNodes.get(1);
+      if (hNode) burstAtNode(hNode, "#38bdf8", 8);
+    }
+  } else {
+    toast(`冷却 · ${mins} 分钟`);
+  }
+  try {
+    if (Notification.permission === "default") Notification.requestPermission();
+  } catch {}
+}
+
+function pauseFocus(silent = false) {
+  if (focus.phase !== "running" && focus.phase !== "break") return;
+  focus.remainingMs = Math.max(0, focus.endsAt - Date.now());
+  focus.phase = "paused";
+  syncFocusUI();
+  if (!silent) toast("反应已暂停", "warn");
+}
+
+function resumeFocus() {
+  if (focus.phase !== "paused") return;
+  focus.endsAt = Date.now() + focus.remainingMs;
+  focus.phase = focus.kind === "break" ? "break" : "running";
+  syncFocusUI();
+  toast("反应继续");
+}
+
+function quenchFocus() {
+  if (!["running", "paused", "break"].includes(focus.phase)) return;
+  const wasWork = focus.kind === "work";
+  const stage = currentFusionStage();
+  const stageEl = stage ? byZ.get(stage.z) : null;
+  const learn = isLearnShell();
+  focus.phase = "idle";
+  focus.remainingMs = 0;
+  focus.endsAt = 0;
+  focus.stageIndex = 0;
+  focus.lastStageIndex = -1;
+  document.title = "核时 · Atomic Clock";
+  if (wasWork && !learn) focus.stats.streak = 0;
+  saveFocusStats();
+  hideRecap();
+  if (learn) armFocus(1, "work", null, focus.demoSec || 90);
+  else armFocus(focus.stats.lastZ || 25, "work");
+  syncFocusUI();
+  toast(
+    wasWork
+      ? (learn
+        ? `观课结束 · 停在 ${stageEl ? stageEl.sym : "途中"} · 可再播`
+        : `已熄灭 · 停在 ${stageEl ? stageEl.sym : "途中"}（不惩罚）`)
+      : "休息结束",
+    "warn"
+  );
+}
+
+function completeFocus() {
+  const durationEl = byZ.get(focus.z);
+  const mins = Math.round(focus.durationMs / 60000);
+  const kind = focus.kind;
+  document.title = "核时 · Atomic Clock";
+
+  if (kind === "work") {
+    focus.stageIndex = FUSION_PATH.length - 1;
+    focus.lastStageIndex = focus.stageIndex;
+    const isDemo = focus.demoSec != null;
+    // 演示不计入正式自律统计，避免刷数据
+    if (!isDemo) {
+      focus.stats.sessions += 1;
+      focus.stats.minutes += mins;
+      focus.stats.streak += 1;
+    }
+    // 铁峰：宇宙成核的终点产物
+    focus.stable.add(IRON_Z);
+    collect(IRON_Z, true);
+    // 时长元素也记一笔（恒星寿命标记）
+    if (durationEl) {
+      focus.stable.add(durationEl.z);
+      collect(durationEl.z, false);
+    }
+    // 整条路径点亮收集
+    FUSION_PATH.forEach(s => {
+      focus.stable.add(s.z);
+      collect(s.z, false);
+    });
+    saveFocusStats();
+    refreshCollected();
+    const feNode = elNodes.get(IRON_Z);
+    if (feNode) {
+      feNode.classList.remove("spark");
+      void feNode.offsetWidth;
+      feNode.classList.add("spark");
+      burstAtNode(feNode, "#fb7185", isDemo ? 48 : 16);
+    }
+    if (isDemo) {
+      // 演示：路径烟花
+      FUSION_PATH.forEach((s, i) => {
+        setTimeout(() => {
+          const n = elNodes.get(s.z);
+          if (n) burstAtNode(n, CATS[byZ.get(s.z).cat].color, 8);
+        }, i * 60);
+      });
+    }
+    toast(
+      isDemo
+        ? "合成演完 · 铁峰到达 · 可再看一遍，或选 Mn 25′ 自律"
+        : `铁峰到达 · 氢已走到铁 · ${mins}′ 完成`,
+      "ok"
+    );
+    if (!isDemo) {
+      notifyBrowser(`核时 · 铁峰`, `H → Fe 完成 · 专注 ${mins} 分钟`);
+    } else {
+      notifyBrowser(`核时 · 恒星核合成`, "H → Fe 演完 · 可再看一遍");
+    }
+    focus.lastWasDemo = isDemo;
+    focus.demoSec = null;
+    syncIntensityClass();
+  } else {
+    toast("冷却结束 · 可以再点燃一颗星", "ok");
+    notifyBrowser("核时 · 冷却结束", "准备好开始下一轮核合成了吗？");
+  }
+
+  focus.phase = "done";
+  focus.remainingMs = 0;
+  syncFocusUI();
+}
+
+function onFusionStageAdvance(prevIdx, nextIdx) {
+  const stage = FUSION_PATH[nextIdx];
+  if (!stage) return;
+  const el = byZ.get(stage.z);
+  const node = elNodes.get(stage.z);
+  const demo = isDemoIntensity();
+
+  if (node) {
+    if (demo) {
+      node.classList.remove("spark");
+      void node.offsetWidth;
+      node.classList.add("spark");
+      burstAtNode(node, nextIdx === FUSION_PATH.length - 1 ? "#fb7185" : CATS[el.cat].color, 18);
+    } else {
+      // 正式：仅轻闪，无粒子雨
+      node.classList.remove("spark");
+      void node.offsetWidth;
+      node.classList.add("spark");
+      burstAtNode(node, CATS[el.cat].color, 3);
+    }
+  }
+
+  // 演示：关键节点 toast；正式：完全静默（铁峰预告另说）
+  if (demo && (nextIdx === 0 || nextIdx === 2 || nextIdx === 7 || nextIdx === FUSION_PATH.length - 1 || nextIdx === FUSION_PATH.length - 2)) {
+    toast(`${el.sym} · ${stage.tag} · ${stage.epoch}`, nextIdx === FUSION_PATH.length - 1 ? "ok" : "");
+  }
+}
+
+function notifyBrowser(title, body) {
+  try {
+    if (Notification.permission === "granted") {
+      new Notification(title, { body, silent: false });
+    }
+  } catch {}
+  // soft chime via Web Audio
+  try {
+    const ac = new (window.AudioContext || window.webkitAudioContext)();
+    const o = ac.createOscillator();
+    const g = ac.createGain();
+    o.type = "sine";
+    o.frequency.setValueAtTime(660, ac.currentTime);
+    o.frequency.exponentialRampToValueAtTime(880, ac.currentTime + 0.12);
+    g.gain.setValueAtTime(0.0001, ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.08, ac.currentTime + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + 0.5);
+    o.connect(g); g.connect(ac.destination);
+    o.start(); o.stop(ac.currentTime + 0.55);
+  } catch {}
+}
+
+function closeDetail() {
+  document.getElementById("detail").classList.remove("open");
+  state.selected = null;
+}
+
+function syncFocusUI() {
+  if (state.shell !== "learn" && state.shell !== "focus") return;
+
+  const phase = focus.phase;
+  const learn = isLearnShell();
+  document.body.classList.remove("phase-running", "phase-paused", "phase-break", "phase-done", "phase-idle", "phase-armed");
+  document.body.classList.add("phase-" + (phase === "break" ? "running" : phase));
+  if (phase === "break") document.body.classList.add("phase-break");
+  syncIntensityClass();
+
+  const el = byZ.get(focus.z || focus.armedZ);
+  const label = document.getElementById("focusLabel");
+  const title = document.getElementById("focusTitle");
+  const sub = document.getElementById("focusSub");
+  const track = document.getElementById("progressTrack");
+  const bar = document.getElementById("progressBar");
+
+  const btnStart = document.getElementById("btnStart");
+  const btnPause = document.getElementById("btnPause");
+  const btnResume = document.getElementById("btnResume");
+  const btnQuench = document.getElementById("btnQuench");
+  const btnBreak = document.getElementById("btnBreak");
+  const btnAgain = document.getElementById("btnAgain");
+  const btnWatch = document.getElementById("btnWatch");
+  const btnToFocus = document.getElementById("btnToFocus");
+
+  [btnWatch, btnStart, btnPause, btnResume, btnQuench, btnBreak, btnAgain, btnToFocus].forEach(b => { if (b) b.hidden = true; });
+
+  const remain = focus.remainingMs;
+  const mm = Math.floor(remain / 60000);
+  const ss = Math.floor((remain % 60000) / 1000);
+  const progress = phase === "done" && focus.kind === "work" ? 1 : fusionProgress();
+  const pct = progress * 100;
+  if (phase === "running" || phase === "paused") {
+    focus.stageIndex = stageIndexFromProgress(progress);
+  } else if (phase === "done" && focus.kind === "work") {
+    focus.stageIndex = FUSION_PATH.length - 1;
+  } else if (phase === "armed" || phase === "idle") {
+    focus.stageIndex = 0;
+  }
+  const stage = currentFusionStage();
+  const stageEl = byZ.get(stage.z);
+
+  if (phase === "idle" || phase === "armed") {
+    label.textContent = learn ? "LESSON" : "FOCUS";
+    const mins = focus.breakOverrideMin || (el ? minutesForElement(el, focus.armedKind) : 25);
+    if (focus.armedKind === "break") {
+      title.textContent = `预备休息 · ${mins}′`;
+      sub.textContent = "短休后可再专注。";
+      btnStart.hidden = false;
+      btnStart.textContent = "开始休息";
+    } else if (learn || focus.demoSec) {
+      const sec = focus.demoSec || 90;
+      title.textContent = learn ? `观课就绪 · ${sec >= 60 ? (sec / 60) + "′" : sec + "″"}` : `预备 · ${sec}″`;
+      sub.textContent = learn
+        ? "点「开始观课」播放恒星核合成。可改课时：45″ / 90″ / 3′ / 5′。"
+        : "演示路径，建议回观课模式观看。";
+      updateFusionPathUI(0, 0);
+      if (learn) {
+        btnWatch.hidden = false;
+        btnWatch.textContent = "开始观课";
+      }
+      btnStart.hidden = false;
+      btnStart.textContent = learn ? "播放" : "开始";
+    } else {
+      title.textContent = `预备专注 · ${mins}′ · H→Fe`;
+      sub.textContent = "安静模式：路径会走，但少弹窗。适合真正做事。";
+      updateFusionPathUI(0, 0);
+      btnStart.hidden = false;
+      btnStart.textContent = "开始专注";
+    }
+    track.classList.remove("on");
+    document.getElementById("hint").textContent = learn ? hints.learn_idle : hints.focus_idle;
+    hideRecap();
+    updateLessonCard(0, 0);
+  } else if (phase === "running" || phase === "break") {
+    label.textContent = phase === "break" ? "BREAK" : (learn ? "PLAYING" : "FUSING");
+    title.textContent = phase === "break"
+      ? `休息 · ${pad(mm)}:${pad(ss)}`
+      : `${learn ? "观课" : "专注"} · ${stageEl.sym} ${stageEl.cn} · ${pad(mm)}:${pad(ss)}`;
+    sub.textContent = phase === "break"
+      ? "放松即可。"
+      : `${stage.epoch} · ${stage.process} · ${stage.takeaway}`;
+    btnPause.hidden = false;
+    btnQuench.hidden = false;
+    btnQuench.textContent = learn ? "结束观课" : "熄灭";
+    track.classList.add("on");
+    bar.style.width = pct + "%";
+    document.getElementById("hint").textContent = phase === "break"
+      ? hints.focus_break
+      : (learn ? hints.learn_run : hints.focus_run);
+    if (phase === "running") {
+      updateFusionPathUI(focus.stageIndex, progress);
+      updateLessonCard(focus.stageIndex, progress);
+    }
+  } else if (phase === "paused") {
+    label.textContent = "PAUSED";
+    title.textContent = `已暂停 · ${stageEl.sym} · ${pad(mm)}:${pad(ss)}`;
+    sub.textContent = learn ? "可讲解当前卡片，再按空格继续。" : "随时继续，不惩罚。";
+    btnResume.hidden = false;
+    btnQuench.hidden = false;
+    track.classList.add("on");
+    bar.style.width = pct + "%";
+    updateFusionPathUI(focus.stageIndex, progress);
+    updateLessonCard(focus.stageIndex, progress);
+  } else if (phase === "done") {
+    label.textContent = focus.kind === "work" ? "IRON PEAK" : "DONE";
+    title.textContent = focus.kind === "work" ? "铁峰到达 · 本课/本轮结束" : "休息结束";
+    sub.textContent = focus.kind === "work"
+      ? (learn
+        ? "复盘下方要点。可再看一遍，或转到自律用 25′ 走慢同一路径。"
+        : `今日专注 ${focus.stats.sessions} 轮 · ${focus.stats.minutes} 分钟`)
+      : "可以开始下一轮。";
+    btnAgain.hidden = false;
+    btnAgain.textContent = learn || focus.lastWasDemo ? "再看一遍" : "再来一轮";
+    if (learn && focus.kind === "work") {
+      btnToFocus.hidden = false;
+      buildRecap();
+    } else {
+      hideRecap();
+      if (!learn) btnBreak.hidden = false;
+    }
+    track.classList.add("on");
+    bar.style.width = "100%";
+    document.getElementById("hint").textContent = hints.focus_done;
+    if (focus.kind === "work") {
+      updateFusionPathUI(FUSION_PATH.length - 1, 1);
+      updateLessonCard(FUSION_PATH.length - 1, 1);
+      document.getElementById("cosmosEra").textContent = "铁峰 · 结合能顶点 · Fe";
+      document.getElementById("cosmosStory").innerHTML =
+        "<strong>Fe 铁</strong> — 恒星稳定聚变终点。更重元素：超新星与中子俘获。";
+    }
+  }
+
+  paintFusionTable(focus.stageIndex, progress);
+  document.getElementById("modeLine").textContent = `${learn ? "观课" : "自律"} · ${phase}`;
+  refreshCollected();
+}
+
+function tickFocus() {
+  if (state.shell !== "focus" && state.shell !== "learn") return false;
+  if (focus.phase === "running" || focus.phase === "break") {
+    focus.remainingMs = Math.max(0, focus.endsAt - Date.now());
+    if (focus.remainingMs <= 0) {
+      completeFocus();
+      return true;
+    }
+    const progress = fusionProgress();
+    const pct = progress * 100;
+    const bar = document.getElementById("progressBar");
+    if (bar) bar.style.width = pct + "%";
+
+    const mm = Math.floor(focus.remainingMs / 60000);
+    const ss = Math.floor((focus.remainingMs % 60000) / 1000);
+    // 演示用总秒；正式用总分钟
+    const totalSlot = focus.demoSec != null
+      ? Math.min(99, Math.round(focus.durationMs / 1000))
+      : Math.round(focus.durationMs / 60000);
+    document.getElementById("digital").innerHTML =
+      `${pad(mm)}<span class="colon">:</span>${pad(ss)}<span class="colon">:</span>${pad(totalSlot)}`;
+
+    if (focus.phase === "running") {
+      const idx = stageIndexFromProgress(progress);
+      if (idx !== focus.lastStageIndex) {
+        const prev = focus.lastStageIndex;
+        focus.stageIndex = idx;
+        if (prev >= 0 && idx > prev) onFusionStageAdvance(prev, idx);
+        focus.lastStageIndex = idx;
+      } else {
+        focus.stageIndex = idx;
+      }
+      updateFusionPathUI(focus.stageIndex, progress);
+      paintFusionTable(focus.stageIndex, progress);
+      updateLessonCard(focus.stageIndex, progress);
+
+      const stage = currentFusionStage();
+      const stageEl = byZ.get(stage.z);
+      const cards = document.querySelectorAll(".triad-card");
+      if (stageEl && cards.length === 3) {
+        cards[0].classList.add("live");
+        cards[0].querySelector(".sym").textContent = stageEl.sym;
+        cards[0].querySelector(".meta").textContent = `${stageEl.cn} · 当前`;
+        cards[1].classList.add("live");
+        cards[1].querySelector(".sym").textContent = `${pad(mm)}:${pad(ss)}`;
+        cards[1].querySelector(".meta").textContent = `${Math.round(progress * 100)}%`;
+        cards[2].classList.add("live");
+        cards[2].querySelector(".sym").textContent = stage.tag;
+        cards[2].querySelector(".meta").textContent = stage.epoch;
+      }
+      document.getElementById("phaseLine").textContent = `${stage.epoch} · ${stage.tag}`;
+      const learn = isLearnShell();
+      document.getElementById("focusTitle").textContent =
+        `${learn ? "观课" : "专注"} · ${stageEl.sym} ${stageEl.cn} · ${pad(mm)}:${pad(ss)}`;
+      document.getElementById("focusSub").textContent =
+        learn ? `${stage.takeaway}` : `${stage.era} · ${stage.process}`;
+      document.title = `${pad(mm)}:${pad(ss)} · ${stageEl.sym}→Fe · 核时`;
+    } else {
+      // break
+      const el = byZ.get(focus.z);
+      const cards = document.querySelectorAll(".triad-card");
+      if (el && cards.length === 3) {
+        cards[0].classList.add("live");
+        cards[0].querySelector(".sym").textContent = el.sym;
+        cards[0].querySelector(".meta").textContent = "冷却介质";
+        cards[1].classList.add("live");
+        cards[1].querySelector(".sym").textContent = `${pad(mm)}:${pad(ss)}`;
+        cards[1].querySelector(".meta").textContent = "剩余";
+        cards[2].classList.add("live");
+        cards[2].querySelector(".sym").textContent = "休";
+        cards[2].querySelector(".meta").textContent = "惰性时段";
+      }
+      document.getElementById("phaseLine").textContent = "phase · 冷却";
+      document.getElementById("focusTitle").textContent = `冷却中 · ${pad(mm)}:${pad(ss)}`;
+      document.title = `${pad(mm)}:${pad(ss)} · 冷却 · 核时`;
+      paintFusionTable(0, 0);
+    }
+    return true;
+  }
+
+  if (focus.phase === "paused" || focus.phase === "armed" || focus.phase === "done" || focus.phase === "idle") {
+    const remain = focus.remainingMs || focus.durationMs || 0;
+    const mm = Math.floor(remain / 60000);
+    const ss = Math.floor((remain % 60000) / 1000);
+    const el = byZ.get(focus.z || focus.armedZ);
+    const progress = focus.phase === "done" && focus.kind === "work" ? 1 : fusionProgress();
+
+    if (focus.phase === "armed" || focus.phase === "idle") {
+      document.getElementById("digital").innerHTML =
+        `${pad(mm)}<span class="colon">:</span>${pad(ss)}<span class="colon">:</span>00`;
+    } else if (focus.phase === "paused") {
+      document.getElementById("digital").innerHTML =
+        `${pad(mm)}<span class="colon">:</span>${pad(ss)}<span class="colon">:</span>00`;
+      paintFusionTable(focus.stageIndex, progress);
+      updateFusionPathUI(focus.stageIndex, progress);
+    } else if (focus.phase === "done") {
+      document.getElementById("digital").innerHTML =
+        `00<span class="colon">:</span>00<span class="colon">:</span>${pad(Math.round(focus.durationMs / 60000))}`;
+      if (focus.kind === "work") {
+        paintFusionTable(FUSION_PATH.length - 1, 1);
+        updateFusionPathUI(FUSION_PATH.length - 1, 1);
+      }
+    }
+
+    const stage = focus.phase === "paused" ? currentFusionStage() : FUSION_PATH[0];
+    const stageEl = byZ.get(stage.z);
+    const cards = document.querySelectorAll(".triad-card");
+    if (cards.length === 3) {
+      if (focus.phase === "paused" && stageEl) {
+        cards[0].querySelector(".sym").textContent = stageEl.sym;
+        cards[0].querySelector(".meta").textContent = `${stageEl.cn} · 冻结`;
+        cards[1].querySelector(".sym").textContent = `${pad(mm)}:${pad(ss)}`;
+        cards[1].querySelector(".meta").textContent = "剩余";
+        cards[2].querySelector(".sym").textContent = stage.era.slice(0, 4);
+        cards[2].querySelector(".meta").textContent = stage.process;
+      } else if (focus.phase === "done" && focus.kind === "work") {
+        const fe = byZ.get(IRON_Z);
+        cards[0].querySelector(".sym").textContent = fe.sym;
+        cards[0].querySelector(".meta").textContent = "铁峰 · 终点";
+        cards[1].querySelector(".sym").textContent = "100%";
+        cards[1].querySelector(".meta").textContent = "核合成完成";
+        cards[2].querySelector(".sym").textContent = String(focus.stats.sessions);
+        cards[2].querySelector(".meta").textContent = `恒星 ×${focus.stats.sessions}`;
+      } else if (el) {
+        cards[0].querySelector(".sym").textContent = "H";
+        cards[0].querySelector(".meta").textContent = "起点 · 氢";
+        cards[1].querySelector(".sym").textContent = `${minutesForElement(el, focus.armedKind || focus.kind)}′`;
+        cards[1].querySelector(".meta").textContent = "恒星寿命";
+        cards[2].querySelector(".sym").textContent = "Fe";
+        cards[2].querySelector(".meta").textContent = "终点 · 铁峰";
+      }
+      cards.forEach(c => c.classList.add("live"));
+    }
+    document.getElementById("phaseLine").textContent = `phase · ${focus.phase}`;
+    return true;
+  }
+  return false;
+}
+
+/* ========== Clock tick ========== */
+function tick() {
+  const now = new Date();
+  const h = now.getHours();
+  const m = now.getMinutes();
+  const s = now.getSeconds();
+  const ms = now.getMilliseconds();
+
+  // 日期行始终更新
+  const week = ["日","一","二","三","四","五","六"][now.getDay()];
+  document.getElementById("dateLine").textContent =
+    `${now.getFullYear()}.${pad(now.getMonth()+1)}.${pad(now.getDate())} 周${week}`;
+
+  // 观课 / 自律：接管表盘
+  if (state.shell === "learn" || state.shell === "focus") {
+    tickFocus();
+    if (state.selected) {
+      drawOrbit(state.selected, s + ms / 1000);
+    }
+    requestAnimationFrame(tick);
+    return;
+  }
+
+  const hz = hourZ(h);
+  const mz = minuteZ(m);
+  const sz = secondZ(s);
+  const he = byZ.get(hz);
+  const me = byZ.get(mz);
+  const se = byZ.get(sz);
+
+  // digital
+  document.getElementById("digital").innerHTML =
+    `${pad(h)}<span class="colon">:</span>${pad(m)}<span class="colon">:</span>${pad(s)}`;
+
+  // triad
+  const cards = document.querySelectorAll(".triad-card");
+  const data = [
+    { el: he, role: "h" },
+    { el: me, role: "m" },
+    { el: se, role: "s" },
+  ];
+  data.forEach((d, i) => {
+    const c = cards[i];
+    c.classList.add("live");
+    c.querySelector(".sym").textContent = d.el.sym;
+    c.querySelector(".meta").textContent = `${d.el.cn} · Z=${d.el.z}`;
+  });
+
+  const phase = s < 20 ? "诱导期" : s < 40 ? "反应期" : "平衡期";
+  document.getElementById("phaseLine").textContent = `phase · ${phase}`;
+  document.getElementById("secEl").textContent = `${se.sym} (${se.cn})`;
+
+  // table roles
+  for (const node of elNodes.values()) {
+    node.classList.remove("role-h", "role-m", "role-s", "dimmed", "lit", "focus-reacting", "focus-break", "focus-disabled");
+    node.style.opacity = "";
+  }
+
+  if (state.mode === "clock" || state.mode === "orbit" || state.mode === "wave") {
+    elNodes.get(hz)?.classList.add("role-h");
+    elNodes.get(mz)?.classList.add("role-m");
+    elNodes.get(sz)?.classList.add("role-s");
+  }
+
+  if (state.mode === "orbit") {
+    for (const [z, node] of elNodes) {
+      if (z !== sz && z !== mz && z !== hz) node.classList.add("dimmed");
+    }
+    elNodes.get(sz)?.classList.add("lit");
+  }
+
+  if (state.mode === "decay") {
+    for (const [z, node] of elNodes) {
+      if (z <= s && z >= 1 && z <= 59) {
+        node.style.opacity = String(0.15 + 0.85 * (z / Math.max(s, 1)));
+      } else if (z <= 59) {
+        node.style.opacity = "0.2";
+      } else {
+        node.style.opacity = "";
+      }
+    }
+    elNodes.get(sz)?.classList.add("role-s");
+    elNodes.get(mz)?.classList.add("role-m");
+    elNodes.get(hz)?.classList.add("role-h");
+  }
+
+  if (state.mode === "synth") {
+    for (const [z, node] of elNodes) {
+      if (state.collected.has(z)) node.classList.add("lit");
+      else node.classList.add("dimmed");
+    }
+    elNodes.get(hz)?.classList.add("role-h");
+    elNodes.get(mz)?.classList.add("role-m");
+    elNodes.get(sz)?.classList.add("role-s");
+  }
+
+  // second change events
+  if (s !== state.lastS) {
+    if (state.mode === "wave") runWave(sz);
+    const n = elNodes.get(sz);
+    if (n && state.mode !== "synth") {
+      n.classList.remove("spark");
+      void n.offsetWidth;
+      n.classList.add("spark");
+    }
+    if (state.mode !== "synth") collect(sz, false);
+    state.lastS = s;
+  }
+
+  if (m !== state.lastM) {
+    if (state.lastM !== -1) cascadeMinute(mz);
+    state.lastM = m;
+  }
+  if (h !== state.lastH) {
+    if (state.lastH !== -1) hourBloom(hz);
+    state.lastH = h;
+  }
+
+  if (state.selected) {
+    document.getElementById("dRole").textContent = roleOfZ(state.selected.z, h, m, s);
+    drawOrbit(state.selected, s + ms / 1000);
+  }
+
+  requestAnimationFrame(tick);
+}
+
+function collect(z, countSpark = true) {
+  const before = state.collected.size;
+  state.collected.add(z);
+  if (state.collected.size !== before) {
+    localStorage.setItem("atomic-clock-collected", JSON.stringify([...state.collected]));
+    refreshCollected();
+  }
+  if (countSpark) {
+    state.sparks += 1;
+    localStorage.setItem("atomic-clock-sparks", String(state.sparks));
+  }
+}
+
+/* ========== Interactions ========== */
+function onElementClick(el, node) {
+  // 观课 / 自律
+  if (state.shell === "learn" || state.shell === "focus") {
+    if (focus.phase === "running" || focus.phase === "break" || focus.phase === "paused") {
+      const onPath = FUSION_PATH.find(s => s.z === el.z);
+      state.selected = el;
+      openDetail(el);
+      if (onPath) {
+        document.getElementById("dRole").textContent = `${onPath.epoch} · ${onPath.tag}`;
+        document.getElementById("dBlurb").textContent =
+          `${onPath.note}\n\n要点：${onPath.takeaway}`;
+      } else {
+        document.getElementById("dRole").textContent = "本课主线之外";
+        document.getElementById("dBlurb").textContent =
+          "本课主线是恒星聚变到铁。此元素可能来自其他过程（如超新星）。";
+      }
+      return;
+    }
+    // 观课：点路径元素只讲课，不改时长
+    if (state.shell === "learn") {
+      const onPath = FUSION_PATH.find(s => s.z === el.z);
+      state.selected = el;
+      openDetail(el);
+      if (onPath) {
+        document.getElementById("dRole").textContent = `课程点 · ${onPath.tag}`;
+        document.getElementById("dBlurb").textContent = `${onPath.note}\n\n要点：${onPath.takeaway}`;
+        toast(`${el.sym} · ${onPath.takeaway}`);
+      } else {
+        document.getElementById("dRole").textContent = "扩展";
+        document.getElementById("dBlurb").textContent = el.blurb + "（不在 H→Fe 主线内）";
+      }
+      return;
+    }
+    // 自律：点元素设时长
+    if (el.z > MAX_FOCUS_Z) {
+      toast(`最长 ${MAX_FOCUS_Z} 分钟`, "warn");
+      return;
+    }
+    armFocus(el.z, "work");
+    node.classList.remove("spark");
+    void node.offsetWidth;
+    node.classList.add("spark");
+    burstAtNode(node, CATS[el.cat].color, 8);
+    state.selected = el;
+    openDetail(el);
+    document.getElementById("dRole").textContent = `专注 ${el.z} 分钟`;
+    document.getElementById("dBlurb").textContent =
+      `安静走完 H→Fe。时长 ${el.z}′，终点仍是铁峰。`;
+    return;
+  }
+
+  state.selected = el;
+  openDetail(el);
+  node.classList.remove("spark");
+  void node.offsetWidth;
+  node.classList.add("spark");
+  burstAtNode(node, CATS[el.cat].color);
+  collect(el.z, true);
+
+  if (state.mode === "synth") {
+    refreshCollected();
+  }
+}
+
+function openDetail(el) {
+  const panel = document.getElementById("detail");
+  panel.classList.add("open");
+  panel.style.setProperty("--cat", CATS[el.cat].color);
+  document.getElementById("dBadge").style.setProperty("--cat", CATS[el.cat].color);
+  document.getElementById("dZ").textContent = el.z;
+  document.getElementById("dZ2").textContent = el.z;
+  document.getElementById("dSym").textContent = el.sym;
+  document.getElementById("dName").textContent = el.cn;
+  document.getElementById("dEn").textContent = el.en;
+  document.getElementById("dCat").textContent = CATS[el.cat].name;
+  document.getElementById("dPeriod").textContent = el.period <= 7 ? el.period : (el.cat === "lanth" ? "6·f" : "7·f");
+  document.getElementById("dGroup").textContent = el.group || "—";
+  const now = new Date();
+  document.getElementById("dRole").textContent = roleOfZ(el.z, now.getHours(), now.getMinutes(), now.getSeconds());
+  document.getElementById("dBlurb").textContent = el.blurb;
+  drawOrbit(el, now.getSeconds());
+}
+
+document.getElementById("detailClose").addEventListener("click", () => closeDetail());
+
+/* shell + focus controls */
+document.getElementById("shellSwitch").addEventListener("click", (e) => {
+  const btn = e.target.closest("button[data-shell]");
+  if (!btn) return;
+  setShell(btn.dataset.shell);
+});
+
+document.getElementById("quickPicks").addEventListener("click", (e) => {
+  const demoBtn = e.target.closest("button[data-demo-sec]");
+  if (demoBtn) {
+    if (focus.phase === "running" || focus.phase === "break" || focus.phase === "paused") {
+      toast("进行中无法改时长 · 请先暂停/熄灭", "warn");
+      return;
+    }
+    armFocus(1, "work", null, Number(demoBtn.dataset.demoSec));
+    const hNode = elNodes.get(1);
+    if (hNode) burstAtNode(hNode, "#38bdf8", 14);
+    return;
+  }
+  const btn = e.target.closest("button[data-z]");
+  if (!btn) return;
+  const z = Number(btn.dataset.z);
+  const kind = btn.dataset.kind === "break" ? "break" : "work";
+  const breakMin = btn.dataset.breakMin ? Number(btn.dataset.breakMin) : null;
+  if (focus.phase === "running" || focus.phase === "break" || focus.phase === "paused") {
+    toast("进行中无法改时长 · 请先暂停/熄灭", "warn");
+    return;
+  }
+  armFocus(z, kind, breakMin);
+  const node = elNodes.get(kind === "break" && breakMin === 5 ? 2 : z);
+  if (node) burstAtNode(node, kind === "break" ? "#f472b6" : CATS[byZ.get(z).cat].color, 10);
+});
+
+/** 一键观课（默认 90 秒） */
+function watchNucleosynthesis(sec = 90) {
+  if (focus.phase === "running" || focus.phase === "break" || focus.phase === "paused") {
+    // 直接重开
+    focus.phase = "idle";
+    focus.endsAt = 0;
+  }
+  setShell("learn", true);
+  hideRecap();
+  state.lastLessonIdx = -1;
+  armFocus(1, "work", null, sec);
+  startFocus(true);
+  toast(sec >= 60 ? `观课开始 · ${sec / 60} 分钟精讲节奏` : `观课开始 · ${sec}″ · 看路径与课程卡`, "ok");
+}
+
+document.getElementById("btnWatch").addEventListener("click", () => {
+  watchNucleosynthesis(focus.demoSec || 90);
+});
+document.getElementById("btnHeroWatch")?.addEventListener("click", () => watchNucleosynthesis(90));
+document.getElementById("btnHeroFast")?.addEventListener("click", () => watchNucleosynthesis(45));
+document.getElementById("btnPresent")?.addEventListener("click", () => setPresentMode(!state.present));
+document.getElementById("btnStart").addEventListener("click", () => startFocus(true));
+document.getElementById("btnPause").addEventListener("click", () => pauseFocus(false));
+document.getElementById("btnResume").addEventListener("click", () => resumeFocus());
+document.getElementById("btnQuench").addEventListener("click", () => quenchFocus());
+document.getElementById("btnBreak").addEventListener("click", () => {
+  armFocus(2, "break", 5);
+  startFocus(true);
+});
+document.getElementById("btnAgain").addEventListener("click", () => {
+  if (isLearnShell() || focus.lastWasDemo) {
+    watchNucleosynthesis(focus.demoSec || 90);
+  } else {
+    armFocus(focus.stats.lastZ || 25, "work");
+    startFocus(true);
+  }
+});
+document.getElementById("btnToFocus")?.addEventListener("click", () => {
+  setShell("focus", true);
+  armFocus(25, "work");
+  toast("已切到自律 · Mn 25′ · 点「开始专注」", "ok");
+});
+
+// 键盘：空格暂停/继续，Esc 结束，F 投影（观课/自律）
+document.addEventListener("keydown", (e) => {
+  if (e.target.matches("input, textarea")) return;
+  if (e.code === "KeyF" && !e.metaKey && !e.ctrlKey) {
+    if (state.shell === "learn" || state.shell === "focus") {
+      e.preventDefault();
+      setPresentMode(!state.present);
+    }
+    return;
+  }
+  if (state.shell !== "focus" && state.shell !== "learn") return;
+  if (e.code === "Space") {
+    e.preventDefault();
+    if (focus.phase === "running" || focus.phase === "break") pauseFocus(false);
+    else if (focus.phase === "paused") resumeFocus();
+    else if (focus.phase === "armed" || focus.phase === "idle") {
+      if (isLearnShell()) watchNucleosynthesis(focus.demoSec || 90);
+      else startFocus(true);
+    }
+  } else if (e.code === "Escape") {
+    if (state.present) {
+      setPresentMode(false);
+      return;
+    }
+    if (["running", "paused", "break"].includes(focus.phase)) quenchFocus();
+    else closeDetail();
+  }
+});
+
+/* orbit svg */
+function drawOrbit(el, tSec) {
+  const box = document.getElementById("orbitBox");
+  const shells = Math.min(7, el.period || 1);
+  const cx = 160, cy = 36;
+  let orbits = "";
+  for (let i = 1; i <= shells; i++) {
+    const r = 8 + i * 8;
+    orbits += `<ellipse cx="${cx}" cy="${cy}" rx="${r * 1.6}" ry="${r * 0.55}" fill="none" stroke="${CATS[el.cat].color}" stroke-opacity="0.25" stroke-width="1"/>`;
+    const angle = (tSec * (0.8 + i * 0.35) + i) % (Math.PI * 2);
+    const ex = cx + Math.cos(angle) * r * 1.6;
+    const ey = cy + Math.sin(angle) * r * 0.55;
+    orbits += `<circle cx="${ex}" cy="${ey}" r="2.2" fill="${CATS[el.cat].color}"><animate attributeName="opacity" values="0.5;1;0.5" dur="${1.2 + i * 0.1}s" repeatCount="indefinite"/></circle>`;
+  }
+  box.innerHTML = `
+    <svg viewBox="0 0 320 72" preserveAspectRatio="xMidYMid meet">
+      <circle cx="${cx}" cy="${cy}" r="5" fill="${CATS[el.cat].color}" opacity="0.9"/>
+      <circle cx="${cx}" cy="${cy}" r="10" fill="none" stroke="${CATS[el.cat].color}" stroke-opacity="0.35"/>
+      ${orbits}
+      <text x="12" y="16" fill="#7a8aa3" font-size="10" font-family="JetBrains Mono, monospace">e⁻ shells ≈ ${shells}</text>
+    </svg>
+  `;
+}
+
+/* wave mode */
+function runWave(centerZ) {
+  const token = ++state.waveToken;
+  const order = [...elNodes.keys()].sort((a, b) => a - b);
+  order.forEach((z, i) => {
+    setTimeout(() => {
+      if (token !== state.waveToken) return;
+      const n = elNodes.get(z);
+      if (!n) return;
+      n.classList.remove("wave");
+      void n.offsetWidth;
+      n.classList.add("wave");
+    }, i * 12);
+  });
+}
+
+function cascadeMinute(mz) {
+  const n = elNodes.get(mz);
+  if (!n) return;
+  burstAtNode(n, "#f5b942", 28);
+  // light neighbors
+  for (let d = -2; d <= 2; d++) {
+    const nn = elNodes.get(mz + d);
+    if (nn) {
+      setTimeout(() => {
+        nn.classList.remove("wave");
+        void nn.offsetWidth;
+        nn.classList.add("wave");
+      }, Math.abs(d) * 80);
+    }
+  }
+}
+
+function hourBloom(hz) {
+  const n = elNodes.get(hz);
+  if (n) burstAtNode(n, "#fb7185", 48);
+  runWave(hz);
+}
+
+/* modes */
+document.getElementById("modes").addEventListener("click", (e) => {
+  const btn = e.target.closest("button[data-mode]");
+  if (!btn) return;
+  state.mode = btn.dataset.mode;
+  document.querySelectorAll("#modes button").forEach(b => b.classList.toggle("active", b === btn));
+  document.getElementById("hint").textContent = hints[state.mode];
+  document.getElementById("modeLine").textContent = `mode · ${state.mode}`;
+});
+
+/* ========== Particles ========== */
+const canvas = document.getElementById("fx");
+const ctx = canvas.getContext("2d");
+let particles = [];
+function resizeFx() {
+  canvas.width = window.innerWidth * devicePixelRatio;
+  canvas.height = window.innerHeight * devicePixelRatio;
+  canvas.style.width = window.innerWidth + "px";
+  canvas.style.height = window.innerHeight + "px";
+  ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+}
+window.addEventListener("resize", resizeFx);
+resizeFx();
+
+function burstAtNode(node, color, count = 18) {
+  const r = node.getBoundingClientRect();
+  const x = r.left + r.width / 2;
+  const y = r.top + r.height / 2;
+  for (let i = 0; i < count; i++) {
+    const a = Math.random() * Math.PI * 2;
+    const sp = 1.2 + Math.random() * 3.5;
+    particles.push({
+      x, y,
+      vx: Math.cos(a) * sp,
+      vy: Math.sin(a) * sp - 0.5,
+      life: 1,
+      decay: 0.015 + Math.random() * 0.02,
+      size: 1.5 + Math.random() * 2.5,
+      color,
+    });
+  }
+}
+
+function fxLoop() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles = particles.filter(p => p.life > 0);
+  for (const p of particles) {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.04;
+    p.life -= p.decay;
+    ctx.globalAlpha = Math.max(0, p.life);
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(fxLoop);
+}
+fxLoop();
+
+/* 粒子：观课轻飘；自律专注时关；观展开 */
+setInterval(() => {
+  if (particles.length > 100) return;
+  if (state.shell === "focus" && (focus.phase === "running" || focus.phase === "paused")) return;
+  if (state.shell === "learn" && focus.phase === "running" && Math.random() > 0.4) return;
+  particles.push({
+    x: Math.random() * window.innerWidth,
+    y: window.innerHeight + 4,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: -0.3 - Math.random() * 0.6,
+    life: 1,
+    decay: 0.003 + Math.random() * 0.004,
+    size: 1 + Math.random() * 1.5,
+    color: state.shell === "learn" ? "rgba(56,189,248,0.4)" : "rgba(94,234,212,0.45)",
+  });
+}, 450);
+
+/* boot：默认观课主用途 */
+buildTable();
+buildFusionPathUI();
+refreshCollected();
+setShell("learn", true);
+requestAnimationFrame(tick);
+
+(function autoWatchIfRequested() {
+  const q = new URLSearchParams(location.search);
+  const wantWatch = q.get("watch") === "1" || q.get("合成") === "1"
+    || location.hash === "#watch" || location.hash === "#合成";
+  const sec = Number(q.get("sec") || 90);
+  if (wantWatch) {
+    setTimeout(() => watchNucleosynthesis(Number.isFinite(sec) && sec > 0 ? sec : 90), 350);
+  }
+})();
+</script>
+</body>
+</html>

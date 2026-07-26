@@ -1,0 +1,2703 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>元素周期表 · Periodic Table of Elements</title>
+<meta name="description" content="漫画风格的化学元素周期表，118个元素详情、70张实拍照片、焰色反应、元素时间轴、化合物侦探小游戏，初高中化学必备工具。">
+<meta property="og:title" content="元素周期表 · 漫画风化学探索">
+<meta property="og:description" content="118个元素 · 70张实拍照 · 焰色反应 · 时间轴 · 化合物侦探 — 把化学课变成一场冒险">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚗️</text></svg>">
+<link rel="preconnect" href="https://fonts.font.im">
+<link href="https://fonts.font.im/css2?family=Bangers&family=Patrick+Hand&family=Fredoka:wght@400;500;600;700&family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&family=Long+Cang&display=swap" rel="stylesheet">
+<style>
+/* ==================== COMIC / 漫画风 ==================== */
+:root{
+  --paper:#fef6e4;
+  --paper-2:#fffaf0;
+  --ink:#1a1410;
+  --ink-2:#3d3530;
+  --ink-3:#6b5d54;
+  --line:#1a1410;
+
+  /* Sticker palette - bright cartoon */
+  --c-alkali:#ff6b6b;
+  --c-alkaline:#ffa94d;
+  --c-transition:#ffd43b;
+  --c-postmetal:#51cf66;
+  --c-metalloid:#20c997;
+  --c-nonmetal:#4dabf7;
+  --c-halogen:#9775fa;
+  --c-noble:#f783ac;
+  --c-lanthanide:#fa5252;
+  --c-actinide:#fd7e14;
+  --c-unknown:#adb5bd;
+
+  --shadow-sm:3px 3px 0 0 var(--ink);
+  --shadow-md:5px 5px 0 0 var(--ink);
+  --shadow-lg:8px 8px 0 0 var(--ink);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{
+  background:var(--paper);color:var(--ink);min-height:100vh;overflow-x:hidden;
+  font-family:'Patrick Hand','Ma Shan Zheng','PingFang SC',sans-serif;
+  font-size:16px;
+}
+
+/* Halftone dot paper background */
+body::before{
+  content:'';position:fixed;inset:0;z-index:-2;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,107,107,.08) 0, transparent 50%),
+    radial-gradient(circle at 80% 30%, rgba(77,171,247,.08) 0, transparent 50%),
+    radial-gradient(circle at 50% 90%, rgba(81,207,102,.07) 0, transparent 50%),
+    var(--paper);
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background-image:radial-gradient(circle, rgba(26,20,16,.08) 1px, transparent 1px);
+  background-size:18px 18px;
+  opacity:.5;
+}
+
+/* ===== Sticky 顶部导航 ===== */
+html{scroll-behavior:smooth}
+body{padding-top:58px}
+section[id], header[id]{scroll-margin-top:70px}
+
+.topnav{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  background:#fef6e4;
+  border-bottom:2.5px solid var(--ink);
+  box-shadow:0 4px 0 var(--ink);
+}
+.topnav-inner{
+  max-width:1400px;margin:0 auto;padding:8px 24px;
+  display:flex;align-items:center;gap:16px;
+}
+.nav-logo{
+  font:600 17px 'ZCOOL KuaiLe','Ma Shan Zheng',sans-serif;
+  color:var(--ink);text-decoration:none;flex-shrink:0;
+  background:#ffd43b;border:2.5px solid var(--ink);border-radius:14px;
+  padding:5px 12px;box-shadow:2.5px 2.5px 0 var(--ink);
+  transform:rotate(-2deg);transition:transform .15s;
+}
+.nav-logo:hover{transform:rotate(0deg) scale(1.05)}
+.nav-links{
+  display:flex;gap:6px;flex:1;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;
+  padding:2px;
+}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-links a{
+  display:flex;align-items:center;gap:5px;text-decoration:none;
+  color:var(--ink-2);font:600 13px 'Patrick Hand','Ma Shan Zheng',sans-serif;
+  padding:6px 12px;border-radius:18px;border:2px solid transparent;
+  white-space:nowrap;flex-shrink:0;transition:all .15s;cursor:pointer;
+}
+.nav-links a .i{line-height:1;display:flex;align-items:center;justify-content:center}
+.nav-links a .i svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav-links a:hover{background:rgba(255,255,255,.7);color:var(--ink)}
+.nav-links a.active{
+  background:var(--ink);color:#ffd43b;border-color:var(--ink);
+  box-shadow:2px 2px 0 #ff6b6b;transform:translateY(-1px);
+}
+/* 外链入口：稍作区分，绿色底 */
+.nav-links a.nav-ext{
+  background:#e8f5e8;border-color:#8ce99a;color:#2b7a2b;
+}
+.nav-links a.nav-ext .t::after{content:' ↗';font-size:.85em;opacity:.75}
+
+@media (max-width:780px){
+  body{padding-top:46px}
+  section[id], header[id]{scroll-margin-top:56px}
+  .topnav-inner{padding:4px 6px;gap:0}
+  .nav-logo{display:none}
+  .nav-links{gap:0;justify-content:space-around;overflow:visible}
+  .nav-links a{
+    padding:4px 0;font-size:10px;gap:1px;
+    flex:1;justify-content:center;flex-direction:column;
+    border-radius:8px;border:none;
+  }
+  .nav-links a .t{font-size:9px;opacity:.7}
+  .nav-links a .i svg{width:20px;height:20px}
+  .nav-links a.active{
+    background:var(--ink);color:#ffd43b;
+    box-shadow:1.5px 1.5px 0 #ff6b6b;border-radius:10px;
+  }
+  .nav-links a.active .t{opacity:1}
+}
+
+/* ===== 首屏导读 hint ===== */
+.hero-hint{
+  margin-top:18px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 4px;
+  font:600 14px 'Patrick Hand','Ma Shan Zheng',sans-serif;color:var(--ink-2);
+}
+.hero-hint .num{
+  display:inline-block;font-family:'ZCOOL KuaiLe','Ma Shan Zheng',sans-serif;
+  font-size:20px;color:#ff6b6b;background:#fff;border:2px solid var(--ink);
+  border-radius:10px;padding:1px 8px;box-shadow:2px 2px 0 var(--ink);
+  margin:0 2px;text-shadow:1.5px 1.5px 0 #ffd43b;
+}
+.hero-hint .arrow{
+  display:inline-block;margin-left:10px;padding:4px 12px;background:#ffd43b;
+  border:2px solid var(--ink);border-radius:14px;box-shadow:2px 2px 0 var(--ink);
+  color:var(--ink);font:700 13px 'Fredoka','Ma Shan Zheng',sans-serif;
+  animation:bounce 1.5s ease-in-out infinite;
+}
+@keyframes bounce{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(4px)}
+}
+
+/* ===== 返回顶部按钮 ===== */
+.back-to-top{
+  position:fixed;bottom:24px;right:24px;z-index:60;
+  width:54px;height:54px;border-radius:50%;
+  background:#ffd43b;border:3px solid var(--ink);color:var(--ink);
+  font:700 22px 'Fredoka',sans-serif;cursor:pointer;
+  box-shadow:4px 4px 0 var(--ink);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transform:translateY(20px);
+  transition:opacity .25s, transform .25s, box-shadow .15s;
+}
+.back-to-top.visible{opacity:1 !important;pointer-events:auto !important;transform:translateY(0) !important}
+.back-to-top:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink);background:#ff6b6b;color:#fff}
+@media (max-width:780px){
+  .back-to-top{width:48px;height:48px;font-size:20px;bottom:18px;right:18px}
+}
+
+/* ===== Header ===== */
+header{padding:36px 48px 18px;display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.brand{position:relative}
+.brand .eyebrow{
+  display:inline-block;background:var(--ink);color:var(--paper);
+  font:600 12px 'Fredoka',sans-serif;letter-spacing:.18em;
+  padding:4px 12px;border-radius:20px;transform:rotate(-2deg);margin-bottom:10px;
+}
+.brand h1{
+  font-family:'ZCOOL KuaiLe','Ma Shan Zheng',sans-serif;font-weight:400;
+  font-size:64px;letter-spacing:.02em;line-height:1;color:var(--ink);
+  position:relative;display:inline-block;
+  text-shadow:4px 4px 0 #fff, 5px 5px 0 var(--ink), -1px -1px 0 #fff, 1px 1px 0 #fff;
+}
+.brand h1 span{
+  display:block;font-family:'Bangers',cursive;font-weight:400;
+  font-size:28px;color:#ff6b6b;letter-spacing:.1em;margin-top:8px;
+  text-shadow:2px 2px 0 var(--ink);transform:rotate(-1.5deg);
+}
+/* squiggle underline */
+.brand h1::after{
+  content:'';position:absolute;left:0;right:-10px;bottom:-14px;height:10px;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'><path d='M0 5 Q 12.5 0 25 5 T 50 5 T 75 5 T 100 5' fill='none' stroke='%23ffd43b' stroke-width='4' stroke-linecap='round'/></svg>");
+  background-size:80px 10px;background-repeat:repeat-x;
+}
+
+.toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+
+.search{
+  display:flex;align-items:center;background:#fff;border:2.5px solid var(--ink);
+  border-radius:30px;padding:0 16px;height:48px;width:300px;
+  box-shadow:var(--shadow-sm);transition:transform .15s, box-shadow .15s;
+}
+.search:focus-within{transform:translate(-2px,-2px);box-shadow:var(--shadow-md)}
+.search svg{width:18px;height:18px;color:var(--ink);flex-shrink:0;stroke-width:2.5}
+.search input{
+  background:transparent;border:0;outline:0;color:var(--ink);
+  font:500 15px 'Patrick Hand',sans-serif;flex:1;padding:0 12px;
+}
+.search input::placeholder{color:var(--ink-3);font-style:italic}
+.kbd{font:700 12px 'Fredoka',monospace;background:var(--ink);color:var(--paper);padding:3px 8px;border-radius:6px}
+
+.view-toggle{
+  display:flex;background:#fff;border:2.5px solid var(--ink);border-radius:30px;padding:4px;
+  box-shadow:var(--shadow-sm);
+  overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;
+  max-width:100%;flex-shrink:0;
+}
+.view-toggle::after{content:'';flex-shrink:0;width:4px}
+.view-toggle::-webkit-scrollbar{display:none}
+.view-toggle button{
+  background:transparent;border:0;color:var(--ink-2);
+  font:600 13px 'Fredoka','Ma Shan Zheng',sans-serif;
+  padding:7px 12px;border-radius:24px;cursor:pointer;transition:all .15s;letter-spacing:.02em;
+  white-space:nowrap;flex-shrink:0;
+}
+.view-toggle button.active{
+  background:var(--ink);color:#ffd43b;transform:scale(1.05);
+  box-shadow:inset 0 0 0 2px #ffd43b;
+}
+.view-toggle button:not(.active):hover{color:var(--ink);transform:translateY(-1px)}
+
+/* ===== Legend ===== */
+.legend{display:flex;flex-wrap:wrap;gap:10px;padding:0 48px 18px}
+.legend .chip{
+  display:flex;align-items:center;gap:8px;
+  font:600 13px 'Patrick Hand','Ma Shan Zheng',sans-serif;color:var(--ink);
+  background:#fff;border:2px solid var(--ink);
+  padding:6px 14px;border-radius:20px;cursor:pointer;
+  box-shadow:2px 2px 0 var(--ink);transition:all .15s;
+}
+.legend .chip:hover{transform:translate(-1px,-1px) rotate(-1deg);box-shadow:3px 3px 0 var(--ink)}
+.legend .chip:nth-child(odd){transform:rotate(-.5deg)}
+.legend .chip:nth-child(even){transform:rotate(.5deg)}
+.legend .dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--ink)}
+
+/* ===== Periodic Table ===== */
+.table-wrap{padding:8px 48px 48px;overflow-x:auto}
+.periodic{
+  display:grid;
+  grid-template-columns:auto repeat(18, minmax(56px, 1fr));
+  grid-template-rows:auto repeat(7, minmax(64px, auto)) 28px repeat(2, minmax(64px, auto));
+  gap:6px;
+  min-width:1200px;
+  position:relative;
+}
+.col-h, .row-h{
+  display:flex;align-items:center;justify-content:center;
+  font:700 13px 'Fredoka',monospace;color:var(--ink-2);
+}
+
+/* Element sticker card */
+.el{
+  position:relative;aspect-ratio:1/1;border-radius:10px;cursor:pointer;
+  background:var(--cc, #fff);
+  border:2.5px solid var(--ink);
+  padding:5px 7px;display:flex;flex-direction:column;justify-content:space-between;
+  overflow:visible;
+  box-shadow:3px 3px 0 0 var(--ink);
+  transition:transform .15s cubic-bezier(.2,.8,.2,1), box-shadow .15s;
+  isolation:isolate;
+  font-family:'Patrick Hand',sans-serif;
+}
+.el:nth-child(3n){transform:rotate(-.5deg)}
+.el:nth-child(3n+1){transform:rotate(.4deg)}
+.el:hover{
+  transform:translate(-3px,-4px) rotate(-2deg) scale(1.08);
+  box-shadow:6px 7px 0 0 var(--ink);z-index:10;
+}
+.el .num{font:700 11px 'Fredoka',monospace;color:var(--ink);line-height:1}
+.el .sym{
+  font-family:'ZCOOL KuaiLe','Ma Shan Zheng',sans-serif;font-weight:400;
+  font-size:26px;line-height:1;color:var(--ink);text-align:center;
+  text-shadow:1.5px 1.5px 0 #fff;
+}
+.el .name{font:500 9px 'Patrick Hand','Ma Shan Zheng',sans-serif;color:var(--ink);line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}
+.el .mass{font:600 9px 'Fredoka',monospace;color:var(--ink-2);line-height:1}
+
+.el.dim{opacity:.25;filter:saturate(.3)}
+.el.match{animation:wobble 1s ease-in-out infinite}
+@keyframes wobble{
+  0%,100%{transform:rotate(-3deg) scale(1.05)}
+  50%{transform:rotate(3deg) scale(1.1)}
+}
+
+.placeholder{
+  display:flex;align-items:center;justify-content:center;border-radius:10px;
+  border:2px dashed var(--ink);color:var(--ink-3);font:600 11px 'Fredoka',monospace;
+  background:rgba(255,255,255,.4);
+}
+.series-label{
+  display:flex;align-items:center;justify-content:center;
+  font:700 11px 'Fredoka',monospace;color:var(--ink-2);
+  background:#fff;border-radius:8px;border:2px dashed var(--ink);
+}
+
+/* ===== Category colors (sticker fill) ===== */
+.el[data-cat="alkali-metal"]{--cc:#ffcdd2}
+.el[data-cat="alkaline-earth-metal"]{--cc:#ffe0b2}
+.el[data-cat="transition-metal"]{--cc:#fff9c4}
+.el[data-cat="post-transition-metal"]{--cc:#c8e6c9}
+.el[data-cat="metalloid"]{--cc:#b2dfdb}
+.el[data-cat="nonmetal"]{--cc:#bbdefb}
+.el[data-cat="halogen"]{--cc:#d1c4e9}
+.el[data-cat="noble-gas"]{--cc:#f8bbd0}
+.el[data-cat="lanthanide"]{--cc:#ffcdd2}
+.el[data-cat="actinide"]{--cc:#ffccbc}
+.el[data-cat="unknown"]{--cc:#e0e0e0}
+
+/* Legend dots use vivid versions */
+.legend .chip[data-key="alkali-metal"] .dot, .legend .dot[style*="ff6b6b"]{background:var(--c-alkali)}
+
+/* ===== Modal ===== */
+.modal-backdrop{
+  position:fixed;inset:0;background:rgba(26,20,16,.65);
+  z-index:100;display:flex;align-items:center;justify-content:center;padding:24px;
+  opacity:0;pointer-events:none;transition:opacity .25s;
+}
+.modal-backdrop.open{opacity:1;pointer-events:auto}
+.modal{
+  width:min(880px, 100%);max-height:90vh;overflow:auto;
+  background:var(--paper-2);border:3px solid var(--ink);border-radius:24px;
+  box-shadow:10px 10px 0 0 var(--ink);
+  transform:translateY(30px) rotate(-1deg) scale(.96);transition:transform .35s cubic-bezier(.2,.8,.2,1);
+  position:relative;overflow-x:hidden;
+}
+.modal-backdrop.open .modal{transform:translateY(0) rotate(0) scale(1)}
+/* Halftone overlay in modal */
+.modal::before{
+  content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background-image:radial-gradient(circle, rgba(26,20,16,.06) 1px, transparent 1px);
+  background-size:14px 14px;
+}
+
+.modal-head{
+  display:grid;grid-template-columns:auto 1fr auto;gap:28px;align-items:center;
+  padding:32px 36px 24px;border-bottom:3px dashed var(--ink);position:relative;
+}
+.modal-symbol{
+  width:160px;height:200px;border-radius:16px;display:flex;flex-direction:column;justify-content:space-between;
+  padding:14px 16px;
+  background:var(--cc,#ffd43b);
+  border:3px solid var(--ink);
+  box-shadow:6px 6px 0 0 var(--ink);
+  transform:rotate(-3deg);
+  position:relative;
+}
+.modal-symbol::after{
+  content:'';position:absolute;top:8px;right:8px;width:18px;height:18px;border-radius:50%;
+  background:#fff;border:2px solid var(--ink);
+}
+.modal-symbol .num{font:700 16px 'Fredoka',monospace;color:var(--ink)}
+.modal-symbol .sym{
+  font-family:'ZCOOL KuaiLe','Ma Shan Zheng',sans-serif;font-weight:400;font-size:88px;line-height:1;
+  color:var(--ink);text-align:center;text-shadow:3px 3px 0 #fff;
+}
+.modal-symbol .mass{font:700 14px 'Fredoka',monospace;color:var(--ink);text-align:center}
+
+.modal-title h2{
+  font-family:'ZCOOL KuaiLe','Ma Shan Zheng',sans-serif;font-weight:400;font-size:48px;
+  color:var(--ink);line-height:1;margin-bottom:8px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+  text-shadow:2px 2px 0 #fff;
+}
+.modal-title .latin{
+  font-family:'Bangers',cursive;color:#ff6b6b;font-size:22px;letter-spacing:.08em;
+  text-shadow:1.5px 1.5px 0 var(--ink);transform:rotate(-1deg);display:inline-block;
+}
+.modal-title .cat{
+  display:inline-flex;align-items:center;gap:8px;margin-top:14px;
+  padding:6px 14px;border-radius:20px;font:600 13px 'Patrick Hand','Ma Shan Zheng',sans-serif;
+  background:var(--cc,#ffd43b);color:var(--ink);
+  border:2.5px solid var(--ink);box-shadow:2px 2px 0 var(--ink);
+}
+.modal-title .cat .dot{width:10px;height:10px;border-radius:50%;background:var(--ink)}
+
+.modal-close{
+  position:fixed;top:max(14px, env(safe-area-inset-top));right:14px;z-index:9999;
+  background:#ff6b6b;border:3px solid var(--ink);color:var(--ink);
+  width:54px;height:54px;border-radius:50%;cursor:pointer;font-size:24px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:4px 4px 0 var(--ink);transition:all .15s;
+  pointer-events:auto;
+}
+/* 弹窗打开时隐藏顶栏和返回顶部按钮，让 X 独享视野 */
+body.modal-open .topnav,
+body.modal-open .back-to-top{display:none !important}
+body.modal-open{overflow:hidden}
+.modal-close:hover{transform:translate(-1px,-1px) rotate(90deg);box-shadow:4px 4px 0 var(--ink)}
+
+.modal-body{padding:28px 36px 36px;display:grid;grid-template-columns:1fr 1fr;gap:24px;position:relative}
+.detail-block{background:#fff;border:2.5px solid var(--ink);border-radius:16px;padding:18px 20px;box-shadow:4px 4px 0 var(--ink)}
+.detail-block h3{
+  font:600 13px 'Fredoka','Ma Shan Zheng',sans-serif;letter-spacing:.05em;
+  color:var(--ink);margin-bottom:14px;
+  display:flex;align-items:center;gap:10px;
+}
+.detail-block h3::before{content:'★';color:#ffd43b;font-size:18px;text-shadow:1px 1px 0 var(--ink)}
+.prop-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px}
+.prop{display:flex;flex-direction:column;gap:2px}
+.prop .k{font:500 11px 'Patrick Hand','Ma Shan Zheng',sans-serif;color:var(--ink-3);letter-spacing:.04em}
+.prop .v{font:700 15px 'Fredoka',monospace;color:var(--ink)}
+.prop .v.serif{font-family:'Patrick Hand',sans-serif;font-weight:600}
+
+.discovery{
+  grid-column:1/-1;background:#fff5d6;border:2.5px solid var(--ink);border-radius:16px;
+  padding:18px 22px;line-height:1.7;color:var(--ink);font-size:15px;
+  box-shadow:4px 4px 0 var(--ink);position:relative;
+  font-family:'Patrick Hand','Ma Shan Zheng',sans-serif;
+}
+.discovery::before{
+  content:'📜 发现历史';position:absolute;top:-16px;left:20px;
+  background:#fff;color:var(--ink);border:2.5px solid var(--ink);
+  padding:4px 12px;border-radius:14px;
+  font:600 13px 'ZCOOL KuaiLe','Ma Shan Zheng',sans-serif;letter-spacing:.04em;
+  box-shadow:2.5px 2.5px 0 var(--ink);transform:rotate(-3deg);
+}
+.discovery strong{color:#ff6b6b;font-weight:700}
+
+/* ===== Atom viz ===== */
+.atom-viz{
+  grid-column:1/-1;background:#e3f2fd;border:2.5px solid var(--ink);border-radius:16px;
+  padding:24px;display:flex;align-items:center;justify-content:center;min-height:240px;
+  position:relative;box-shadow:4px 4px 0 var(--ink);
+}
+.atom-svg{width:100%;max-width:380px;height:auto}
+.atom-svg .nucleus{fill:var(--cc, #ff6b6b);stroke:var(--ink);stroke-width:2.5}
+.atom-svg .orbit{fill:none;stroke:var(--ink);stroke-width:2;stroke-dasharray:4 3;opacity:.5}
+.atom-svg .electron{fill:#ffd43b;stroke:var(--ink);stroke-width:1.5}
+.atom-svg text{fill:var(--ink);font:700 14px 'Fredoka',monospace}
+
+/* ===== Mendelevium card in modal ===== */
+.mendelevium-card{
+  grid-column:1/-1;
+  background:linear-gradient(135deg,#fff5d6,#ffe0b2);
+  border:3px solid var(--ink);border-radius:18px;padding:20px 22px;
+  display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start;
+  box-shadow:6px 6px 0 var(--ink);position:relative;
+}
+.mendelevium-card::after{
+  content:'🎴 桌游联动';position:absolute;top:-16px;right:20px;
+  background:#ff6b6b;color:#fff;border:2.5px solid var(--ink);
+  padding:4px 12px;border-radius:14px;
+  font:600 13px 'ZCOOL KuaiLe','Ma Shan Zheng',sans-serif;letter-spacing:.04em;
+  box-shadow:2.5px 2.5px 0 var(--ink);transform:rotate(3deg);
+}
+.mendelevium-card .icon{
+  width:56px;height:78px;border-radius:8px;flex-shrink:0;
+  background:#fff;border:2.5px solid var(--ink);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'ZCOOL KuaiLe','Ma Shan Zheng',sans-serif;color:var(--ink);font-size:28px;
+  box-shadow:3px 3px 0 var(--ink);transform:rotate(-5deg);
+}
+.mendelevium-card h4{font:600 18px 'Fredoka','Ma Shan Zheng',sans-serif;color:var(--ink);margin-bottom:4px}
+.mendelevium-card .meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.mendelevium-card .pill{
+  font:600 12px 'Patrick Hand','Ma Shan Zheng',sans-serif;padding:4px 10px;border-radius:14px;
+  background:#fff;border:2px solid var(--ink);color:var(--ink);
+}
+.mendelevium-card .pill.role{background:#ff6b6b;color:#fff}
+.mendelevium-card .bomb-list{margin-top:12px;font-size:13px;color:var(--ink);line-height:1.7;font-family:'Patrick Hand','Ma Shan Zheng',sans-serif}
+.mendelevium-card .bomb-list strong{color:var(--ink);font-weight:700}
+.mendelevium-card .bomb-list .sym-pill{
+  display:inline-block;padding:3px 9px;margin:2px 3px;border-radius:8px;
+  background:#fff;border:2px solid var(--ink);color:var(--ink);
+  font:700 12px 'Fredoka',monospace;box-shadow:2px 2px 0 var(--ink);
+}
+
+/* ===== 真实样子 + 发现者肖像 ===== */
+.real-stuff{
+  grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:16px;
+}
+.real-card{
+  background:#fff;border:3px solid var(--ink);border-radius:16px;overflow:hidden;
+  box-shadow:5px 5px 0 var(--ink);position:relative;
+}
+.real-card .label{
+  background:#ffd43b;border-bottom:2.5px solid var(--ink);padding:8px 14px;
+  font:600 13px 'ZCOOL KuaiLe','Ma Shan Zheng',sans-serif;color:var(--ink);
+  text-align:center;letter-spacing:.05em;
+}
+.real-card .img-wrap{
+  aspect-ratio:4/3;background:#f5f0e8;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;position:relative;max-height:280px;
+}
+.real-card img{
+  width:100%;height:100%;object-fit:cover;display:block;
+}
+.real-card .img-wrap.loading::before{
+  content:'图片加载中…';position:absolute;color:var(--ink-3);
+  font:500 12px 'Patrick Hand','Ma Shan Zheng',sans-serif;
+}
+.real-card .img-wrap.fail::before{
+  content:'📷 图片加载中…\A如无法显示请刷新页面';white-space:pre;
+  position:absolute;color:var(--ink-3);text-align:center;
+  font:500 12px 'Patrick Hand','Ma Shan Zheng',sans-serif;line-height:1.6;
+}
+.real-card .img-wrap.empty{font:500 12px 'Patrick Hand','Ma Shan Zheng',sans-serif;color:var(--ink-3);padding:20px;text-align:center}
+.real-card .caption{
+  padding:10px 14px;font:600 12.5px 'Patrick Hand','Ma Shan Zheng',sans-serif;
+  color:var(--ink);text-align:center;line-height:1.4;
+}
+.real-card .person-meta{
+  background:#fef6e4;border-top:2px dashed var(--ink);padding:6px 14px;
+  font:500 11px 'Fredoka','Ma Shan Zheng',sans-serif;color:var(--ink-2);text-align:center;
+}
+
+@media (max-width:780px){
+  .real-stuff{grid-template-columns:1fr}
+}
+
+/* ===== Persona bubble (拟人化角色卡) ===== */
+.persona-bubble{
+  grid-column:1/-1;
+  background:linear-gradient(135deg,#fff5d6,#ffe9b0);
+  border:3px solid var(--ink);border-radius:18px;
+  padding:22px 24px;box-shadow:6px 6px 0 var(--ink);
+  display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center;
+  position:relative;
+}
+.persona-bubble::before{
+  content:'🎭 角色卡 · SELF-INTRO';position:absolute;top:-16px;left:20px;
+  background:#fbbf24;color:var(--ink);border:2.5px solid var(--ink);
+  padding:4px 12px;border-radius:14px;
+  font:600 13px 'ZCOOL KuaiLe','Ma Shan Zheng',sans-serif;letter-spacing:.04em;
+  box-shadow:2.5px 2.5px 0 var(--ink);transform:rotate(-3deg);
+}
+.persona-bubble .avatar{
+  width:88px;height:88px;border-radius:50%;
+  background:#fff;border:3px solid var(--ink);
+  display:flex;align-items:center;justify-content:center;
+  font-size:52px;line-height:1;
+  box-shadow:5px 5px 0 var(--ink);flex-shrink:0;
+  transform:rotate(-5deg);
+}
+.persona-bubble .bubble{
+  background:#fff;border:2.5px solid var(--ink);border-radius:18px;
+  padding:14px 18px;position:relative;box-shadow:3px 3px 0 var(--ink);
+}
+.persona-bubble .bubble::before{
+  content:'';position:absolute;left:-18px;top:24px;
+  width:0;height:0;border-top:11px solid transparent;border-bottom:11px solid transparent;
+  border-right:20px solid var(--ink);
+}
+.persona-bubble .bubble::after{
+  content:'';position:absolute;left:-13px;top:25px;
+  width:0;height:0;border-top:9px solid transparent;border-bottom:9px solid transparent;
+  border-right:16px solid #fff;
+}
+.persona-bubble .intro{
+  font-family:'Patrick Hand','Ma Shan Zheng',sans-serif;font-size:17px;line-height:1.5;
+  color:var(--ink);font-weight:600;margin-bottom:10px;
+}
+.persona-bubble .tags{display:flex;gap:6px;flex-wrap:wrap}
+.persona-bubble .tags span{
+  font:600 12px 'Patrick Hand','Ma Shan Zheng',sans-serif;color:#ff6b6b;
+  background:#fff5d6;border:2px solid var(--ink);padding:3px 10px;border-radius:12px;
+  box-shadow:1.5px 1.5px 0 var(--ink);
+}
+
+/* ===== Life card ===== */
+.life-card{
+  grid-column:1/-1;background:#c8e6c9;border:3px solid var(--ink);border-radius:18px;
+  padding:20px 22px;box-shadow:6px 6px 0 var(--ink);position:relative;
+}
+.life-card::after{
+  content:'🌍 生活中';position:absolute;top:-16px;right:20px;
+  background:#51cf66;color:var(--ink);border:2.5px solid var(--ink);
+  padding:4px 12px;border-radius:14px;
+  font:600 13px 'ZCOOL KuaiLe','Ma Shan Zheng',sans-serif;letter-spacing:.04em;
+  box-shadow:2.5px 2.5px 0 var(--ink);transform:rotate(-3deg);
+}
+.life-card h4{
+  font:600 13px 'Fredoka','Ma Shan Zheng',sans-serif;letter-spacing:.08em;
+  color:var(--ink);margin-bottom:10px;
+}
+.life-card .life-row{
+  color:var(--ink);font-size:17px;line-height:1.6;margin-bottom:8px;
+  font-family:'Patrick Hand','Ma Shan Zheng',sans-serif;
+}
+.life-card .fun{
+  background:#fff;border:2px dashed var(--ink);border-radius:12px;padding:10px 14px;
+  color:var(--ink);font-size:14px;font-style:italic;margin-top:10px;
+  font-family:'Patrick Hand','Ma Shan Zheng',sans-serif;
+}
+
+.cur-badge{
+  display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:14px;
+  font:600 12px 'Patrick Hand','Ma Shan Zheng',sans-serif;margin-left:8px;
+  border:2px solid var(--ink);box-shadow:2px 2px 0 var(--ink);
+}
+.cur-badge.j{background:#51cf66;color:var(--ink)}
+.cur-badge.s{background:#4dabf7;color:var(--ink)}
+
+/* ===== Mendelevium view effects ===== */
+.el .deck-badge{
+  position:absolute;top:-6px;right:-6px;
+  font:700 10px 'Fredoka',monospace;color:var(--ink);
+  background:#ffd43b;padding:2px 6px;border-radius:10px;line-height:1.2;
+  border:2px solid var(--ink);box-shadow:2px 2px 0 var(--ink);
+}
+.el .role-mark{position:absolute;bottom:-8px;right:-4px;font-size:18px;filter:drop-shadow(1px 1px 0 var(--ink))}
+body[data-view="mendelevium"] .el:not([data-deck]){opacity:.18;filter:grayscale(.7)}
+body[data-view="mendelevium"] .el[data-role="thick"]{box-shadow:5px 5px 0 var(--ink), inset 0 0 0 3px #ffd43b}
+body[data-view="mendelevium"] .el[data-role="md"]{
+  animation:wiggle 1s ease-in-out infinite;
+  background:linear-gradient(135deg,#ff6b6b,#ffd43b)!important;
+}
+body[data-view="mendelevium"] .el[data-role="pb"]{background:#51cf66!important;box-shadow:6px 6px 0 var(--ink)}
+body[data-view="mendelevium"] .el[data-role="grab"]{background:#d1c4e9!important;box-shadow:5px 5px 0 var(--ink)}
+@keyframes wiggle{
+  0%,100%{transform:rotate(-4deg) scale(1.08)}
+  50%{transform:rotate(4deg) scale(1.12)}
+}
+
+/* Curriculum badge dots in card */
+.el[data-cur="j"]::before{
+  content:'初';position:absolute;top:-7px;left:-7px;width:20px;height:20px;
+  background:#51cf66;border:2px solid var(--ink);border-radius:50%;
+  font:700 10px 'Ma Shan Zheng',sans-serif;color:var(--ink);
+  display:flex;align-items:center;justify-content:center;z-index:2;
+  box-shadow:1.5px 1.5px 0 var(--ink);
+}
+.el[data-cur="s"]::before{
+  content:'高';position:absolute;top:-7px;left:-7px;width:20px;height:20px;
+  background:#4dabf7;border:2px solid var(--ink);border-radius:50%;
+  font:700 10px 'Ma Shan Zheng',sans-serif;color:var(--ink);
+  display:flex;align-items:center;justify-content:center;z-index:2;
+  box-shadow:1.5px 1.5px 0 var(--ink);
+}
+body.cur-j .el:not([data-cur="j"]){opacity:.15;filter:grayscale(.9)}
+body.cur-s .el:not([data-cur="j"]):not([data-cur="s"]){opacity:.15;filter:grayscale(.9)}
+
+/* ===== CTA Section ===== */
+.cta-section{
+  margin:48px 48px 32px;
+  background:linear-gradient(135deg,#ffd43b 0%, #ff6b6b 60%, #f783ac 100%);
+  border:3px solid var(--ink);border-radius:28px;
+  padding:44px 44px;
+  display:grid;grid-template-columns:1.4fr 1fr;gap:36px;align-items:center;
+  position:relative;overflow:hidden;
+  box-shadow:10px 10px 0 var(--ink);
+  transform:rotate(-.5deg);
+}
+.cta-section::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(circle, rgba(26,20,16,.12) 1px, transparent 1px);
+  background-size:16px 16px;
+}
+.cta-section .eyebrow{
+  display:inline-block;background:var(--ink);color:#ffd43b;
+  font:700 13px 'Fredoka',sans-serif;letter-spacing:.16em;
+  padding:5px 14px;border-radius:20px;transform:rotate(-2deg);margin-bottom:18px;
+}
+.cta-section h2{
+  font-family:'ZCOOL KuaiLe','Ma Shan Zheng',sans-serif;font-weight:400;font-size:44px;
+  line-height:1.15;margin-bottom:16px;color:var(--ink);
+  text-shadow:3px 3px 0 #fff;
+}
+.cta-section .desc{
+  color:var(--ink);font-size:17px;line-height:1.6;margin-bottom:22px;
+  font-family:'Patrick Hand','Ma Shan Zheng',sans-serif;
+  background:rgba(255,255,255,.5);padding:14px 18px;border-radius:14px;
+  border:2.5px dashed var(--ink);
+}
+.cta-section .stats{display:flex;gap:14px;margin-bottom:22px;flex-wrap:wrap}
+.cta-section .stat{
+  background:#fff;border:2.5px solid var(--ink);border-radius:14px;
+  padding:8px 14px;font:600 12px 'Patrick Hand','Ma Shan Zheng',sans-serif;color:var(--ink);
+  box-shadow:3px 3px 0 var(--ink);
+}
+.cta-section .stat strong{
+  display:block;font:700 22px 'Fredoka',sans-serif;color:#ff6b6b;line-height:1;
+  text-shadow:1.5px 1.5px 0 var(--ink);
+}
+.cta-buttons{display:flex;gap:14px;flex-wrap:wrap}
+.cta-btn{
+  display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:30px;
+  font:700 16px 'Fredoka','Ma Shan Zheng',sans-serif;text-decoration:none;
+  border:3px solid var(--ink);box-shadow:5px 5px 0 var(--ink);
+  transition:transform .15s, box-shadow .15s;
+}
+.cta-btn.primary{background:var(--ink);color:#ffd43b}
+.cta-btn.primary:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 #ff6b6b}
+.cta-btn.ghost{background:#fff;color:var(--ink)}
+.cta-btn.ghost:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--ink)}
+
+.cta-visual{position:relative;display:flex;justify-content:center;align-items:center;min-height:240px}
+.cta-card-stack{position:relative;width:180px;height:240px}
+.cta-card-stack .card{
+  position:absolute;width:150px;height:220px;border-radius:14px;
+  background:var(--c1,#fff);border:3px solid var(--ink);
+  display:flex;flex-direction:column;justify-content:space-between;padding:14px;
+  font-family:'ZCOOL KuaiLe','Ma Shan Zheng',sans-serif;color:var(--ink);
+  box-shadow:6px 6px 0 var(--ink);
+  transition:transform .35s cubic-bezier(.2,.8,.2,1);
+}
+.cta-card-stack .card .sym{font-size:74px;font-weight:400;text-align:center;line-height:1;flex:1;display:flex;align-items:center;justify-content:center;text-shadow:2px 2px 0 #fff}
+.cta-card-stack .card .num{font:700 13px 'Fredoka',monospace}
+.cta-card-stack .card .name{font:600 12px 'Patrick Hand','Ma Shan Zheng',sans-serif;text-align:right}
+.cta-card-stack .card:nth-child(1){--c1:#ffd43b;transform:rotate(-14deg) translate(-35px,5px)}
+.cta-card-stack .card:nth-child(2){--c1:#4dabf7;transform:rotate(2deg)}
+.cta-card-stack .card:nth-child(3){--c1:#f783ac;transform:rotate(15deg) translate(35px,5px)}
+.cta-card-stack:hover .card:nth-child(1){transform:rotate(-22deg) translate(-55px,-12px)}
+.cta-card-stack:hover .card:nth-child(3){transform:rotate(24deg) translate(55px,-12px)}
+
+/* ===== Compound Detective ===== */
+.detective{
+  margin:32px 48px;background:#fffaf0;border:3px solid var(--ink);border-radius:24px;
+  padding:36px 40px;box-shadow:8px 8px 0 var(--ink);position:relative;overflow:hidden;
+}
+.detective::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(circle, rgba(26,20,16,.05) 1px, transparent 1px);
+  background-size:18px 18px;
+}
+.det-head{text-align:center;margin-bottom:24px;position:relative}
+.det-head .badge{
+  display:inline-block;background:var(--ink);color:#ffd43b;
+  font:600 13px 'Fredoka','Ma Shan Zheng',sans-serif;letter-spacing:.12em;
+  padding:5px 14px;border-radius:20px;transform:rotate(-2deg);margin-bottom:12px;
+}
+.det-head h2{
+  font-family:'ZCOOL KuaiLe','Ma Shan Zheng',sans-serif;font-weight:400;
+  font-size:34px;color:var(--ink);line-height:1.2;margin-bottom:8px;
+  text-shadow:2px 2px 0 #fff;
+}
+.det-head p{
+  color:var(--ink-2);font-size:15px;
+  font-family:'Patrick Hand','Ma Shan Zheng',sans-serif;
+}
+.det-stage{position:relative;display:flex;flex-direction:column;gap:24px;align-items:center}
+.slots{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center;
+}
+.slot{
+  width:88px;height:110px;border-radius:12px;border:2.5px dashed var(--ink);
+  background:rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;
+  font:600 13px 'Patrick Hand','Ma Shan Zheng',sans-serif;color:var(--ink-3);
+  position:relative;transition:transform .2s;
+}
+.slot.empty::before{content:'+ 加元素';}
+.slot.filled{
+  background:var(--cc,#fff);border:2.5px solid var(--ink);border-style:solid;
+  cursor:pointer;box-shadow:3px 3px 0 var(--ink);
+  flex-direction:column;justify-content:space-between;padding:8px 10px;
+}
+.slot.filled:hover{transform:rotate(-3deg) translateY(-2px)}
+.slot.filled .s-num{font:700 11px 'Fredoka',monospace;align-self:flex-start}
+.slot.filled .s-sym{
+  font-family:'ZCOOL KuaiLe','Ma Shan Zheng',sans-serif;font-size:36px;text-align:center;
+  line-height:1;text-shadow:1.5px 1.5px 0 #fff;width:100%;
+}
+.slot.filled .s-name{font:500 10px 'Patrick Hand','Ma Shan Zheng',sans-serif;text-align:center}
+.slot.filled .s-remove{
+  position:absolute;top:-8px;right:-8px;width:22px;height:22px;border-radius:50%;
+  background:#ff6b6b;border:2px solid var(--ink);color:#fff;font:700 12px sans-serif;
+  display:flex;align-items:center;justify-content:center;box-shadow:1.5px 1.5px 0 var(--ink);
+}
+.plus,.equals{
+  font:700 32px 'ZCOOL KuaiLe',sans-serif;color:var(--ink);
+  text-shadow:2px 2px 0 #ffd43b;
+}
+.result-card{
+  min-width:180px;height:110px;border-radius:14px;border:3px solid var(--ink);
+  background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:10px 16px;box-shadow:4px 4px 0 var(--ink);text-align:center;
+  font-family:'Patrick Hand','Ma Shan Zheng',sans-serif;
+}
+.result-card.waiting{color:var(--ink-3);font-size:48px;font-family:'ZCOOL KuaiLe',sans-serif;text-shadow:3px 3px 0 #ffd43b}
+.result-card.success{background:#c8e6c9}
+.result-card.fail{background:#ffcdd2}
+.result-card .emoji{font-size:36px;line-height:1;margin-bottom:4px}
+.result-card .formula{font:700 22px 'Fredoka',monospace;color:var(--ink);line-height:1;margin-bottom:4px;text-shadow:1.5px 1.5px 0 #fff}
+.result-card .cname{font:600 14px 'ZCOOL KuaiLe','Ma Shan Zheng',sans-serif;color:var(--ink);margin-bottom:4px}
+.result-card .cfact{font:500 11px 'Patrick Hand','Ma Shan Zheng',sans-serif;color:var(--ink-2);line-height:1.3}
+
+.picker{
+  display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:840px;
+  background:rgba(255,255,255,.5);padding:18px;border-radius:18px;
+  border:2.5px dashed var(--ink);
+}
+.picker .pick{
+  width:54px;height:64px;border-radius:8px;cursor:pointer;
+  background:var(--cc,#fff);border:2px solid var(--ink);box-shadow:2px 2px 0 var(--ink);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:4px;transition:transform .15s;
+}
+.picker .pick:hover{transform:translate(-1px,-1px) rotate(-3deg);box-shadow:3px 3px 0 var(--ink)}
+.picker .pick:active{transform:scale(.92)}
+.picker .pick .p-sym{font-family:'ZCOOL KuaiLe','Ma Shan Zheng',sans-serif;font-size:20px;line-height:1;text-shadow:1px 1px 0 #fff}
+.picker .pick .p-name{font:500 9px 'Patrick Hand','Ma Shan Zheng',sans-serif;margin-top:2px}
+.picker .pick.disabled{opacity:.3;pointer-events:none}
+
+.det-actions{display:flex;gap:12px}
+.det-btn{
+  background:#fff;border:2.5px solid var(--ink);color:var(--ink);
+  font:600 14px 'Fredoka','Ma Shan Zheng',sans-serif;
+  padding:10px 18px;border-radius:24px;cursor:pointer;
+  box-shadow:3px 3px 0 var(--ink);transition:all .15s;
+}
+.det-btn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+.det-btn.primary{background:#ffd43b;color:var(--ink)}
+
+/* ===== 性能优化 ===== */
+.section, .detective, .cta-section, .stars, .flames, .timeline, .tops, .couples{
+  content-visibility:auto;
+  contain-intrinsic-size: 0 800px;
+}
+/* 离屏的 section 内动画自动暂停（节省 GPU） */
+.flame-svg .core, .flame-svg .glow,
+.cp-pair .heart,
+.hero-hint .arrow,
+body[data-view="mendelevium"] .el[data-role="md"]{
+  animation-play-state:paused;
+}
+.flames.inview .flame-svg .core, .flames.inview .flame-svg .glow,
+.couples.inview .cp-pair .heart,
+header.inview .hero-hint .arrow,
+body[data-view="mendelevium"] .periodic.inview .el[data-role="md"]{
+  animation-play-state:running;
+}
+
+/* ===== 公共：section header style ===== */
+.section{margin:48px 48px;border:3px solid var(--ink);border-radius:24px;padding:40px 44px;box-shadow:10px 10px 0 var(--ink);position:relative;overflow:hidden}
+.section .head{text-align:center;margin-bottom:28px;position:relative}
+.section .head .badge{
+  display:inline-block;background:var(--ink);color:#ffd43b;
+  font:600 13px 'Fredoka','Ma Shan Zheng',sans-serif;letter-spacing:.16em;
+  padding:5px 14px;border-radius:20px;transform:rotate(-2deg);margin-bottom:14px;
+}
+.section .head h2{
+  font-family:'ZCOOL KuaiLe','Ma Shan Zheng',sans-serif;font-weight:400;font-size:36px;
+  line-height:1.2;color:var(--ink);text-shadow:3px 3px 0 #fff;
+}
+.section .head .sub{
+  font:500 15px 'Patrick Hand','Ma Shan Zheng',sans-serif;color:var(--ink-2);
+  margin-top:8px;
+}
+
+/* ===== 🪐 你身体里的星辰 ===== */
+.stars{background:radial-gradient(800px 500px at 20% 10%, rgba(124,156,255,.15), transparent 60%),
+                 radial-gradient(700px 400px at 80% 90%, rgba(244,114,182,.15), transparent 60%),
+                 #fef6e4;}
+.stars .head h2{font-size:38px}
+.stars-body{display:grid;grid-template-columns:1fr 1.2fr;gap:30px;margin-top:10px}
+.body-comp{background:#fff;border:3px solid var(--ink);border-radius:18px;padding:22px 24px;box-shadow:6px 6px 0 var(--ink)}
+.body-comp h3{font:600 14px 'Fredoka','Ma Shan Zheng',sans-serif;letter-spacing:.06em;margin-bottom:16px;color:var(--ink);display:flex;align-items:center;gap:8px}
+.body-comp h3::before{content:'🧍';font-size:20px}
+.body-comp .row{margin-bottom:12px}
+.body-comp .row .top{display:flex;justify-content:space-between;font:600 13px 'Patrick Hand','Ma Shan Zheng',sans-serif;color:var(--ink);margin-bottom:4px}
+.body-comp .row .top b{font:700 14px 'Fredoka',monospace;color:#ff6b6b}
+.body-comp .row .bar-wrap{height:18px;background:#fef6e4;border:2px solid var(--ink);border-radius:10px;overflow:hidden;position:relative}
+.body-comp .row .bar{height:100%;border-right:2px solid var(--ink);
+  background:repeating-linear-gradient(45deg, var(--bc,#ffd43b) 0 8px, color-mix(in srgb, var(--bc) 80%, #000) 8px 10px);
+  display:flex;align-items:center;padding-left:6px;font:700 10px 'Fredoka',monospace;color:var(--ink);
+}
+.body-comp .row .hint{font:500 11px 'Patrick Hand','Ma Shan Zheng',sans-serif;color:var(--ink-3);margin-top:2px}
+.body-comp .row[data-e="O"]{--bc:#bbdefb}
+.body-comp .row[data-e="C"]{--bc:#fff9c4}
+.body-comp .row[data-e="H"]{--bc:#bbdefb}
+.body-comp .row[data-e="N"]{--bc:#bbdefb}
+.body-comp .row[data-e="Ca"]{--bc:#ffe0b2}
+.body-comp .row[data-e="P"]{--bc:#bbdefb}
+
+.origins{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.origin-card{
+  background:#fff;border:3px solid var(--ink);border-radius:16px;padding:16px 18px;
+  box-shadow:5px 5px 0 var(--ink);position:relative;
+}
+.origin-card .icon{font-size:36px;line-height:1;margin-bottom:8px}
+.origin-card h4{font:600 18px 'ZCOOL KuaiLe','Ma Shan Zheng',sans-serif;color:var(--ink);margin-bottom:4px}
+.origin-card .when{font:600 11px 'Fredoka','Ma Shan Zheng',sans-serif;color:#ff6b6b;letter-spacing:.04em;margin-bottom:6px}
+.origin-card .desc{font:500 12px 'Patrick Hand','Ma Shan Zheng',sans-serif;color:var(--ink-2);line-height:1.5;margin-bottom:10px}
+.origin-card .syms{display:flex;gap:5px;flex-wrap:wrap}
+.origin-card .syms span{
+  font:700 11px 'Fredoka',monospace;background:var(--oc,#7c9cff);color:var(--ink);
+  border:2px solid var(--ink);padding:2px 7px;border-radius:8px;box-shadow:1.5px 1.5px 0 var(--ink);
+}
+.origin-card.bigbang{background:#e0e7ff}
+.origin-card.stellar{background:#fff5d6}
+.origin-card.supernova{background:#fce7f3}
+.origin-card.manmade{background:#dcfce7}
+
+.stars .punch{
+  margin-top:30px;text-align:center;font-family:'ZCOOL KuaiLe','Ma Shan Zheng',sans-serif;
+  font-size:22px;color:var(--ink);line-height:1.5;
+  background:#fff;border:3px dashed var(--ink);border-radius:18px;padding:20px 24px;
+  text-shadow:2px 2px 0 #ffd43b;
+}
+.stars .punch strong{color:#ff6b6b}
+
+/* ===== 🎬 焰色反应剧场 ===== */
+.flames{background:linear-gradient(180deg,#1a1410 0%, #2d1810 100%);color:#fff5d6;border-color:#ffd43b}
+.flames .head h2,.flames .head .sub{color:#fff5d6}
+.flames .head h2{text-shadow:3px 3px 0 #ff6b6b}
+.flames .head .badge{background:#ffd43b;color:var(--ink)}
+.flames-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:18px}
+.flame-card{
+  background:rgba(255,255,255,.05);border:2.5px solid #ffd43b;border-radius:16px;
+  padding:14px 12px 18px;text-align:center;position:relative;
+  display:flex;flex-direction:column;align-items:center;
+  box-shadow:4px 4px 0 #ffd43b;
+}
+.flame-card .f-sym{font-family:'ZCOOL KuaiLe',sans-serif;font-size:34px;color:#fff;line-height:1;margin-bottom:2px;text-shadow:2px 2px 0 var(--ink)}
+.flame-card .f-name{font:600 12px 'Patrick Hand','Ma Shan Zheng',sans-serif;color:#fff5d6;margin-bottom:8px}
+.flame-card .flame-wrap{
+  width:80px;height:110px;position:relative;display:flex;align-items:flex-end;justify-content:center;
+  background:radial-gradient(circle at 50% 95%, rgba(255,200,100,.25), transparent 60%);
+}
+.flame-svg{width:80px;height:110px}
+.flame-svg .core, .flame-svg .glow{
+  transform-origin:50% 100%;
+  animation:flicker 1.2s ease-in-out infinite alternate;
+}
+.flame-svg .glow{animation-duration:1.6s;animation-delay:.1s;opacity:.75}
+@keyframes flicker{
+  0%   {transform:scaleY(.95) scaleX(1.05) translateY(2px);filter:blur(.5px)}
+  50%  {transform:scaleY(1.05) scaleX(.95) translateY(-2px) skewX(2deg);}
+  100% {transform:scaleY(1) scaleX(1) translateY(0) skewX(-2deg);}
+}
+.flame-card .f-label{
+  margin-top:8px;font:600 12px 'Patrick Hand','Ma Shan Zheng',sans-serif;color:#fff5d6;line-height:1.4;
+  background:rgba(255,212,59,.2);border:1.5px dashed #ffd43b;border-radius:10px;padding:4px 8px;
+}
+.flames .footnote{margin-top:24px;text-align:center;font:500 13px 'Patrick Hand','Ma Shan Zheng',sans-serif;color:#fbbf24;font-style:italic;opacity:.9}
+
+/* ===== 📜 时间轴 ===== */
+.timeline{background:#fffaf0}
+.tl-stage{max-width:900px;margin:0 auto}
+.tl-counter{
+  text-align:center;font:600 18px 'Patrick Hand','Ma Shan Zheng',sans-serif;color:var(--ink);
+  margin-bottom:18px;
+}
+.tl-counter .big{
+  display:inline-block;font-family:'ZCOOL KuaiLe','Ma Shan Zheng',sans-serif;font-size:32px;color:#ff6b6b;
+  background:#fff;border:2.5px solid var(--ink);border-radius:12px;padding:2px 14px;
+  box-shadow:3px 3px 0 var(--ink);margin:0 6px;text-shadow:2px 2px 0 #ffd43b;
+}
+#tl-slider{
+  width:100%;-webkit-appearance:none;appearance:none;height:14px;border-radius:8px;
+  background:linear-gradient(90deg,#fce7f3,#fff5d6,#dcfce7);border:2.5px solid var(--ink);outline:none;
+  box-shadow:3px 3px 0 var(--ink);cursor:pointer;
+}
+#tl-slider::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;
+  background:#ffd43b;border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);cursor:grab;}
+#tl-slider::-moz-range-thumb{width:28px;height:28px;border-radius:50%;background:#ffd43b;border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);cursor:grab}
+.tl-markers{display:flex;justify-content:space-between;margin-top:8px;font:600 11px 'Fredoka',monospace;color:var(--ink-2)}
+.tl-mini{display:grid;grid-template-columns:repeat(18, 1fr);gap:4px;margin-top:24px;max-width:760px;margin-left:auto;margin-right:auto}
+.tl-cell{
+  aspect-ratio:1/1;border-radius:6px;background:var(--cc,#fff);border:1.5px solid var(--ink);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'ZCOOL KuaiLe',sans-serif;font-size:11px;color:var(--ink);
+  transition:opacity .25s, filter .25s;
+}
+.tl-cell.hidden{opacity:.1;filter:grayscale(1)}
+.tl-milestones{margin-top:24px;display:flex;justify-content:space-around;flex-wrap:wrap;gap:14px}
+.tl-mile{
+  background:#fff;border:2.5px solid var(--ink);border-radius:14px;padding:10px 14px;
+  font:500 12px 'Patrick Hand','Ma Shan Zheng',sans-serif;color:var(--ink);
+  box-shadow:3px 3px 0 var(--ink);text-align:center;cursor:pointer;transition:transform .15s;
+}
+.tl-mile:hover{transform:translate(-1px,-1px) rotate(-2deg)}
+.tl-mile b{display:block;font:700 16px 'Fredoka',monospace;color:#ff6b6b;margin-bottom:3px}
+
+/* ===== 🏆 Top 榜单 ===== */
+.tops{background:#fef6e4}
+.tops-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+.top-card{
+  background:#fff;border:3px solid var(--ink);border-radius:18px;padding:18px 20px;
+  box-shadow:5px 5px 0 var(--ink);transform:rotate(-.3deg);
+}
+.top-card:nth-child(even){transform:rotate(.5deg)}
+.top-card .top-title{
+  font:600 17px 'ZCOOL KuaiLe','Ma Shan Zheng',sans-serif;color:var(--ink);
+  margin-bottom:14px;padding-bottom:10px;border-bottom:2px dashed var(--ink);
+}
+.top-card ol{list-style:none;padding:0}
+.top-card li{display:flex;align-items:center;gap:10px;padding:6px 0;font:600 13px 'Patrick Hand','Ma Shan Zheng',sans-serif;color:var(--ink)}
+.top-card li .rank{
+  width:22px;height:22px;border-radius:50%;background:#fef6e4;border:2px solid var(--ink);
+  display:flex;align-items:center;justify-content:center;font:700 11px 'Fredoka',monospace;flex-shrink:0;
+}
+.top-card li:first-child .rank{background:#ffd43b}
+.top-card li:nth-child(2) .rank{background:#e8e8e8}
+.top-card li:nth-child(3) .rank{background:#fcd9b6}
+.top-card li .sym{
+  font-family:'ZCOOL KuaiLe',sans-serif;font-size:18px;color:var(--ink);min-width:32px;
+}
+.top-card li .meta{color:var(--ink-2);flex:1;font-size:12px}
+
+/* ===== 🤝 元素 CP ===== */
+.couples{background:#fff5f7}
+.cp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.cp-card{
+  background:#fff;border:3px solid var(--ink);border-radius:18px;padding:18px 20px;
+  box-shadow:5px 5px 0 var(--ink);text-align:center;
+}
+.cp-pair{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px}
+.cp-pair .heart{font-size:24px;animation:beat 1s ease-in-out infinite}
+@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+.cp-pair .sym{
+  width:50px;height:60px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-family:'ZCOOL KuaiLe',sans-serif;font-size:24px;color:var(--ink);
+  border:2.5px solid var(--ink);box-shadow:3px 3px 0 var(--ink);
+}
+.cp-card h4{font:600 17px 'ZCOOL KuaiLe','Ma Shan Zheng',sans-serif;color:var(--ink);margin-bottom:6px}
+.cp-card p{font:500 13px 'Patrick Hand','Ma Shan Zheng',sans-serif;color:var(--ink-2);line-height:1.5}
+
+/* ===== 弹窗内 origin / flame 小块 ===== */
+.origin-tag{
+  grid-column:1/-1;background:rgba(124,156,255,.1);border:2.5px solid var(--ink);
+  border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:14px;
+  box-shadow:4px 4px 0 var(--ink);
+}
+.origin-tag .o-icon{font-size:32px;line-height:1}
+.origin-tag .o-text{flex:1;font:500 14px 'Patrick Hand','Ma Shan Zheng',sans-serif;color:var(--ink);line-height:1.5}
+.origin-tag .o-text b{font-family:'ZCOOL KuaiLe',sans-serif;color:#ff6b6b;font-size:16px}
+
+.flame-detail{
+  grid-column:1/-1;background:linear-gradient(180deg,#1a1410,#2d1810);color:#fff5d6;
+  border:3px solid #ffd43b;border-radius:16px;padding:16px 18px;
+  display:flex;align-items:center;gap:18px;box-shadow:5px 5px 0 #ffd43b;
+}
+.flame-detail .fd-flame{flex-shrink:0;width:60px;height:80px;display:flex;align-items:flex-end;justify-content:center}
+.flame-detail .fd-text h5{font:600 16px 'ZCOOL KuaiLe','Ma Shan Zheng',sans-serif;color:#ffd43b;margin-bottom:4px}
+.flame-detail .fd-text p{font:500 13px 'Patrick Hand','Ma Shan Zheng',sans-serif;color:#fff5d6;line-height:1.5}
+
+/* Mobile */
+@media (max-width:780px){
+  .section{margin:24px 16px;padding:28px 22px;border-radius:20px}
+  .section .head h2{font-size:26px}
+  .stars-body{grid-template-columns:1fr}
+  .origins{grid-template-columns:1fr 1fr}
+  .stars .punch{font-size:17px;padding:16px 18px}
+  .flames-grid{grid-template-columns:repeat(2,1fr)}
+  .tl-mini{grid-template-columns:repeat(9,1fr)}
+}
+
+/* ===== 电负性 trend overlay ===== */
+body[data-view="trend-eneg"] .el:not([data-eneg]){opacity:.18}
+
+/* ===== Footer ===== */
+footer{
+  padding:24px 48px 36px;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;
+  color:var(--ink-2);font:500 13px 'Patrick Hand','Ma Shan Zheng',sans-serif;
+  border-top:3px dashed var(--ink);margin-top:20px;
+}
+
+/* ===== Mobile list ===== */
+.mobile-list{display:none;padding:8px 16px 24px}
+.mobile-period{margin-bottom:24px}
+.mobile-period h3{
+  font:600 14px 'Fredoka','Ma Shan Zheng',sans-serif;letter-spacing:.1em;
+  color:var(--ink);margin-bottom:12px;padding-left:4px;
+  display:flex;align-items:center;gap:8px;
+}
+.mobile-period h3::before{content:'✦';color:#ff6b6b;font-size:18px}
+.mobile-period h3::after{content:'';flex:1;height:2px;background:var(--ink);border-radius:1px;opacity:.3}
+.mobile-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:10px;padding:8px 0}
+.mobile-grid .el{aspect-ratio:1/1}
+
+@media (max-width:780px){
+  header{padding:24px 20px 14px;gap:18px}
+  .brand h1{font-size:44px}
+  .brand h1 span{font-size:20px;margin-top:6px}
+  .toolbar{width:100%}
+  .search{width:100%}
+  .legend{padding:0 20px 12px}
+  .table-wrap{display:none}
+  .mobile-list{display:block}
+  .modal-body{grid-template-columns:1fr;padding:24px 22px 30px;gap:18px}
+  .modal-head{padding:28px 22px 20px;grid-template-columns:auto 1fr;gap:18px}
+  .modal-symbol{width:120px;height:150px}
+  .modal-symbol .sym{font-size:64px}
+  .modal-title h2{font-size:34px}
+  .mendelevium-card{grid-template-columns:1fr;gap:14px}
+  .cta-section{margin:32px 20px 24px;padding:32px 26px;grid-template-columns:1fr;gap:24px;text-align:center}
+  .cta-section h2{font-size:32px}
+  .cta-visual{order:-1;min-height:200px}
+  .cta-buttons{justify-content:center}
+  footer{padding:18px 20px 24px;flex-direction:column;text-align:center}
+}
+@media (max-width:480px){
+  .mobile-grid{grid-template-columns:repeat(auto-fill,minmax(66px,1fr));gap:8px}
+  .el .sym{font-size:22px}
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav" id="topnav">
+  <div class="topnav-inner">
+    <a class="nav-logo" href="#top">🧪 元素</a>
+    <div class="nav-links">
+      <a href="#top" data-target="top"><span class="i"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span><span class="t">周期表</span></a>
+      <a href="#stars" data-target="stars"><span class="i"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg></span><span class="t">星辰</span></a>
+      <a href="#flames" data-target="flames"><span class="i"><svg viewBox="0 0 24 24"><path d="M12 2c.5 3.5 4 6 4 10a4 4 0 1 1-8 0c0-4 3.5-6.5 4-10z" fill="currentColor" stroke="none" opacity=".2"/><path d="M12 2c.5 3.5 4 6 4 10a4 4 0 1 1-8 0c0-4 3.5-6.5 4-10z"/></svg></span><span class="t">焰色</span></a>
+      <a href="#timeline" data-target="timeline"><span class="i"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span><span class="t">时间轴</span></a>
+      <a href="#tops" data-target="tops"><span class="i"><svg viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C7 4 7 7 7 7m12-3a2.5 2.5 0 0 1 0 5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></span><span class="t">榜单</span></a>
+      <a href="#detective" data-target="detective"><span class="i"><svg viewBox="0 0 24 24"><path d="M10 2v7.53l-4 4V20a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-6.47l-4-4V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg></span><span class="t">互动</span></a>
+      <a href="https://balance-game-771.pages.dev" target="_blank" rel="noopener" class="nav-ext"><span class="i"><svg viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M4 8h16"/><path d="M4 8l-2 6a4 4 0 0 0 8 0l-2-6"/><path d="M20 8l-2 6a4 4 0 0 0 8 0l-2-6"/></svg></span><span class="t">配平游戏</span></a>
+      <a href="../../" class="nav-ext"><span class="i"><svg viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 0 0-2 2v4"/><path d="M15 3h4a2 2 0 0 1 2 2v4"/><path d="M9 21H5a2 2 0 0 1-2-2v-4"/><path d="M15 21h4a2 2 0 0 0 2-2v-4"/><circle cx="12" cy="12" r="3"/></svg></span><span class="t">学习实验室</span></a>
+    </div>
+  </div>
+</nav>
+
+<header id="top">
+  <div class="brand">
+    <div class="eyebrow">Periodic Table · 化学元素</div>
+    <h1>元素周期表<span>Periodic Table</span></h1>
+    <div class="hero-hint">
+      <span class="num">118</span>个元素 ·
+      <span class="num">70</span>张实拍照 ·
+      <span class="num">62</span>种化合物 ·
+      <span class="num">7</span>个互动玩法
+      <span class="arrow">↓ 往下还有惊喜</span>
+    </div>
+  </div>
+  <div class="toolbar">
+    <label class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="search" type="text" placeholder="搜索元素 · Symbol / Name / Number" autocomplete="off"/>
+      <span class="kbd">/</span>
+    </label>
+    <div class="view-toggle">
+      <button class="active" data-view="category">分类</button>
+      <button data-view="state">状态</button>
+      <button data-view="block">区块</button>
+      <button data-view="mendelevium">🎴 钔牌</button>
+      <button data-view="trend-eneg">🔥 电负性</button>
+    </div>
+    <div class="view-toggle" id="curriculum-toggle">
+      <button class="active" data-cur="all">全部</button>
+      <button data-cur="j">📘 初中</button>
+      <button data-cur="s">📗 高中</button>
+    </div>
+  </div>
+</header>
+
+<div class="legend" id="legend"></div>
+
+<div class="table-wrap">
+  <div class="periodic" id="grid"></div>
+</div>
+
+<div class="mobile-list" id="mobile-list"></div>
+
+<!-- 🪐 你身体里的星辰 -->
+<section class="section stars" id="stars">
+  <div class="head">
+    <div class="badge">🪐 你身体里的星辰 · STARDUST</div>
+    <h2>你的每个原子，<br>都来自一颗恒星的死亡</h2>
+    <div class="sub">138 亿年前的大爆炸，造出了你呼吸的氢；一颗远古恒星的核心，烧出了你血液里的铁。</div>
+  </div>
+  <div class="stars-body">
+    <div class="body-comp" id="body-comp">
+      <h3>你的身体 ≈ 一张元素拼图</h3>
+    </div>
+    <div>
+      <div class="origins" id="origins"></div>
+    </div>
+  </div>
+  <div class="punch">你呼吸的<strong>氧</strong>、骨头里的<strong>钙</strong>、血液中的<strong>铁</strong>——<br>都曾在一颗恒星的核心里燃烧过 ⭐</div>
+</section>
+
+<!-- 🎬 焰色反应剧场 -->
+<section class="section flames" id="flames">
+  <div class="head">
+    <div class="badge">🎬 焰色反应剧场 · FLAME TEST</div>
+    <h2>把这些金属丢进火里…</h2>
+    <div class="sub">每种金属灼烧时都会发出特定颜色的光，这就是焰色反应（化学课经典实验）</div>
+  </div>
+  <div class="flames-grid" id="flames-grid"></div>
+  <div class="footnote">💡 节日烟花的红绿黄紫，就靠不同金属配方调出来的</div>
+</section>
+
+<!-- 📜 元素发现时间轴 -->
+<section class="section timeline" id="timeline">
+  <div class="head">
+    <div class="badge">📜 发现时间轴 · TIMELINE</div>
+    <h2>1869 年门捷列夫制表时，<br>人类已知多少种元素？</h2>
+    <div class="sub">拖动滑块，看看历史上每个年代人类已经认识哪些元素</div>
+  </div>
+  <div class="tl-stage">
+    <div class="tl-counter"><span class="big" id="tl-year">2020</span> 年 · 人类已发现 <span class="big" id="tl-count">118</span> 种</div>
+    <input type="range" id="tl-slider" min="-9000" max="2020" step="10" value="2020" />
+    <div class="tl-markers"><span>公元前 9000</span><span>0</span><span>1700</span><span>1900</span><span>今天</span></div>
+    <div class="tl-mini" id="tl-mini"></div>
+    <div class="tl-milestones" id="tl-milestones"></div>
+  </div>
+</section>
+
+<!-- 🏆 元素之最榜单 -->
+<section class="section tops" id="tops">
+  <div class="head">
+    <div class="badge">🏆 元素之最 · CHAMPIONS</div>
+    <h2>谁是各项冠军？</h2>
+  </div>
+  <div class="tops-grid" id="tops-grid"></div>
+</section>
+
+<!-- 🤝 元素 CP -->
+<section class="section couples" id="couples">
+  <div class="head">
+    <div class="badge">🤝 元素 CP · CHEMISTRY CP</div>
+    <h2>谁跟谁是天生一对？</h2>
+    <div class="sub">化合价匹配 + 现实存在 = 一对靠谱 CP</div>
+  </div>
+  <div class="cp-grid" id="cp-grid"></div>
+</section>
+
+<!-- 🧪 化合物侦探（移到末尾作互动高潮） -->
+<section class="detective" id="detective">
+  <div class="det-head">
+    <div class="badge">🧪 化合物侦探 · COMPOUND DETECTIVE</div>
+    <h2>选几个元素，看它们能组成什么？</h2>
+    <p>这就是《钔牌》组合牌的玩法——化合价对上了、现实中真的存在，就成立！</p>
+  </div>
+  <div class="det-stage">
+    <div class="slots" id="det-slots">
+      <div class="slot empty" data-slot="0"></div>
+      <span class="plus">+</span>
+      <div class="slot empty" data-slot="1"></div>
+      <span class="plus">+</span>
+      <div class="slot empty" data-slot="2"></div>
+      <span class="equals">=</span>
+      <div class="result-card waiting" id="det-result">?</div>
+    </div>
+    <div class="picker" id="det-picker"></div>
+    <div class="det-actions">
+      <button class="det-btn" id="det-clear">↺ 清空</button>
+      <button class="det-btn primary" id="det-hint">💡 来个提示</button>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section" id="mendelevium">
+  <div>
+    <div class="eyebrow">🎴 桌游推荐 · Tabletop Game</div>
+    <h2>把这张周期表<br>真正"玩"起来</h2>
+    <p class="desc">《钔牌》是一款以化学元素为主题的策略纸牌桌游，由化合价组合化学式、由族别组炸弹、由元素序号比大小——你刚才看的每一格元素，都是牌桌上的一张牌。</p>
+    <div class="stats">
+      <div class="stat"><strong>128</strong>张牌</div>
+      <div class="stat"><strong>37</strong>种元素</div>
+      <div class="stat"><strong>2-4</strong>人对战</div>
+      <div class="stat"><strong>7+</strong>岁可玩</div>
+    </div>
+    <div class="cta-buttons">
+      <a class="cta-btn primary" href="javascript:alert('对战界面即将上线，敬请期待！')">▶ 体验对战界面</a>
+      <a class="cta-btn ghost" href="javascript:alert('完整规则即将上线，敬请期待！')">📖 查看完整规则</a>
+    </div>
+  </div>
+  <div class="cta-visual">
+    <div class="cta-card-stack">
+      <div class="card"><div class="num">101</div><div class="sym">Md</div><div class="name">钔 · 大钔牌</div></div>
+      <div class="card"><div class="num">11</div><div class="sym">Na</div><div class="name">钠 · +1</div></div>
+      <div class="card"><div class="num">17</div><div class="sym">Cl</div><div class="name">氯 · 厚牌</div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>© 2026 Periodic Table · 数据基于 IUPAC 公开标准 · 致敬门捷列夫</div>
+  <div>点击元素查看详情 · 按 <span class="kbd">/</span> 搜索 · <span class="kbd">Esc</span> 关闭</div>
+</footer>
+
+<div class="modal-backdrop" id="modal">
+  <div class="modal" id="modal-content"></div>
+</div>
+
+<script>
+// =================== ELEMENT DATA ===================
+const ELEMENTS = [
+  {n:1,s:"H",name:"氢",en:"Hydrogen",mass:"1.008",cat:"nonmetal",period:1,group:1,block:"s",state:"gas",ec:"1s¹",eneg:2.20,mp:-259.16,bp:-252.87,density:"0.00009",discovered:1766,discoverer:"Cavendish",shells:[1]},
+  {n:2,s:"He",name:"氦",en:"Helium",mass:"4.0026",cat:"noble-gas",period:1,group:18,block:"s",state:"gas",ec:"1s²",eneg:null,mp:-272.2,bp:-268.93,density:"0.0002",discovered:1868,discoverer:"Janssen, Lockyer",shells:[2]},
+  {n:3,s:"Li",name:"锂",en:"Lithium",mass:"6.94",cat:"alkali-metal",period:2,group:1,block:"s",state:"solid",ec:"[He] 2s¹",eneg:0.98,mp:180.5,bp:1342,density:"0.534",discovered:1817,discoverer:"Arfwedson",shells:[2,1]},
+  {n:4,s:"Be",name:"铍",en:"Beryllium",mass:"9.0122",cat:"alkaline-earth-metal",period:2,group:2,block:"s",state:"solid",ec:"[He] 2s²",eneg:1.57,mp:1287,bp:2469,density:"1.85",discovered:1798,discoverer:"Vauquelin",shells:[2,2]},
+  {n:5,s:"B",name:"硼",en:"Boron",mass:"10.81",cat:"metalloid",period:2,group:13,block:"p",state:"solid",ec:"[He] 2s² 2p¹",eneg:2.04,mp:2076,bp:3927,density:"2.34",discovered:1808,discoverer:"Davy, Gay-Lussac",shells:[2,3]},
+  {n:6,s:"C",name:"碳",en:"Carbon",mass:"12.011",cat:"nonmetal",period:2,group:14,block:"p",state:"solid",ec:"[He] 2s² 2p²",eneg:2.55,mp:3550,bp:4027,density:"2.27",discovered:-3750,discoverer:"史前",shells:[2,4]},
+  {n:7,s:"N",name:"氮",en:"Nitrogen",mass:"14.007",cat:"nonmetal",period:2,group:15,block:"p",state:"gas",ec:"[He] 2s² 2p³",eneg:3.04,mp:-210,bp:-195.79,density:"0.00125",discovered:1772,discoverer:"Rutherford",shells:[2,5]},
+  {n:8,s:"O",name:"氧",en:"Oxygen",mass:"15.999",cat:"nonmetal",period:2,group:16,block:"p",state:"gas",ec:"[He] 2s² 2p⁴",eneg:3.44,mp:-218.79,bp:-182.96,density:"0.00143",discovered:1774,discoverer:"Priestley, Scheele",shells:[2,6]},
+  {n:9,s:"F",name:"氟",en:"Fluorine",mass:"18.998",cat:"halogen",period:2,group:17,block:"p",state:"gas",ec:"[He] 2s² 2p⁵",eneg:3.98,mp:-219.67,bp:-188.11,density:"0.0017",discovered:1886,discoverer:"Moissan",shells:[2,7]},
+  {n:10,s:"Ne",name:"氖",en:"Neon",mass:"20.180",cat:"noble-gas",period:2,group:18,block:"p",state:"gas",ec:"[He] 2s² 2p⁶",eneg:null,mp:-248.59,bp:-246.08,density:"0.0009",discovered:1898,discoverer:"Ramsay, Travers",shells:[2,8]},
+  {n:11,s:"Na",name:"钠",en:"Sodium",mass:"22.990",cat:"alkali-metal",period:3,group:1,block:"s",state:"solid",ec:"[Ne] 3s¹",eneg:0.93,mp:97.79,bp:883,density:"0.97",discovered:1807,discoverer:"Davy",shells:[2,8,1]},
+  {n:12,s:"Mg",name:"镁",en:"Magnesium",mass:"24.305",cat:"alkaline-earth-metal",period:3,group:2,block:"s",state:"solid",ec:"[Ne] 3s²",eneg:1.31,mp:650,bp:1090,density:"1.74",discovered:1755,discoverer:"Black",shells:[2,8,2]},
+  {n:13,s:"Al",name:"铝",en:"Aluminium",mass:"26.982",cat:"post-transition-metal",period:3,group:13,block:"p",state:"solid",ec:"[Ne] 3s² 3p¹",eneg:1.61,mp:660.32,bp:2519,density:"2.70",discovered:1825,discoverer:"Ørsted",shells:[2,8,3]},
+  {n:14,s:"Si",name:"硅",en:"Silicon",mass:"28.085",cat:"metalloid",period:3,group:14,block:"p",state:"solid",ec:"[Ne] 3s² 3p²",eneg:1.90,mp:1414,bp:3265,density:"2.33",discovered:1824,discoverer:"Berzelius",shells:[2,8,4]},
+  {n:15,s:"P",name:"磷",en:"Phosphorus",mass:"30.974",cat:"nonmetal",period:3,group:15,block:"p",state:"solid",ec:"[Ne] 3s² 3p³",eneg:2.19,mp:44.15,bp:280.5,density:"1.82",discovered:1669,discoverer:"Brand",shells:[2,8,5]},
+  {n:16,s:"S",name:"硫",en:"Sulfur",mass:"32.06",cat:"nonmetal",period:3,group:16,block:"p",state:"solid",ec:"[Ne] 3s² 3p⁴",eneg:2.58,mp:115.21,bp:444.61,density:"2.07",discovered:-2000,discoverer:"史前",shells:[2,8,6]},
+  {n:17,s:"Cl",name:"氯",en:"Chlorine",mass:"35.45",cat:"halogen",period:3,group:17,block:"p",state:"gas",ec:"[Ne] 3s² 3p⁵",eneg:3.16,mp:-101.5,bp:-34.04,density:"0.0032",discovered:1774,discoverer:"Scheele",shells:[2,8,7]},
+  {n:18,s:"Ar",name:"氩",en:"Argon",mass:"39.948",cat:"noble-gas",period:3,group:18,block:"p",state:"gas",ec:"[Ne] 3s² 3p⁶",eneg:null,mp:-189.34,bp:-185.85,density:"0.00178",discovered:1894,discoverer:"Rayleigh, Ramsay",shells:[2,8,8]},
+  {n:19,s:"K",name:"钾",en:"Potassium",mass:"39.098",cat:"alkali-metal",period:4,group:1,block:"s",state:"solid",ec:"[Ar] 4s¹",eneg:0.82,mp:63.5,bp:759,density:"0.86",discovered:1807,discoverer:"Davy",shells:[2,8,8,1]},
+  {n:20,s:"Ca",name:"钙",en:"Calcium",mass:"40.078",cat:"alkaline-earth-metal",period:4,group:2,block:"s",state:"solid",ec:"[Ar] 4s²",eneg:1.00,mp:842,bp:1484,density:"1.55",discovered:1808,discoverer:"Davy",shells:[2,8,8,2]},
+  {n:21,s:"Sc",name:"钪",en:"Scandium",mass:"44.956",cat:"transition-metal",period:4,group:3,block:"d",state:"solid",ec:"[Ar] 3d¹ 4s²",eneg:1.36,mp:1541,bp:2836,density:"2.99",discovered:1879,discoverer:"Nilson",shells:[2,8,9,2]},
+  {n:22,s:"Ti",name:"钛",en:"Titanium",mass:"47.867",cat:"transition-metal",period:4,group:4,block:"d",state:"solid",ec:"[Ar] 3d² 4s²",eneg:1.54,mp:1668,bp:3287,density:"4.51",discovered:1791,discoverer:"Gregor",shells:[2,8,10,2]},
+  {n:23,s:"V",name:"钒",en:"Vanadium",mass:"50.942",cat:"transition-metal",period:4,group:5,block:"d",state:"solid",ec:"[Ar] 3d³ 4s²",eneg:1.63,mp:1910,bp:3407,density:"6.11",discovered:1801,discoverer:"del Río",shells:[2,8,11,2]},
+  {n:24,s:"Cr",name:"铬",en:"Chromium",mass:"51.996",cat:"transition-metal",period:4,group:6,block:"d",state:"solid",ec:"[Ar] 3d⁵ 4s¹",eneg:1.66,mp:1907,bp:2671,density:"7.15",discovered:1797,discoverer:"Vauquelin",shells:[2,8,13,1]},
+  {n:25,s:"Mn",name:"锰",en:"Manganese",mass:"54.938",cat:"transition-metal",period:4,group:7,block:"d",state:"solid",ec:"[Ar] 3d⁵ 4s²",eneg:1.55,mp:1246,bp:2061,density:"7.21",discovered:1774,discoverer:"Gahn",shells:[2,8,13,2]},
+  {n:26,s:"Fe",name:"铁",en:"Iron",mass:"55.845",cat:"transition-metal",period:4,group:8,block:"d",state:"solid",ec:"[Ar] 3d⁶ 4s²",eneg:1.83,mp:1538,bp:2861,density:"7.87",discovered:-5000,discoverer:"史前",shells:[2,8,14,2]},
+  {n:27,s:"Co",name:"钴",en:"Cobalt",mass:"58.933",cat:"transition-metal",period:4,group:9,block:"d",state:"solid",ec:"[Ar] 3d⁷ 4s²",eneg:1.88,mp:1495,bp:2927,density:"8.86",discovered:1735,discoverer:"Brandt",shells:[2,8,15,2]},
+  {n:28,s:"Ni",name:"镍",en:"Nickel",mass:"58.693",cat:"transition-metal",period:4,group:10,block:"d",state:"solid",ec:"[Ar] 3d⁸ 4s²",eneg:1.91,mp:1455,bp:2913,density:"8.91",discovered:1751,discoverer:"Cronstedt",shells:[2,8,16,2]},
+  {n:29,s:"Cu",name:"铜",en:"Copper",mass:"63.546",cat:"transition-metal",period:4,group:11,block:"d",state:"solid",ec:"[Ar] 3d¹⁰ 4s¹",eneg:1.90,mp:1084.62,bp:2562,density:"8.96",discovered:-9000,discoverer:"史前",shells:[2,8,18,1]},
+  {n:30,s:"Zn",name:"锌",en:"Zinc",mass:"65.38",cat:"transition-metal",period:4,group:12,block:"d",state:"solid",ec:"[Ar] 3d¹⁰ 4s²",eneg:1.65,mp:419.53,bp:907,density:"7.13",discovered:1746,discoverer:"Marggraf",shells:[2,8,18,2]},
+  {n:31,s:"Ga",name:"镓",en:"Gallium",mass:"69.723",cat:"post-transition-metal",period:4,group:13,block:"p",state:"solid",ec:"[Ar] 3d¹⁰ 4s² 4p¹",eneg:1.81,mp:29.76,bp:2204,density:"5.91",discovered:1875,discoverer:"de Boisbaudran",shells:[2,8,18,3]},
+  {n:32,s:"Ge",name:"锗",en:"Germanium",mass:"72.630",cat:"metalloid",period:4,group:14,block:"p",state:"solid",ec:"[Ar] 3d¹⁰ 4s² 4p²",eneg:2.01,mp:938.25,bp:2833,density:"5.32",discovered:1886,discoverer:"Winkler",shells:[2,8,18,4]},
+  {n:33,s:"As",name:"砷",en:"Arsenic",mass:"74.922",cat:"metalloid",period:4,group:15,block:"p",state:"solid",ec:"[Ar] 3d¹⁰ 4s² 4p³",eneg:2.18,mp:817,bp:614,density:"5.78",discovered:1250,discoverer:"Magnus",shells:[2,8,18,5]},
+  {n:34,s:"Se",name:"硒",en:"Selenium",mass:"78.971",cat:"nonmetal",period:4,group:16,block:"p",state:"solid",ec:"[Ar] 3d¹⁰ 4s² 4p⁴",eneg:2.55,mp:221,bp:685,density:"4.81",discovered:1817,discoverer:"Berzelius",shells:[2,8,18,6]},
+  {n:35,s:"Br",name:"溴",en:"Bromine",mass:"79.904",cat:"halogen",period:4,group:17,block:"p",state:"liquid",ec:"[Ar] 3d¹⁰ 4s² 4p⁵",eneg:2.96,mp:-7.2,bp:58.8,density:"3.12",discovered:1826,discoverer:"Balard",shells:[2,8,18,7]},
+  {n:36,s:"Kr",name:"氪",en:"Krypton",mass:"83.798",cat:"noble-gas",period:4,group:18,block:"p",state:"gas",ec:"[Ar] 3d¹⁰ 4s² 4p⁶",eneg:3.00,mp:-157.36,bp:-153.22,density:"0.00375",discovered:1898,discoverer:"Ramsay, Travers",shells:[2,8,18,8]},
+  {n:37,s:"Rb",name:"铷",en:"Rubidium",mass:"85.468",cat:"alkali-metal",period:5,group:1,block:"s",state:"solid",ec:"[Kr] 5s¹",eneg:0.82,mp:39.30,bp:688,density:"1.53",discovered:1861,discoverer:"Bunsen, Kirchhoff",shells:[2,8,18,8,1]},
+  {n:38,s:"Sr",name:"锶",en:"Strontium",mass:"87.62",cat:"alkaline-earth-metal",period:5,group:2,block:"s",state:"solid",ec:"[Kr] 5s²",eneg:0.95,mp:777,bp:1382,density:"2.64",discovered:1790,discoverer:"Hope",shells:[2,8,18,8,2]},
+  {n:39,s:"Y",name:"钇",en:"Yttrium",mass:"88.906",cat:"transition-metal",period:5,group:3,block:"d",state:"solid",ec:"[Kr] 4d¹ 5s²",eneg:1.22,mp:1526,bp:3336,density:"4.47",discovered:1794,discoverer:"Gadolin",shells:[2,8,18,9,2]},
+  {n:40,s:"Zr",name:"锆",en:"Zirconium",mass:"91.224",cat:"transition-metal",period:5,group:4,block:"d",state:"solid",ec:"[Kr] 4d² 5s²",eneg:1.33,mp:1855,bp:4409,density:"6.51",discovered:1789,discoverer:"Klaproth",shells:[2,8,18,10,2]},
+  {n:41,s:"Nb",name:"铌",en:"Niobium",mass:"92.906",cat:"transition-metal",period:5,group:5,block:"d",state:"solid",ec:"[Kr] 4d⁴ 5s¹",eneg:1.6,mp:2477,bp:4744,density:"8.57",discovered:1801,discoverer:"Hatchett",shells:[2,8,18,12,1]},
+  {n:42,s:"Mo",name:"钼",en:"Molybdenum",mass:"95.95",cat:"transition-metal",period:5,group:6,block:"d",state:"solid",ec:"[Kr] 4d⁵ 5s¹",eneg:2.16,mp:2623,bp:4639,density:"10.28",discovered:1778,discoverer:"Scheele",shells:[2,8,18,13,1]},
+  {n:43,s:"Tc",name:"锝",en:"Technetium",mass:"[98]",cat:"transition-metal",period:5,group:7,block:"d",state:"solid",ec:"[Kr] 4d⁵ 5s²",eneg:1.9,mp:2157,bp:4265,density:"11.50",discovered:1937,discoverer:"Perrier, Segrè",shells:[2,8,18,13,2]},
+  {n:44,s:"Ru",name:"钌",en:"Ruthenium",mass:"101.07",cat:"transition-metal",period:5,group:8,block:"d",state:"solid",ec:"[Kr] 4d⁷ 5s¹",eneg:2.2,mp:2334,bp:4150,density:"12.37",discovered:1844,discoverer:"Klaus",shells:[2,8,18,15,1]},
+  {n:45,s:"Rh",name:"铑",en:"Rhodium",mass:"102.91",cat:"transition-metal",period:5,group:9,block:"d",state:"solid",ec:"[Kr] 4d⁸ 5s¹",eneg:2.28,mp:1964,bp:3695,density:"12.45",discovered:1803,discoverer:"Wollaston",shells:[2,8,18,16,1]},
+  {n:46,s:"Pd",name:"钯",en:"Palladium",mass:"106.42",cat:"transition-metal",period:5,group:10,block:"d",state:"solid",ec:"[Kr] 4d¹⁰",eneg:2.20,mp:1554.9,bp:2963,density:"12.02",discovered:1803,discoverer:"Wollaston",shells:[2,8,18,18]},
+  {n:47,s:"Ag",name:"银",en:"Silver",mass:"107.87",cat:"transition-metal",period:5,group:11,block:"d",state:"solid",ec:"[Kr] 4d¹⁰ 5s¹",eneg:1.93,mp:961.78,bp:2162,density:"10.49",discovered:-5000,discoverer:"史前",shells:[2,8,18,18,1]},
+  {n:48,s:"Cd",name:"镉",en:"Cadmium",mass:"112.41",cat:"transition-metal",period:5,group:12,block:"d",state:"solid",ec:"[Kr] 4d¹⁰ 5s²",eneg:1.69,mp:321.07,bp:767,density:"8.69",discovered:1817,discoverer:"Stromeyer",shells:[2,8,18,18,2]},
+  {n:49,s:"In",name:"铟",en:"Indium",mass:"114.82",cat:"post-transition-metal",period:5,group:13,block:"p",state:"solid",ec:"[Kr] 4d¹⁰ 5s² 5p¹",eneg:1.78,mp:156.6,bp:2072,density:"7.31",discovered:1863,discoverer:"Reich, Richter",shells:[2,8,18,18,3]},
+  {n:50,s:"Sn",name:"锡",en:"Tin",mass:"118.71",cat:"post-transition-metal",period:5,group:14,block:"p",state:"solid",ec:"[Kr] 4d¹⁰ 5s² 5p²",eneg:1.96,mp:231.93,bp:2602,density:"7.31",discovered:-3500,discoverer:"史前",shells:[2,8,18,18,4]},
+  {n:51,s:"Sb",name:"锑",en:"Antimony",mass:"121.76",cat:"metalloid",period:5,group:15,block:"p",state:"solid",ec:"[Kr] 4d¹⁰ 5s² 5p³",eneg:2.05,mp:630.63,bp:1587,density:"6.69",discovered:-3000,discoverer:"史前",shells:[2,8,18,18,5]},
+  {n:52,s:"Te",name:"碲",en:"Tellurium",mass:"127.60",cat:"metalloid",period:5,group:16,block:"p",state:"solid",ec:"[Kr] 4d¹⁰ 5s² 5p⁴",eneg:2.1,mp:449.51,bp:988,density:"6.24",discovered:1782,discoverer:"von Reichenstein",shells:[2,8,18,18,6]},
+  {n:53,s:"I",name:"碘",en:"Iodine",mass:"126.90",cat:"halogen",period:5,group:17,block:"p",state:"solid",ec:"[Kr] 4d¹⁰ 5s² 5p⁵",eneg:2.66,mp:113.7,bp:184.3,density:"4.93",discovered:1811,discoverer:"Courtois",shells:[2,8,18,18,7]},
+  {n:54,s:"Xe",name:"氙",en:"Xenon",mass:"131.29",cat:"noble-gas",period:5,group:18,block:"p",state:"gas",ec:"[Kr] 4d¹⁰ 5s² 5p⁶",eneg:2.60,mp:-111.75,bp:-108.0,density:"0.0059",discovered:1898,discoverer:"Ramsay, Travers",shells:[2,8,18,18,8]},
+  {n:55,s:"Cs",name:"铯",en:"Caesium",mass:"132.91",cat:"alkali-metal",period:6,group:1,block:"s",state:"solid",ec:"[Xe] 6s¹",eneg:0.79,mp:28.44,bp:671,density:"1.93",discovered:1860,discoverer:"Bunsen, Kirchhoff",shells:[2,8,18,18,8,1]},
+  {n:56,s:"Ba",name:"钡",en:"Barium",mass:"137.33",cat:"alkaline-earth-metal",period:6,group:2,block:"s",state:"solid",ec:"[Xe] 6s²",eneg:0.89,mp:727,bp:1845,density:"3.59",discovered:1808,discoverer:"Davy",shells:[2,8,18,18,8,2]},
+  {n:57,s:"La",name:"镧",en:"Lanthanum",mass:"138.91",cat:"lanthanide",period:6,group:3,block:"f",state:"solid",ec:"[Xe] 5d¹ 6s²",eneg:1.10,mp:920,bp:3464,density:"6.15",discovered:1839,discoverer:"Mosander",shells:[2,8,18,18,9,2]},
+  {n:58,s:"Ce",name:"铈",en:"Cerium",mass:"140.12",cat:"lanthanide",period:6,group:3,block:"f",state:"solid",ec:"[Xe] 4f¹ 5d¹ 6s²",eneg:1.12,mp:795,bp:3443,density:"6.77",discovered:1803,discoverer:"Berzelius",shells:[2,8,18,19,9,2]},
+  {n:59,s:"Pr",name:"镨",en:"Praseodymium",mass:"140.91",cat:"lanthanide",period:6,group:3,block:"f",state:"solid",ec:"[Xe] 4f³ 6s²",eneg:1.13,mp:935,bp:3520,density:"6.77",discovered:1885,discoverer:"Welsbach",shells:[2,8,18,21,8,2]},
+  {n:60,s:"Nd",name:"钕",en:"Neodymium",mass:"144.24",cat:"lanthanide",period:6,group:3,block:"f",state:"solid",ec:"[Xe] 4f⁴ 6s²",eneg:1.14,mp:1024,bp:3074,density:"7.01",discovered:1885,discoverer:"Welsbach",shells:[2,8,18,22,8,2]},
+  {n:61,s:"Pm",name:"钷",en:"Promethium",mass:"[145]",cat:"lanthanide",period:6,group:3,block:"f",state:"solid",ec:"[Xe] 4f⁵ 6s²",eneg:1.13,mp:1042,bp:3000,density:"7.26",discovered:1945,discoverer:"Marinsky et al.",shells:[2,8,18,23,8,2]},
+  {n:62,s:"Sm",name:"钐",en:"Samarium",mass:"150.36",cat:"lanthanide",period:6,group:3,block:"f",state:"solid",ec:"[Xe] 4f⁶ 6s²",eneg:1.17,mp:1072,bp:1794,density:"7.52",discovered:1879,discoverer:"de Boisbaudran",shells:[2,8,18,24,8,2]},
+  {n:63,s:"Eu",name:"铕",en:"Europium",mass:"151.96",cat:"lanthanide",period:6,group:3,block:"f",state:"solid",ec:"[Xe] 4f⁷ 6s²",eneg:1.2,mp:826,bp:1529,density:"5.24",discovered:1901,discoverer:"Demarçay",shells:[2,8,18,25,8,2]},
+  {n:64,s:"Gd",name:"钆",en:"Gadolinium",mass:"157.25",cat:"lanthanide",period:6,group:3,block:"f",state:"solid",ec:"[Xe] 4f⁷ 5d¹ 6s²",eneg:1.20,mp:1312,bp:3273,density:"7.90",discovered:1880,discoverer:"de Marignac",shells:[2,8,18,25,9,2]},
+  {n:65,s:"Tb",name:"铽",en:"Terbium",mass:"158.93",cat:"lanthanide",period:6,group:3,block:"f",state:"solid",ec:"[Xe] 4f⁹ 6s²",eneg:1.2,mp:1356,bp:3230,density:"8.23",discovered:1843,discoverer:"Mosander",shells:[2,8,18,27,8,2]},
+  {n:66,s:"Dy",name:"镝",en:"Dysprosium",mass:"162.50",cat:"lanthanide",period:6,group:3,block:"f",state:"solid",ec:"[Xe] 4f¹⁰ 6s²",eneg:1.22,mp:1407,bp:2567,density:"8.55",discovered:1886,discoverer:"de Boisbaudran",shells:[2,8,18,28,8,2]},
+  {n:67,s:"Ho",name:"钬",en:"Holmium",mass:"164.93",cat:"lanthanide",period:6,group:3,block:"f",state:"solid",ec:"[Xe] 4f¹¹ 6s²",eneg:1.23,mp:1461,bp:2700,density:"8.80",discovered:1878,discoverer:"Delafontaine, Soret",shells:[2,8,18,29,8,2]},
+  {n:68,s:"Er",name:"铒",en:"Erbium",mass:"167.26",cat:"lanthanide",period:6,group:3,block:"f",state:"solid",ec:"[Xe] 4f¹² 6s²",eneg:1.24,mp:1529,bp:2868,density:"9.07",discovered:1843,discoverer:"Mosander",shells:[2,8,18,30,8,2]},
+  {n:69,s:"Tm",name:"铥",en:"Thulium",mass:"168.93",cat:"lanthanide",period:6,group:3,block:"f",state:"solid",ec:"[Xe] 4f¹³ 6s²",eneg:1.25,mp:1545,bp:1950,density:"9.32",discovered:1879,discoverer:"Cleve",shells:[2,8,18,31,8,2]},
+  {n:70,s:"Yb",name:"镱",en:"Ytterbium",mass:"173.05",cat:"lanthanide",period:6,group:3,block:"f",state:"solid",ec:"[Xe] 4f¹⁴ 6s²",eneg:1.1,mp:824,bp:1196,density:"6.90",discovered:1878,discoverer:"de Marignac",shells:[2,8,18,32,8,2]},
+  {n:71,s:"Lu",name:"镥",en:"Lutetium",mass:"174.97",cat:"lanthanide",period:6,group:3,block:"d",state:"solid",ec:"[Xe] 4f¹⁴ 5d¹ 6s²",eneg:1.27,mp:1652,bp:3402,density:"9.84",discovered:1907,discoverer:"Urbain, Welsbach",shells:[2,8,18,32,9,2]},
+  {n:72,s:"Hf",name:"铪",en:"Hafnium",mass:"178.49",cat:"transition-metal",period:6,group:4,block:"d",state:"solid",ec:"[Xe] 4f¹⁴ 5d² 6s²",eneg:1.3,mp:2233,bp:4603,density:"13.31",discovered:1923,discoverer:"Coster, Hevesy",shells:[2,8,18,32,10,2]},
+  {n:73,s:"Ta",name:"钽",en:"Tantalum",mass:"180.95",cat:"transition-metal",period:6,group:5,block:"d",state:"solid",ec:"[Xe] 4f¹⁴ 5d³ 6s²",eneg:1.5,mp:3017,bp:5458,density:"16.65",discovered:1802,discoverer:"Ekeberg",shells:[2,8,18,32,11,2]},
+  {n:74,s:"W",name:"钨",en:"Tungsten",mass:"183.84",cat:"transition-metal",period:6,group:6,block:"d",state:"solid",ec:"[Xe] 4f¹⁴ 5d⁴ 6s²",eneg:2.36,mp:3422,bp:5555,density:"19.25",discovered:1783,discoverer:"de Elhuyar",shells:[2,8,18,32,12,2]},
+  {n:75,s:"Re",name:"铼",en:"Rhenium",mass:"186.21",cat:"transition-metal",period:6,group:7,block:"d",state:"solid",ec:"[Xe] 4f¹⁴ 5d⁵ 6s²",eneg:1.9,mp:3186,bp:5596,density:"21.02",discovered:1925,discoverer:"Noddack et al.",shells:[2,8,18,32,13,2]},
+  {n:76,s:"Os",name:"锇",en:"Osmium",mass:"190.23",cat:"transition-metal",period:6,group:8,block:"d",state:"solid",ec:"[Xe] 4f¹⁴ 5d⁶ 6s²",eneg:2.2,mp:3033,bp:5012,density:"22.59",discovered:1803,discoverer:"Tennant",shells:[2,8,18,32,14,2]},
+  {n:77,s:"Ir",name:"铱",en:"Iridium",mass:"192.22",cat:"transition-metal",period:6,group:9,block:"d",state:"solid",ec:"[Xe] 4f¹⁴ 5d⁷ 6s²",eneg:2.20,mp:2466,bp:4428,density:"22.56",discovered:1803,discoverer:"Tennant",shells:[2,8,18,32,15,2]},
+  {n:78,s:"Pt",name:"铂",en:"Platinum",mass:"195.08",cat:"transition-metal",period:6,group:10,block:"d",state:"solid",ec:"[Xe] 4f¹⁴ 5d⁹ 6s¹",eneg:2.28,mp:1768.3,bp:3825,density:"21.45",discovered:1735,discoverer:"de Ulloa",shells:[2,8,18,32,17,1]},
+  {n:79,s:"Au",name:"金",en:"Gold",mass:"196.97",cat:"transition-metal",period:6,group:11,block:"d",state:"solid",ec:"[Xe] 4f¹⁴ 5d¹⁰ 6s¹",eneg:2.54,mp:1064.18,bp:2856,density:"19.30",discovered:-6000,discoverer:"史前",shells:[2,8,18,32,18,1]},
+  {n:80,s:"Hg",name:"汞",en:"Mercury",mass:"200.59",cat:"transition-metal",period:6,group:12,block:"d",state:"liquid",ec:"[Xe] 4f¹⁴ 5d¹⁰ 6s²",eneg:2.00,mp:-38.83,bp:356.73,density:"13.534",discovered:-2000,discoverer:"史前",shells:[2,8,18,32,18,2]},
+  {n:81,s:"Tl",name:"铊",en:"Thallium",mass:"204.38",cat:"post-transition-metal",period:6,group:13,block:"p",state:"solid",ec:"[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p¹",eneg:1.62,mp:304,bp:1473,density:"11.85",discovered:1861,discoverer:"Crookes",shells:[2,8,18,32,18,3]},
+  {n:82,s:"Pb",name:"铅",en:"Lead",mass:"207.2",cat:"post-transition-metal",period:6,group:14,block:"p",state:"solid",ec:"[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p²",eneg:1.87,mp:327.46,bp:1749,density:"11.34",discovered:-7000,discoverer:"史前",shells:[2,8,18,32,18,4]},
+  {n:83,s:"Bi",name:"铋",en:"Bismuth",mass:"208.98",cat:"post-transition-metal",period:6,group:15,block:"p",state:"solid",ec:"[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p³",eneg:2.02,mp:271.4,bp:1564,density:"9.78",discovered:1753,discoverer:"Geoffroy",shells:[2,8,18,32,18,5]},
+  {n:84,s:"Po",name:"钋",en:"Polonium",mass:"[209]",cat:"post-transition-metal",period:6,group:16,block:"p",state:"solid",ec:"[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁴",eneg:2.0,mp:254,bp:962,density:"9.20",discovered:1898,discoverer:"P. & M. Curie",shells:[2,8,18,32,18,6]},
+  {n:85,s:"At",name:"砹",en:"Astatine",mass:"[210]",cat:"halogen",period:6,group:17,block:"p",state:"solid",ec:"[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁵",eneg:2.2,mp:302,bp:337,density:"6.35",discovered:1940,discoverer:"Corson et al.",shells:[2,8,18,32,18,7]},
+  {n:86,s:"Rn",name:"氡",en:"Radon",mass:"[222]",cat:"noble-gas",period:6,group:18,block:"p",state:"gas",ec:"[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁶",eneg:2.2,mp:-71,bp:-61.7,density:"0.00973",discovered:1900,discoverer:"Dorn",shells:[2,8,18,32,18,8]},
+  {n:87,s:"Fr",name:"钫",en:"Francium",mass:"[223]",cat:"alkali-metal",period:7,group:1,block:"s",state:"solid",ec:"[Rn] 7s¹",eneg:0.7,mp:21,bp:650,density:"1.87",discovered:1939,discoverer:"Perey",shells:[2,8,18,32,18,8,1]},
+  {n:88,s:"Ra",name:"镭",en:"Radium",mass:"[226]",cat:"alkaline-earth-metal",period:7,group:2,block:"s",state:"solid",ec:"[Rn] 7s²",eneg:0.9,mp:700,bp:1737,density:"5.50",discovered:1898,discoverer:"P. & M. Curie",shells:[2,8,18,32,18,8,2]},
+  {n:89,s:"Ac",name:"锕",en:"Actinium",mass:"[227]",cat:"actinide",period:7,group:3,block:"f",state:"solid",ec:"[Rn] 6d¹ 7s²",eneg:1.1,mp:1051,bp:3198,density:"10.07",discovered:1899,discoverer:"Debierne",shells:[2,8,18,32,18,9,2]},
+  {n:90,s:"Th",name:"钍",en:"Thorium",mass:"232.04",cat:"actinide",period:7,group:3,block:"f",state:"solid",ec:"[Rn] 6d² 7s²",eneg:1.3,mp:1750,bp:4788,density:"11.72",discovered:1829,discoverer:"Berzelius",shells:[2,8,18,32,18,10,2]},
+  {n:91,s:"Pa",name:"镤",en:"Protactinium",mass:"231.04",cat:"actinide",period:7,group:3,block:"f",state:"solid",ec:"[Rn] 5f² 6d¹ 7s²",eneg:1.5,mp:1568,bp:4027,density:"15.37",discovered:1913,discoverer:"Fajans, Göhring",shells:[2,8,18,32,20,9,2]},
+  {n:92,s:"U",name:"铀",en:"Uranium",mass:"238.03",cat:"actinide",period:7,group:3,block:"f",state:"solid",ec:"[Rn] 5f³ 6d¹ 7s²",eneg:1.38,mp:1132.2,bp:4131,density:"19.05",discovered:1789,discoverer:"Klaproth",shells:[2,8,18,32,21,9,2]},
+  {n:93,s:"Np",name:"镎",en:"Neptunium",mass:"[237]",cat:"actinide",period:7,group:3,block:"f",state:"solid",ec:"[Rn] 5f⁴ 6d¹ 7s²",eneg:1.36,mp:644,bp:3902,density:"20.45",discovered:1940,discoverer:"McMillan, Abelson",shells:[2,8,18,32,22,9,2]},
+  {n:94,s:"Pu",name:"钚",en:"Plutonium",mass:"[244]",cat:"actinide",period:7,group:3,block:"f",state:"solid",ec:"[Rn] 5f⁶ 7s²",eneg:1.28,mp:639.4,bp:3228,density:"19.82",discovered:1940,discoverer:"Seaborg et al.",shells:[2,8,18,32,24,8,2]},
+  {n:95,s:"Am",name:"镅",en:"Americium",mass:"[243]",cat:"actinide",period:7,group:3,block:"f",state:"solid",ec:"[Rn] 5f⁷ 7s²",eneg:1.13,mp:1176,bp:2011,density:"13.69",discovered:1944,discoverer:"Seaborg et al.",shells:[2,8,18,32,25,8,2]},
+  {n:96,s:"Cm",name:"锔",en:"Curium",mass:"[247]",cat:"actinide",period:7,group:3,block:"f",state:"solid",ec:"[Rn] 5f⁷ 6d¹ 7s²",eneg:1.28,mp:1345,bp:3110,density:"13.51",discovered:1944,discoverer:"Seaborg et al.",shells:[2,8,18,32,25,9,2]},
+  {n:97,s:"Bk",name:"锫",en:"Berkelium",mass:"[247]",cat:"actinide",period:7,group:3,block:"f",state:"solid",ec:"[Rn] 5f⁹ 7s²",eneg:1.3,mp:986,bp:2627,density:"14.78",discovered:1949,discoverer:"Seaborg et al.",shells:[2,8,18,32,27,8,2]},
+  {n:98,s:"Cf",name:"锎",en:"Californium",mass:"[251]",cat:"actinide",period:7,group:3,block:"f",state:"solid",ec:"[Rn] 5f¹⁰ 7s²",eneg:1.3,mp:900,bp:1470,density:"15.10",discovered:1950,discoverer:"Seaborg et al.",shells:[2,8,18,32,28,8,2]},
+  {n:99,s:"Es",name:"锿",en:"Einsteinium",mass:"[252]",cat:"actinide",period:7,group:3,block:"f",state:"solid",ec:"[Rn] 5f¹¹ 7s²",eneg:1.3,mp:860,bp:996,density:"8.84",discovered:1952,discoverer:"Ghiorso et al.",shells:[2,8,18,32,29,8,2]},
+  {n:100,s:"Fm",name:"镄",en:"Fermium",mass:"[257]",cat:"actinide",period:7,group:3,block:"f",state:"solid",ec:"[Rn] 5f¹² 7s²",eneg:1.3,mp:1527,bp:null,density:null,discovered:1953,discoverer:"Ghiorso et al.",shells:[2,8,18,32,30,8,2]},
+  {n:101,s:"Md",name:"钔",en:"Mendelevium",mass:"[258]",cat:"actinide",period:7,group:3,block:"f",state:"solid",ec:"[Rn] 5f¹³ 7s²",eneg:1.3,mp:827,bp:null,density:null,discovered:1955,discoverer:"Ghiorso et al.",shells:[2,8,18,32,31,8,2]},
+  {n:102,s:"No",name:"锘",en:"Nobelium",mass:"[259]",cat:"actinide",period:7,group:3,block:"f",state:"solid",ec:"[Rn] 5f¹⁴ 7s²",eneg:1.3,mp:827,bp:null,density:null,discovered:1958,discoverer:"Ghiorso et al.",shells:[2,8,18,32,32,8,2]},
+  {n:103,s:"Lr",name:"铹",en:"Lawrencium",mass:"[266]",cat:"actinide",period:7,group:3,block:"d",state:"solid",ec:"[Rn] 5f¹⁴ 7s² 7p¹",eneg:1.3,mp:1627,bp:null,density:null,discovered:1961,discoverer:"Ghiorso et al.",shells:[2,8,18,32,32,8,3]},
+  {n:104,s:"Rf",name:"𬬻",en:"Rutherfordium",mass:"[267]",cat:"transition-metal",period:7,group:4,block:"d",state:"solid",ec:"[Rn] 5f¹⁴ 6d² 7s²",eneg:null,mp:null,bp:null,density:null,discovered:1964,discoverer:"JINR",shells:[2,8,18,32,32,10,2]},
+  {n:105,s:"Db",name:"𬭊",en:"Dubnium",mass:"[268]",cat:"transition-metal",period:7,group:5,block:"d",state:"solid",ec:"[Rn] 5f¹⁴ 6d³ 7s²",eneg:null,mp:null,bp:null,density:null,discovered:1967,discoverer:"JINR / LBNL",shells:[2,8,18,32,32,11,2]},
+  {n:106,s:"Sg",name:"𬭳",en:"Seaborgium",mass:"[269]",cat:"transition-metal",period:7,group:6,block:"d",state:"solid",ec:"[Rn] 5f¹⁴ 6d⁴ 7s²",eneg:null,mp:null,bp:null,density:null,discovered:1974,discoverer:"LBNL",shells:[2,8,18,32,32,12,2]},
+  {n:107,s:"Bh",name:"𬭛",en:"Bohrium",mass:"[270]",cat:"transition-metal",period:7,group:7,block:"d",state:"solid",ec:"[Rn] 5f¹⁴ 6d⁵ 7s²",eneg:null,mp:null,bp:null,density:null,discovered:1981,discoverer:"GSI",shells:[2,8,18,32,32,13,2]},
+  {n:108,s:"Hs",name:"𬭶",en:"Hassium",mass:"[269]",cat:"transition-metal",period:7,group:8,block:"d",state:"solid",ec:"[Rn] 5f¹⁴ 6d⁶ 7s²",eneg:null,mp:null,bp:null,density:null,discovered:1984,discoverer:"GSI",shells:[2,8,18,32,32,14,2]},
+  {n:109,s:"Mt",name:"鿏",en:"Meitnerium",mass:"[278]",cat:"unknown",period:7,group:9,block:"d",state:"solid",ec:"[Rn] 5f¹⁴ 6d⁷ 7s²",eneg:null,mp:null,bp:null,density:null,discovered:1982,discoverer:"GSI",shells:[2,8,18,32,32,15,2]},
+  {n:110,s:"Ds",name:"𫟼",en:"Darmstadtium",mass:"[281]",cat:"unknown",period:7,group:10,block:"d",state:"solid",ec:"[Rn] 5f¹⁴ 6d⁸ 7s²",eneg:null,mp:null,bp:null,density:null,discovered:1994,discoverer:"GSI",shells:[2,8,18,32,32,16,2]},
+  {n:111,s:"Rg",name:"𬬭",en:"Roentgenium",mass:"[282]",cat:"unknown",period:7,group:11,block:"d",state:"solid",ec:"[Rn] 5f¹⁴ 6d⁹ 7s²",eneg:null,mp:null,bp:null,density:null,discovered:1994,discoverer:"GSI",shells:[2,8,18,32,32,17,2]},
+  {n:112,s:"Cn",name:"鿔",en:"Copernicium",mass:"[285]",cat:"unknown",period:7,group:12,block:"d",state:"gas",ec:"[Rn] 5f¹⁴ 6d¹⁰ 7s²",eneg:null,mp:null,bp:null,density:null,discovered:1996,discoverer:"GSI",shells:[2,8,18,32,32,18,2]},
+  {n:113,s:"Nh",name:"鿭",en:"Nihonium",mass:"[286]",cat:"unknown",period:7,group:13,block:"p",state:"solid",ec:"[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p¹",eneg:null,mp:null,bp:null,density:null,discovered:2003,discoverer:"RIKEN",shells:[2,8,18,32,32,18,3]},
+  {n:114,s:"Fl",name:"𫓧",en:"Flerovium",mass:"[289]",cat:"unknown",period:7,group:14,block:"p",state:"solid",ec:"[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p²",eneg:null,mp:null,bp:null,density:null,discovered:1999,discoverer:"JINR",shells:[2,8,18,32,32,18,4]},
+  {n:115,s:"Mc",name:"镆",en:"Moscovium",mass:"[290]",cat:"unknown",period:7,group:15,block:"p",state:"solid",ec:"[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p³",eneg:null,mp:null,bp:null,density:null,discovered:2003,discoverer:"JINR",shells:[2,8,18,32,32,18,5]},
+  {n:116,s:"Lv",name:"𫟷",en:"Livermorium",mass:"[293]",cat:"unknown",period:7,group:16,block:"p",state:"solid",ec:"[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p⁴",eneg:null,mp:null,bp:null,density:null,discovered:2000,discoverer:"JINR / LLNL",shells:[2,8,18,32,32,18,6]},
+  {n:117,s:"Ts",name:"鿬",en:"Tennessine",mass:"[294]",cat:"unknown",period:7,group:17,block:"p",state:"solid",ec:"[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p⁵",eneg:null,mp:null,bp:null,density:null,discovered:2010,discoverer:"JINR / ORNL",shells:[2,8,18,32,32,18,7]},
+  {n:118,s:"Og",name:"鿫",en:"Oganesson",mass:"[294]",cat:"noble-gas",period:7,group:18,block:"p",state:"gas",ec:"[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p⁶",eneg:null,mp:null,bp:null,density:null,discovered:2002,discoverer:"JINR / LLNL",shells:[2,8,18,32,32,18,8]},
+];
+
+const CATEGORIES = {
+  "alkali-metal":{label:"碱金属",en:"Alkali Metal"},
+  "alkaline-earth-metal":{label:"碱土金属",en:"Alkaline Earth"},
+  "transition-metal":{label:"过渡金属",en:"Transition Metal"},
+  "post-transition-metal":{label:"后过渡金属",en:"Post-transition"},
+  "metalloid":{label:"类金属",en:"Metalloid"},
+  "nonmetal":{label:"非金属",en:"Nonmetal"},
+  "halogen":{label:"卤素",en:"Halogen"},
+  "noble-gas":{label:"稀有气体",en:"Noble Gas"},
+  "lanthanide":{label:"镧系",en:"Lanthanide"},
+  "actinide":{label:"锕系",en:"Actinide"},
+  "unknown":{label:"未知性质",en:"Unknown"},
+};
+
+const STATE_LABELS = {solid:"固态 Solid", liquid:"液态 Liquid", gas:"气态 Gas"};
+
+// =================== ENRICH: 钔牌 / 生活 / 课本 ===================
+// curriculum: "j"=初中常考  "s"=高中拓展  其余=课外
+// deck: 在钔牌中是否登场  count: 张数  role: thick(厚牌·不可单出) / md / pb / grab(抢零) / normal
+// valences: 常见化合价（中学范围）  life: 生活中在哪里  fun: 趣味一句话
+const ENRICH = {
+  H:  {curriculum:"j", deck:6, role:"thick", valences:["+1","-1"], life:"水 H₂O · 氢气球 · 加氢站",                   fun:"宇宙中最古老、最丰富的元素"},
+  He: {curriculum:"s", deck:2, role:"grab",  valences:["0"],        life:"派对气球 · MRI 核磁共振冷却",                   fun:"吸一口声音变尖——但很危险！"},
+  Li: {curriculum:"s", deck:2, role:"normal",valences:["+1"],       life:"手机电池 · 电动车电池",                          fun:"密度最小的金属，能浮在油上"},
+  Be: {curriculum:"s", deck:2, role:"normal",valences:["+2"],       life:"航天器结构件 · X光仪器窗口",                     fun:"翡翠和海蓝宝石都含铍"},
+  B:  {curriculum:"s", deck:2, role:"normal",valences:["+3"],       life:"硼砂 · 玻璃纤维 · 洗衣粉",                        fun:"植物缺硼花不会开"},
+  C:  {curriculum:"j", deck:2, role:"normal",valences:["+4","+2","-4"],life:"铅笔芯 · 钻石 · 烧烤的木炭 · 你身体的 18%", fun:"同样是碳，钻石是钻石，铅笔是铅笔"},
+  N:  {curriculum:"j", deck:6, role:"thick", valences:["-3","+1","+2","+3","+4","+5"],life:"空气 78% · 化肥 · 液氮冰激凌", fun:"空气里你呼吸最多的就是它"},
+  O:  {curriculum:"j", deck:6, role:"thick", valences:["-2"],       life:"呼吸 · 水 · 钢铁生锈",                           fun:"地壳里含量第一的元素"},
+  F:  {curriculum:"s", deck:6, role:"thick", valences:["-1"],       life:"含氟牙膏 · 不粘锅涂层 (PTFE)",                    fun:"非金属之王——电负性最强"},
+  Ne: {curriculum:"s", deck:2, role:"grab",  valences:["0"],        life:"霓虹灯招牌的红色光",                              fun:"Neon 就是霓虹的意思"},
+  Na: {curriculum:"j", deck:2, role:"normal",valences:["+1"],       life:"食盐 NaCl · 小苏打 NaHCO₃ · 钠灯路灯",            fun:"扔进水里会爆炸的金属"},
+  Mg: {curriculum:"j", deck:2, role:"normal",valences:["+2"],       life:"叶绿素中心 · 烟花的强白光 · 笔记本外壳",          fun:"植物绿色来自镁原子"},
+  Al: {curriculum:"j", deck:2, role:"normal",valences:["+3"],       life:"易拉罐 · 铝箔 · 飞机外壳",                        fun:"地壳含量最高的金属"},
+  Si: {curriculum:"j", deck:2, role:"normal",valences:["+4","-4"],  life:"沙子 · 玻璃 · 芯片 · 太阳能板",                   fun:"整个硅谷的名字来源"},
+  P:  {curriculum:"j", deck:2, role:"normal",valences:["+5","+3","-3"],life:"火柴头 · 化肥 · DNA 骨架",                    fun:"白磷在空气中会自燃"},
+  S:  {curriculum:"j", deck:2, role:"normal",valences:["-2","+4","+6"],life:"火山口的黄色 · 火药 · 蛋黄味",                fun:"煮鸡蛋的臭味就是硫"},
+  Cl: {curriculum:"j", deck:6, role:"thick", valences:["-1","+1","+3","+5","+7"],life:"游泳池消毒 · 食盐 · 84 消毒液",     fun:"一战中第一种化学武器"},
+  Ar: {curriculum:"s", deck:2, role:"grab",  valences:["0"],        life:"白炽灯泡填充 · 焊接保护气",                       fun:"空气里 1% 都是它，但你完全感觉不到"},
+  K:  {curriculum:"j", deck:2, role:"normal",valences:["+1"],       life:"香蕉 · 化肥 · 心脏跳动需要它",                    fun:"火焰呈紫色——焰色反应"},
+  Ca: {curriculum:"j", deck:2, role:"normal",valences:["+2"],       life:"骨头 · 牙齿 · 牛奶 · 大理石 · 鸡蛋壳",            fun:"长高的小朋友请多喝牛奶"},
+  Cr: {curriculum:"s", deck:2, role:"normal",valences:["+3","+6","+2"],life:"不锈钢 · 汽车镀铬亮饰",                       fun:"红宝石的红来自微量铬"},
+  Mn: {curriculum:"j", deck:2, role:"normal",valences:["+2","+4","+6","+7"],life:"干电池 · 高锰酸钾 (消毒)",               fun:"高锰酸钾的紫色就是它"},
+  Fe: {curriculum:"j", deck:2, role:"normal",valences:["+2","+3"],  life:"血红蛋白 · 钢铁 · 磁铁 · 地球核心",               fun:"地球之所以有磁场，靠它"},
+  Co: {curriculum:"s", deck:2, role:"normal",valences:["+2","+3"],  life:"蓝色颜料 · 锂电池正极",                            fun:"古埃及蓝色琉璃就用它"},
+  Ni: {curriculum:"s", deck:2, role:"normal",valences:["+2","+3"],  life:"硬币 · 不锈钢 · 充电电池",                        fun:"5 角硬币的银白色是镍"},
+  Cu: {curriculum:"j", deck:2, role:"normal",valences:["+1","+2"],  life:"电线 · 铜钱 · 自由女神像的绿",                    fun:"人类使用最早的金属之一"},
+  Zn: {curriculum:"j", deck:2, role:"normal",valences:["+2"],       life:"干电池外壳 · 防锈镀层 · 生蚝富含",                fun:"缺锌会没胃口"},
+  Br: {curriculum:"s", deck:6, role:"thick", valences:["-1","+1","+3","+5","+7"],life:"阻燃剂 · 老式照相底片 (溴化银)",     fun:"常温下唯一液态的非金属"},
+  Ag: {curriculum:"j", deck:2, role:"normal",valences:["+1"],       life:"银饰 · 银餐具 · 抗菌涂层",                        fun:"电导率宇宙第一"},
+  Sn: {curriculum:"s", deck:2, role:"normal",valences:["+2","+4"],  life:"焊锡 · 罐头镀锡 · 锡纸",                          fun:"低温下会粉碎成粉——锡疫"},
+  I:  {curriculum:"j", deck:6, role:"thick", valences:["-1","+1","+3","+5","+7"],life:"加碘盐 · 碘酒消毒 · 海带富含",       fun:"缺碘会得大脖子病"},
+  Ba: {curriculum:"s", deck:2, role:"normal",valences:["+2"],       life:"医院 X 光检查喝的 \"钡餐\" · 烟花的绿色",         fun:"焰色反应——绿色"},
+  Pt: {curriculum:"s", deck:2, role:"normal",valences:["+2","+4"],  life:"催化转化器 · 高级首饰 · 抗癌药",                  fun:"比黄金还贵的贵金属"},
+  Au: {curriculum:"j", deck:2, role:"normal",valences:["+1","+3"],  life:"金饰 · 电子触点镀金 · 牙冠",                      fun:"唯一带黄色的金属"},
+  Hg: {curriculum:"j", deck:2, role:"normal",valences:["+1","+2"],  life:"老式温度计 · 节能灯管 (有毒慎触)",                fun:"常温下唯一液态的金属"},
+  Pb: {curriculum:"j", deck:2, role:"pb",    valences:["+2","+4"],  life:"汽车铅酸电池 · 老式焊锡 · X光防护",               fun:"钔牌中最小单牌·再生效果"},
+  Md: {curriculum:"x", deck:2, role:"md",    valences:["+2","+3"],  life:"实验室人造元素 · 几乎只存在几分钟",                fun:"钔牌中最大单牌·门捷列夫致敬"},
+};
+
+const ROLE_BADGE = {
+  thick:{label:"厚牌·不可单出", color:"#fbbf24"},
+  md:   {label:"⭐ 大钔牌 · 换牌", color:"#f472b6"},
+  pb:   {label:"⭐ 小钔牌 · 再生", color:"#7be495"},
+  grab: {label:"⚡ 抢零牌", color:"#a78bfa"},
+  normal:{label:"普通单牌", color:"#7c9cff"},
+};
+
+// =================== 元素真实样子 + 发现者肖像 ===================
+// ⚠️ 当前用维基百科 URL，国内访问可能慢/失败
+// 图片使用 upload.wikimedia.org 直链（国内大部分地区可访问）
+const WC = 'https://upload.wikimedia.org/wikipedia/commons/';
+const _img = (hash, file) => `${WC}${hash}/${file}`;
+const _davy = _img('8/8f','Sir_Humphry_Davy%2C_Bt_by_Thomas_Phillips.jpg');
+
+const IMAGES = {
+  H:  {photo:_img('8/83','Hydrogen_discharge_tube.jpg'), photoCap:'氢气在放电管中发出粉紫色光',
+       person:{name:'Henry Cavendish', cn:'亨利·卡文迪许', year:'1766', portrait:_img('9/95','Henry_cavendish.JPG')}},
+  He: {photo:_img('8/82','Helium_discharge_tube.jpg'), photoCap:'氦气放电管的橙色光',
+       person:{name:'Janssen & Lockyer', cn:'扬森 / 洛克耶', year:'1868', portrait:_img('6/6e','Pierre_Janssen.jpg')}},
+  Li: {photo:_img('a/ae','Lithium_paraffin.jpg'), photoCap:'锂——保存在石蜡油中的银白色金属',
+       person:{name:'J. A. Arfwedson', cn:'阿尔韦德松', year:'1817', portrait:''}},
+  Be: {photo:_img('6/6c','Beryllium_%28Element_-_4%29_4.jpg'), photoCap:'铍金属块——轻而坚硬',
+       person:{name:'L. N. Vauquelin', cn:'沃克兰', year:'1798', portrait:''}},
+  B:  {photo:_img('1/19','Boron_R105.jpg'), photoCap:'硼单质——黑色晶体',
+       person:{name:'Davy / Gay-Lussac', cn:'戴维 / 盖-吕萨克', year:'1808', portrait:''}},
+  C:  {photo:_img('e/e9','Charcoal_2.jpg'), photoCap:'木炭——碳的常见形式',
+       person:{name:'史前', cn:'人类自古就用', year:'公元前 ~3750', portrait:''}},
+  N:  {photo:_img('7/70','Liquid_nitrogen_being_poured.jpg'), photoCap:'液氮（-196°C）',
+       person:{name:'Daniel Rutherford', cn:'丹尼尔·卢瑟福', year:'1772', portrait:_img('d/da','Rutherford_Daniel.jpg')}},
+  O:  {photo:_img('c/c3','Liquid_oxygen_in_a_beaker_4.jpg'), photoCap:'液氧——淡蓝色，会被磁铁吸引',
+       person:{name:'Priestley & Scheele', cn:'普利斯特里 / 舍勒', year:'1774', portrait:_img('d/d5','Priestley.jpg')}},
+  Na: {photo:_img('6/60','Sodium_%28Element_-_11%29_3.jpg'), photoCap:'金属钠——银白色，必须存放在煤油中',
+       person:{name:'Humphry Davy', cn:'汉弗里·戴维', year:'1807', portrait:_davy}},
+  Mg: {photo:_img('3/3a','Mg-Crystals.jpg'), photoCap:'镁单质',
+       person:{name:'Joseph Black', cn:'约瑟夫·布拉克', year:'1755', portrait:_img('6/62','Joseph_Black_b1728.jpg')}},
+  Al: {photo:_img('5/5d','Aluminium-4.jpg'), photoCap:'铝——银白色轻金属',
+       person:{name:'H. C. Ørsted', cn:'奥斯特', year:'1825', portrait:_img('c/cf','Hans_Christian_%C3%98rsted_daguerreotype.jpg')}},
+  Si: {photo:_img('e/e9','SiliconCroda.jpg'), photoCap:'高纯度硅晶——芯片原料',
+       person:{name:'J. J. Berzelius', cn:'贝采里乌斯', year:'1824', portrait:_img('b/b0','J%C3%B6ns_Jacob_Berzelius_from_Familj-Journalen1873.png')}},
+  P:  {photo:_img('d/d8','Phosphorus_red.jpg'), photoCap:'红磷——安全火柴的原料',
+       person:{name:'Hennig Brand', cn:'亨尼格·布兰德', year:'1669', portrait:''}},
+  S:  {photo:_img('4/44','Sulfur-sample.jpg'), photoCap:'硫——明亮的柠檬黄晶体',
+       person:{name:'史前', cn:'古代已知', year:'公元前 ~2000', portrait:''}},
+  Cl: {photo:_img('f/f4','Chlorine_ampoule.jpg'), photoCap:'液态氯——黄绿色，有剧毒',
+       person:{name:'Carl W. Scheele', cn:'卡尔·舍勒', year:'1774', portrait:_img('6/60','Carl_Wilhelm_Scheele.jpg')}},
+  Ar: {photo:_img('8/87','Argon_discharge_tube.jpg'), photoCap:'氩气放电管——蓝紫色光',
+       person:{name:'Lord Rayleigh', cn:'瑞利勋爵', year:'1894', portrait:''}},
+  K:  {photo:_img('b/b3','Potassium.JPG'), photoCap:'金属钾——比钠更活泼',
+       person:{name:'Humphry Davy', cn:'汉弗里·戴维', year:'1807', portrait:_davy}},
+  Ca: {photo:_img('9/96','Calcium_unter_Argon_Schutzgasatmosph%C3%A4re.jpg'), photoCap:'金属钙',
+       person:{name:'Humphry Davy', cn:'汉弗里·戴维', year:'1808', portrait:_davy}},
+  Sc: {photo:_img('e/e6','Scandium_sublimed_dendritic_and_1cm3_cube.jpg'), photoCap:'钪——树枝状晶体',
+       person:{name:'L. F. Nilson', cn:'尼尔森', year:'1879', portrait:''}},
+  Ti: {photo:_img('d/db','Titan-crystal_bar.JPG'), photoCap:'钛晶棒——航空航天之星',
+       person:{name:'W. Gregor', cn:'格雷戈尔', year:'1791', portrait:''}},
+  V:  {photo:_img('0/0f','Vanadium_crystal.jpg'), photoCap:'钒晶体——银灰色',
+       person:{name:'A. M. del Río', cn:'德尔里奥', year:'1801', portrait:''}},
+  Cr: {photo:_img('0/08','Chromium_crystals_and_1cm3_cube.jpg'), photoCap:'铬晶体——不锈钢的灵魂',
+       person:{name:'L. N. Vauquelin', cn:'沃克兰', year:'1797', portrait:''}},
+  Mn: {photo:_img('1/1d','Manganese_electrolytic_and_1cm3_cube.jpg'), photoCap:'电解锰——银灰色金属',
+       person:{name:'J. G. Gahn', cn:'甘恩', year:'1774', portrait:''}},
+  Fe: {photo:_img('a/ad','Iron_electrolytic_and_1cm3_cube.jpg'), photoCap:'高纯度电解铁',
+       person:{name:'史前', cn:'人类自古就用', year:'公元前 ~5000', portrait:''}},
+  Co: {photo:_img('7/78','Cobalt_electrolytic_and_1cm3_cube.jpg'), photoCap:'电解钴——银白色带蓝光',
+       person:{name:'G. Brandt', cn:'布兰特', year:'1735', portrait:''}},
+  Ni: {photo:_img('5/57','Nickel_chunk.jpg'), photoCap:'镍块——用于合金和电镀',
+       person:{name:'A. F. Cronstedt', cn:'克朗斯泰特', year:'1751', portrait:''}},
+  Cu: {photo:_img('f/f0','NatCopper.jpg'), photoCap:'天然铜——人类最早使用的金属之一',
+       person:{name:'史前', cn:'人类自古就用', year:'公元前 ~9000', portrait:''}},
+  Zn: {photo:_img('f/f9','Zinc_fragment_sublimed_and_1cm3_cube.jpg'), photoCap:'锌晶——蓝白色',
+       person:{name:'A. Marggraf', cn:'马格拉夫', year:'1746', portrait:''}},
+  Ga: {photo:_img('9/92','Gallium_crystals.jpg'), photoCap:'镓晶体——放手心就融化（29.8°C）',
+       person:{name:'Boisbaudran', cn:'布瓦博德朗', year:'1875', portrait:''}},
+  Ge: {photo:_img('5/50','Germanium-crystal.jpg'), photoCap:'锗晶体——半导体先驱',
+       person:{name:'C. A. Winkler', cn:'温克勒', year:'1886', portrait:''}},
+  As: {photo:_img('2/2f','Arsenic.jpg'), photoCap:'砷——古代毒药之王',
+       person:{name:'Albertus Magnus', cn:'阿尔伯图斯·马格努斯', year:'~1250', portrait:''}},
+  Se: {photo:_img('7/7f','Selenium.jpg'), photoCap:'硒——光电池的关键元素',
+       person:{name:'J. J. Berzelius', cn:'贝采里乌斯', year:'1817', portrait:''}},
+  Br: {photo:_img('7/7c','Bromine_25ml.jpg'), photoCap:'溴——常温下唯一液态的非金属',
+       person:{name:'Antoine Balard', cn:'巴拉尔', year:'1826', portrait:_img('1/17','Antoine-Jerome_Balard.jpg')}},
+  Kr: {photo:_img('5/50','Krypton_discharge_tube.jpg'), photoCap:'氪气放电管——白色亮光',
+       person:{name:'Ramsay & Travers', cn:'拉姆塞 / 特拉弗斯', year:'1898', portrait:''}},
+  Sr: {photo:_img('4/41','Strontium_destilled_crystals.jpg'), photoCap:'锶晶体——烟花红色来源',
+       person:{name:'A. Crawford', cn:'克劳福德', year:'1790', portrait:''}},
+  Y:  {photo:_img('1/19','Yttrium_sublimed_dendritic_and_1cm3_cube.jpg'), photoCap:'钇金属——稀土之一',
+       person:{name:'J. Gadolin', cn:'加多林', year:'1794', portrait:''}},
+  Zr: {photo:_img('9/92','Zirconium_crystal_bar_and_1cm3_cube.jpg'), photoCap:'锆晶棒——核反应堆包壳',
+       person:{name:'M. H. Klaproth', cn:'克拉普罗特', year:'1789', portrait:''}},
+  Nb: {photo:_img('f/f2','Niobium_crystals_and_1cm3_cube.jpg'), photoCap:'铌晶体——超导材料',
+       person:{name:'C. Hatchett', cn:'哈切特', year:'1801', portrait:''}},
+  Mo: {photo:_img('4/43','Molybdenum_crystals_and_1cm3_cube.jpg'), photoCap:'钼晶体——高温合金',
+       person:{name:'C. W. Scheele', cn:'卡尔·舍勒', year:'1778', portrait:''}},
+  Ru: {photo:_img('4/46','Ruthenium_a.jpg'), photoCap:'钌——铂族金属',
+       person:{name:'K. K. Klaus', cn:'克劳斯', year:'1844', portrait:''}},
+  Rh: {photo:_img('9/98','Rhodium_powder_pressed_melted.jpg'), photoCap:'铑——地表最贵金属之一',
+       person:{name:'W. H. Wollaston', cn:'沃拉斯顿', year:'1803', portrait:''}},
+  Pd: {photo:_img('6/68','Palladium_%28Pd%29.jpg'), photoCap:'钯——汽车催化转化器的核心',
+       person:{name:'W. H. Wollaston', cn:'沃拉斯顿', year:'1803', portrait:''}},
+  Ag: {photo:_img('5/55','Silver_crystal.jpg'), photoCap:'银晶体',
+       person:{name:'史前', cn:'人类自古就用', year:'公元前 ~5000', portrait:''}},
+  Cd: {photo:_img('b/b5','Cadmium-crystal_bar.jpg'), photoCap:'镉晶棒——有毒重金属',
+       person:{name:'F. Stromeyer', cn:'施特罗迈尔', year:'1817', portrait:''}},
+  In: {photo:_img('b/b8','Indium.jpg'), photoCap:'铟——触摸屏 ITO 镀层的关键',
+       person:{name:'Reich & Richter', cn:'赖希 / 里希特', year:'1863', portrait:''}},
+  Sn: {photo:_img('6/6a','Tin-2.jpg'), photoCap:'锡——焊锡和罐头镀层',
+       person:{name:'史前', cn:'古代已知', year:'公元前 ~3500', portrait:''}},
+  Sb: {photo:_img('5/5c','Antimony-4.jpg'), photoCap:'锑晶体——阻燃剂原料',
+       person:{name:'史前', cn:'古代已知', year:'公元前 ~3000', portrait:''}},
+  Te: {photo:_img('c/c1','Tellurium2.jpg'), photoCap:'碲晶体——半导体材料',
+       person:{name:'Reichenstein', cn:'赖兴施泰因', year:'1783', portrait:''}},
+  I:  {photo:_img('0/0a','Sample_of_iodine.jpg'), photoCap:'碘晶体——深紫黑色，会升华',
+       person:{name:'Bernard Courtois', cn:'库尔图瓦', year:'1811', portrait:_img('0/07','Bernard_Courtois.jpg')}},
+  Xe: {photo:_img('d/d7','Xenon_discharge_tube.jpg'), photoCap:'氙气放电管——蓝白色光',
+       person:{name:'Ramsay & Travers', cn:'拉姆塞 / 特拉弗斯', year:'1898', portrait:''}},
+  Cs: {photo:_img('4/4a','Caesium.jpg'), photoCap:'铯——原子钟的基准元素',
+       person:{name:'Bunsen & Kirchhoff', cn:'本生 / 基尔霍夫', year:'1860', portrait:''}},
+  Ba: {photo:_img('1/16','Barium_unter_Argon_Schutzgas_Atmosph%C3%A4re.jpg'), photoCap:'金属钡——保存在氩气中',
+       person:{name:'Humphry Davy', cn:'汉弗里·戴维', year:'1808', portrait:_davy}},
+  La: {photo:_img('8/8c','Lanthanum-2.jpg'), photoCap:'镧——稀土之首',
+       person:{name:'C. G. Mosander', cn:'莫桑德', year:'1839', portrait:''}},
+  Ce: {photo:_img('0/0d','Cerium2.jpg'), photoCap:'铈——打火石的主要成分',
+       person:{name:'Berzelius & Hisinger', cn:'贝采里乌斯', year:'1803', portrait:''}},
+  Pr: {photo:_img('c/c7','Praseodymium.jpg'), photoCap:'镨——玻璃绿色着色剂',
+       person:{name:'C. A. von Welsbach', cn:'威尔斯巴赫', year:'1885', portrait:''}},
+  Nd: {photo:_img('b/ba','Neodymium2.jpg'), photoCap:'钕——强力磁铁 NdFeB 的灵魂',
+       person:{name:'C. A. von Welsbach', cn:'威尔斯巴赫', year:'1885', portrait:''}},
+  Hf: {photo:_img('b/b7','Hafnium_bits.jpg'), photoCap:'铪碎片——核反应控制棒',
+       person:{name:'Coster & Hevesy', cn:'科斯特 / 赫维西', year:'1923', portrait:''}},
+  Ta: {photo:_img('8/83','Tantalum_single_crystal_and_1cm3_cube.jpg'), photoCap:'钽单晶——电容器关键材料',
+       person:{name:'A. G. Ekeberg', cn:'厄克贝格', year:'1802', portrait:''}},
+  W:  {photo:_img('1/1a','Wolfram_evaporated_crystals_and_1cm3_cube.jpg'), photoCap:'钨棒——熔点最高的金属（3422°C）',
+       person:{name:'de Elhuyar brothers', cn:'埃尔于亚尔兄弟', year:'1783', portrait:''}},
+  Re: {photo:_img('7/71','Rhenium_single_crystal_bar_and_1cm3_cube.jpg'), photoCap:'铼单晶棒——航空发动机合金',
+       person:{name:'Noddack, Tacke, Berg', cn:'诺达克等', year:'1925', portrait:''}},
+  Os: {photo:_img('0/0c','Osmium_crystals.jpg'), photoCap:'锇晶体——密度最大的元素',
+       person:{name:'S. Tennant', cn:'坦南特', year:'1803', portrait:''}},
+  Ir: {photo:_img('a/a8','Iridium-2.jpg'), photoCap:'铱——密度第二，陨石带来的',
+       person:{name:'S. Tennant', cn:'坦南特', year:'1803', portrait:''}},
+  Pt: {photo:_img('6/68','Platinum_crystals.jpg'), photoCap:'铂晶体——催化之王',
+       person:{name:'A. de Ulloa', cn:'乌略亚', year:'1735', portrait:''}},
+  Au: {photo:_img('d/d7','Gold-crystals.jpg'), photoCap:'天然金晶体',
+       person:{name:'史前', cn:'人类自古就用', year:'公元前 ~6000', portrait:''}},
+  Hg: {photo:_img('9/99','Pouring_liquid_mercury_bionerd.jpg'), photoCap:'液态汞——唯一常温液态的金属',
+       person:{name:'史前', cn:'古代已知', year:'公元前 ~2000', portrait:''}},
+  Tl: {photo:_img('a/a7','Thallium_pieces_in_glass_vial.jpg'), photoCap:'铊——剧毒重金属',
+       person:{name:'W. Crookes', cn:'克鲁克斯', year:'1861', portrait:''}},
+  Pb: {photo:_img('e/e6','Lead_electrolytic_and_1cm3_cube.jpg'), photoCap:'金属铅——沉甸甸的灰色',
+       person:{name:'史前', cn:'古代已知', year:'公元前 ~7000', portrait:''}},
+  Bi: {photo:_img('e/ef','Bismuth_crystals_and_1cm3_cube.jpg'), photoCap:'铋晶体——彩虹色氧化层',
+       person:{name:'C. F. Geoffroy', cn:'若弗鲁瓦', year:'1753', portrait:''}},
+  U:  {photo:_img('2/26','Uranium_ore_uraninite.jpg'), photoCap:'铀矿石（沥青铀矿）',
+       person:{name:'M. H. Klaproth', cn:'克拉普罗特', year:'1789', portrait:''}},
+  Pu: {photo:_img('0/0f','Plutonium_ring.jpg'), photoCap:'钚环——核武器原料',
+       person:{name:'Seaborg et al.', cn:'西博格团队', year:'1940', portrait:''}},
+  Md: {photo:'', photoCap:'人造元素，只存在几分钟，无法拍照',
+       person:{name:'Ghiorso et al.', cn:'吉奥索团队', year:'1955', portrait:_img('c/cc','Albert_Ghiorso_ca_1970.jpg')}},
+};
+
+// =================== PERSONA: 元素拟人化 ===================
+const PERSONA = {
+  H:  {emoji:"🐣", intro:"我是宇宙里最古老的小不点！宇宙 75% 都是我哦～", tags:["#活泼好动","#一点就炸","#离不开氧妹妹"]},
+  He: {emoji:"🎈", intro:"派对气球都靠我！吸我一口声音变尖～", tags:["#冷静不反应","#高音变声器","#宇宙第二多"]},
+  Li: {emoji:"🔋", intro:"你手机能玩多久，全看我心情！", tags:["#密度最小的金属","#浮在油上","#电池主角"]},
+  Be: {emoji:"💎", intro:"翡翠和海蓝宝石的颜色都是我送的礼物！", tags:["#毒美人","#航天首选","#宝石之心"]},
+  B:  {emoji:"🌱", intro:"植物没有我，花儿一朵都开不出来。", tags:["#半导体常客","#洗衣粉常驻","#隐形守护者"]},
+  C:  {emoji:"✏️", intro:"钻石、铅笔、烧烤的炭——通通是我！你身体里也有 18% 是我！", tags:["#百变星君","#生命基石","#最多面元素"]},
+  N:  {emoji:"💨", intro:"你每呼吸一口空气，78% 都是我哦！", tags:["#液氮冰激凌","#化肥之父","#低调多数派"]},
+  O:  {emoji:"🫁", intro:"没有我你 5 分钟都活不下去——我是生命的守门员！", tags:["#地壳第一多","#呼吸主角","#燃烧元凶"]},
+  F:  {emoji:"😈", intro:"哼！全周期表论抢电子的本事，我说第二没人敢说第一！", tags:["#小恶魔","#牙膏护卫","#不粘锅功臣"]},
+  Ne: {emoji:"🌈", intro:"夜晚霓虹灯招牌的红光，那就是我！", tags:["#我就是Neon","#派对小公主","#颜色担当"]},
+  Na: {emoji:"⚡", intro:"扔进水里就爆炸！但变成食盐又乖巧得很～", tags:["#暴脾气金属","#食盐主角","#街灯黄光"]},
+  Mg: {emoji:"🌿", intro:"叶子之所以是绿的，全因为有我在叶绿素里！", tags:["#植物绿源头","#镁光灯之王","#烟花强白光"]},
+  Al: {emoji:"✈️", intro:"易拉罐、铝箔、飞机外壳——都是我撑起来的！", tags:["#地壳金属王","#轻巧担当","#飞行家底"]},
+  Si: {emoji:"💻", intro:"硅谷的硅就是我！沙子→玻璃→芯片三连冠！", tags:["#宅男之父","#沙变芯片","#透明光辉"]},
+  P:  {emoji:"🔥", intro:"火柴一划，那就是我在工作！连你的 DNA 骨架也有我！", tags:["#火柴头","#遗传守护","#自燃属性"]},
+  S:  {emoji:"🥚", intro:"煮鸡蛋的臭味就是我！古代火药也少不了我！", tags:["#臭蛋之王","#火药祖宗","#火山黄"]},
+  Cl: {emoji:"🏊", intro:"游泳池消毒的味道、84 消毒液——主角全是我！", tags:["#消毒能手","#食盐搭档","#战场恶名"]},
+  Ar: {emoji:"💡", intro:"白炽灯能亮多久？全看我在里面护着它～", tags:["#隐形护卫","#灯泡常驻","#空气里1%"]},
+  K:  {emoji:"🍌", intro:"你心脏每一次跳动都需要我！多吃香蕉补补我吧～", tags:["#紫色焰火","#香蕉之源","#心电的能量"]},
+  Ca: {emoji:"🦴", intro:"骨头、牙齿、鸡蛋壳——全是我撑的！多喝牛奶哦！", tags:["#长高小帮手","#牛奶代言","#大理石主角"]},
+  Cr: {emoji:"🚗", intro:"不锈钢和镀铬亮饰都是我的杰作！", tags:["#红宝石红","#镀铬亮闪","#防锈担当"]},
+  Mn: {emoji:"🔋", intro:"干电池、高锰酸钾——我都包了！", tags:["#紫色魔法","#电池打工人","#消毒搭档"]},
+  Fe: {emoji:"🩸", intro:"你血是红的——我功劳！地球有磁场——也是我！", tags:["#血液主角","#磁性之源","#地核统治者"]},
+  Cu: {emoji:"🪙", intro:"电线、铜钱、自由女神像——都是我！", tags:["#导电亚军","#古老金属","#绿铜锈艺术家"]},
+  Zn: {emoji:"🦪", intro:"干电池外壳是我，生蚝里也有我，缺我会没胃口！", tags:["#食欲守门员","#镀锌防锈","#免疫帮手"]},
+  Br: {emoji:"🟫", intro:"我是唯一常温下液态的非金属！老式照相全靠我！", tags:["#液态非金属","#摄影老法师","#阻燃专员"]},
+  Ag: {emoji:"✨", intro:"电导率宇宙第一名！银餐具能抗菌也是我功劳！", tags:["#抗菌之王","#导电冠军","#首饰常客"]},
+  I:  {emoji:"🌿", intro:"加碘盐里有我！没了我会得大脖子病哦～", tags:["#大脖子救星","#海带主角","#紫色升华"]},
+  Au: {emoji:"👑", intro:"我是唯一带黄色的金属，古今最贵代言人～", tags:["#黄金贵公子","#传家宝","#永不生锈"]},
+  Hg: {emoji:"🌡️", intro:"我是唯一常温下液态的金属！老式温度计就是我～", tags:["#液态金属","#银白杀手","#温度计大师"]},
+  Pb: {emoji:"🔧", intro:"汽车蓄电池靠我！我还是钔牌里最小的单牌哦！", tags:["#沉甸甸","#小钔牌·再生","#古代水管"]},
+  Md: {emoji:"🎴", intro:"《钔牌》就是为我命名的！致敬门捷列夫～", tags:["#人造元素","#大钔牌·换牌","#实验室昙花"]},
+};
+
+// =================== 宇宙来源 ===================
+function originOf(n){
+  if(n <= 2) return 'bigbang';
+  if(n <= 26) return 'stellar';
+  if(n <= 92) return 'supernova';
+  return 'manmade';
+}
+const ORIGIN_INFO = {
+  bigbang:  {emoji:'🌌', label:'大爆炸',     time:'138 亿年前',  desc:'宇宙刚诞生 3 分钟内造好',  color:'#7c9cff'},
+  stellar:  {emoji:'⭐', label:'恒星核聚变',  time:'大恒星一生',  desc:'恒星核心把氢一层层烧成铁',  color:'#ffd43b'},
+  supernova:{emoji:'💥', label:'超新星爆炸',  time:'恒星临终瞬间', desc:'恒星死亡时巨大能量瞬间合成', color:'#f783ac'},
+  manmade:  {emoji:'🧪', label:'人造',       time:'实验室合成',   desc:'粒子加速器轰击出来的元素', color:'#51cf66'},
+};
+
+// 焰色反应（中学常考）
+const FLAMES = {
+  Li:{color:'#dc143c', name:'深红 / 绛红'},
+  Na:{color:'#ffd700', name:'明亮的黄色'},
+  K: {color:'#9370db', name:'紫色（需透过蓝色钴玻璃看）'},
+  Rb:{color:'#c71585', name:'紫红色'},
+  Cs:{color:'#8a2be2', name:'紫色'},
+  Mg:{color:'#ffffff', name:'强白光（刺眼）'},
+  Ca:{color:'#ff8c00', name:'砖红色 / 橙红'},
+  Sr:{color:'#ff1493', name:'洋红 / 深红'},
+  Ba:{color:'#9acd32', name:'黄绿色'},
+  Cu:{color:'#00ced1', name:'蓝绿色 / 翠绿'},
+};
+
+// 元素之最 Top
+const TOPS = [
+  {title:'🌌 宇宙第一多', items:[['H','氢','约 75%'],['He','氦','约 23%'],['O','氧','约 1%'],['C','碳','约 0.5%']]},
+  {title:'🌍 地壳第一多', items:[['O','氧','46%'],['Si','硅','28%'],['Al','铝','8%'],['Fe','铁','5%']]},
+  {title:'🧍 人体第一多', items:[['O','氧','65%'],['C','碳','18%'],['H','氢','10%'],['N','氮','3%']]},
+  {title:'💰 最值钱', items:[['Rh','铑','地表最贵金属'],['Pt','铂','比黄金贵很多'],['Au','金','大家都认识'],['Pd','钯','汽车排气催化']]},
+  {title:'☠️ 最危险', items:[['Po','钋','放射性 + 剧毒'],['Pu','钚','核弹原料'],['Hg','汞','液态金属累积毒'],['As','砷','古代毒药之王']]},
+  {title:'🔥 熔点最高', items:[['W','钨','3422 °C'],['Re','铼','3186 °C'],['Os','锇','3033 °C'],['Ta','钽','3017 °C']]},
+  {title:'🏋️ 密度最大', items:[['Os','锇','22.59'],['Ir','铱','22.56'],['Pt','铂','21.45'],['Re','铼','21.02']]},
+  {title:'⚡ 导电最强', items:[['Ag','银','宇宙第一'],['Cu','铜','电线主角'],['Au','金','高端电子'],['Al','铝','轻便代替']]},
+];
+
+// 人体元素组成（按质量百分比）
+const BODY_COMP = [
+  {sym:'O', name:'氧', pct:65, label:'你身体 2/3 都是它（水的主要成分）'},
+  {sym:'C', name:'碳', pct:18, label:'蛋白质、脂肪、糖——骨架全靠它'},
+  {sym:'H', name:'氢', pct:10, label:'和氧搭档变成水，遍布全身'},
+  {sym:'N', name:'氮', pct:3,  label:'DNA、蛋白质里都有它'},
+  {sym:'Ca',name:'钙', pct:1.5,label:'骨头和牙齿的主力'},
+  {sym:'P', name:'磷', pct:1,  label:'DNA 骨架 + 能量分子 ATP'},
+];
+
+// 元素 CP（化学键趣味版）
+const COUPLES = [
+  {a:'Na', b:'Cl', name:'NaCl 食盐', desc:'一见钟情秒成盐，你家餐桌的灵魂 CP'},
+  {a:'H',  b:'O',  name:'H₂O 水',    desc:'2 氢 1 氧——生命之源最有名的三角恋'},
+  {a:'C',  b:'O',  name:'CO₂ 二氧化碳', desc:'植物的最爱，可乐里的气泡，烧烤的化身'},
+  {a:'Fe', b:'O',  name:'Fe₂O₃ 铁锈', desc:'潮湿空气下的悲剧 CP，红褐色伤痕'},
+  {a:'Ca', b:'C',  name:'CaCO₃ 碳酸钙', desc:'鸡蛋壳、贝壳、大理石——慢热长久型'},
+  {a:'Au', b:'Au', name:'Au 金',      desc:'谁也不要——黄金孤傲，自己跟自己玩'},
+];
+
+// 合并到 ELEMENTS
+ELEMENTS.forEach(el => {
+  const e = ENRICH[el.s];
+  if(e){ Object.assign(el, e); }
+  const p = PERSONA[el.s];
+  if(p){ el.persona = p; }
+  el.origin = originOf(el.n);
+  if(FLAMES[el.s]) el.flame = FLAMES[el.s];
+  if(IMAGES[el.s]) el.images = IMAGES[el.s];
+});
+
+// =================== RENDER ===================
+const grid = document.getElementById('grid');
+
+function makeCard(el){
+  const card = document.createElement('div');
+  card.className = 'el';
+  card.dataset.cat = el.cat;
+  card.dataset.state = el.state;
+  card.dataset.block = el.block;
+  card.dataset.n = el.n;
+  if(el.curriculum && el.curriculum !== 'x') card.dataset.cur = el.curriculum;
+  if(el.deck) card.dataset.deck = '1';
+  if(el.role) card.dataset.role = el.role;
+  let badge = '';
+  if(el.deck && el.deck > 2) badge = `<span class="deck-badge">×${el.deck}</span>`;
+  let mark = '';
+  if(el.role === 'md') mark = '<span class="role-mark">⭐</span>';
+  else if(el.role === 'pb') mark = '<span class="role-mark">♻️</span>';
+  else if(el.role === 'grab') mark = '<span class="role-mark">⚡</span>';
+  card.innerHTML = `
+    ${badge}${mark}
+    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+      <span class="num">${el.n}</span>
+      <span class="mass">${el.mass}</span>
+    </div>
+    <div class="sym">${el.s}</div>
+    <div class="name">${el.name} · ${el.en}</div>
+  `;
+  card.addEventListener('click', () => openModal(el));
+  return card;
+}
+
+function buildGrid(){
+  grid.innerHTML = '';
+
+  // Top-left empty
+  const corner = document.createElement('div');
+  corner.style.gridColumn = '1'; corner.style.gridRow = '1';
+  grid.appendChild(corner);
+
+  // Group headers (1-18)
+  for(let g=1; g<=18; g++){
+    const h = document.createElement('div');
+    h.className = 'col-h';
+    h.style.gridColumn = (g+1); h.style.gridRow = '1';
+    h.textContent = g;
+    grid.appendChild(h);
+  }
+
+  // Period headers (1-7)
+  for(let p=1; p<=7; p++){
+    const h = document.createElement('div');
+    h.className = 'row-h';
+    h.style.gridColumn = '1'; h.style.gridRow = (p+1);
+    h.textContent = p;
+    grid.appendChild(h);
+  }
+
+  // Main elements (skip La 57 and Ac 89 for f-block - we place La/Lu and Ac/Lr in main row 6/7)
+  ELEMENTS.forEach(el => {
+    const inFBlock = el.block === 'f';
+    let row, col;
+    if(inFBlock){
+      // f-block series rows (after main table)
+      row = el.cat === 'lanthanide' ? 10 : 11;
+      // start at column 4 (group 3 slot offset), Ce=58 in col 4 ... Lu=71 in col 17. But Lu is d-block.
+      // For lanthanides 57-71 → cols 3..17
+      if(el.cat === 'lanthanide'){
+        col = 2 + (el.n - 57) + 1; // n=57 → col 3, n=71 → col 17
+      } else {
+        col = 2 + (el.n - 89) + 1;
+      }
+    } else {
+      row = el.period + 1;
+      col = el.group + 1;
+    }
+
+    const card = makeCard(el);
+    card.style.gridRow = row;
+    card.style.gridColumn = col;
+    grid.appendChild(card);
+  });
+
+  // Series labels (row 10 col 2 / row 11 col 2) hint at La-Lu / Ac-Lr
+  const lLabel = document.createElement('div');
+  lLabel.className='series-label';lLabel.style.gridRow='10';lLabel.style.gridColumn='2';
+  lLabel.textContent='La–Lu';
+  grid.appendChild(lLabel);
+
+  const aLabel = document.createElement('div');
+  aLabel.className='series-label';aLabel.style.gridRow='11';aLabel.style.gridColumn='2';
+  aLabel.textContent='Ac–Lr';
+  grid.appendChild(aLabel);
+
+  // Placeholders pointing to series in main grid (row 7 col 4 and row 8 col 4)
+  const ph1 = document.createElement('div');
+  ph1.className='placeholder';ph1.style.gridRow='7';ph1.style.gridColumn='4';ph1.textContent='57–71';
+  grid.appendChild(ph1);
+  const ph2 = document.createElement('div');
+  ph2.className='placeholder';ph2.style.gridRow='8';ph2.style.gridColumn='4';ph2.textContent='89–103';
+  grid.appendChild(ph2);
+}
+
+// CAT_VAR 在 openModal 之前需用到，先在这里声明（避免顺序问题）
+const _CAT_VAR_LEGEND = {
+  "alkali-metal":"--c-alkali","alkaline-earth-metal":"--c-alkaline",
+  "transition-metal":"--c-transition","post-transition-metal":"--c-postmetal",
+  "metalloid":"--c-metalloid","nonmetal":"--c-nonmetal",
+  "halogen":"--c-halogen","noble-gas":"--c-noble",
+  "lanthanide":"--c-lanthanide","actinide":"--c-actinide","unknown":"--c-unknown"
+};
+
+function buildLegend(){
+  const legend = document.getElementById('legend');
+  legend.innerHTML = '';
+  const activeView = document.querySelector('.view-toggle:not(#curriculum-toggle) button.active').dataset.view;
+
+  let items = [];
+  if(activeView === 'category'){
+    items = Object.entries(CATEGORIES).map(([k,v]) => ({key:k, color:`var(${_CAT_VAR_LEGEND[k]})`, label:v.label, en:v.en}));
+  } else if(activeView === 'state'){
+    items = [
+      {key:'solid', color:'#7be495', label:'固态', en:'Solid'},
+      {key:'liquid', color:'#5eead4', label:'液态', en:'Liquid'},
+      {key:'gas', color:'#a78bfa', label:'气态', en:'Gas'},
+    ];
+  } else if(activeView === 'block'){
+    items = [
+      {key:'s', color:'#ff5e7a', label:'s 区块', en:'s-block'},
+      {key:'p', color:'#60a5fa', label:'p 区块', en:'p-block'},
+      {key:'d', color:'#ffd23f', label:'d 区块', en:'d-block'},
+      {key:'f', color:'#fb7185', label:'f 区块', en:'f-block'},
+    ];
+  } else if(activeView === 'mendelevium'){
+    items = [
+      {key:'thick', color:'#fbbf24', label:'厚牌×6', en:'H N O F Cl Br I'},
+      {key:'md', color:'#f472b6', label:'⭐ 大钔牌 Md', en:'换牌'},
+      {key:'pb', color:'#7be495', label:'♻️ 小钔牌 Pb', en:'再生'},
+      {key:'grab', color:'#a78bfa', label:'⚡ 抢零牌', en:'He Ne Ar'},
+      {key:'normal', color:'#7c9cff', label:'普通元素×2', en:'其余30种'},
+    ];
+  } else if(activeView === 'trend-eneg'){
+    items = [
+      {key:'low', color:'rgb(60,130,246)', label:'弱 0.7', en:'Cs Fr'},
+      {key:'mid', color:'rgb(255,212,90)', label:'中 2.3', en:'C S Au'},
+      {key:'high', color:'rgb(255,90,59)', label:'强 3.98', en:'F O Cl'},
+    ];
+  }
+
+  items.forEach(it => {
+    const c = document.createElement('div');
+    c.className = 'chip';
+    c.innerHTML = `<span class="dot" style="background:${it.color};color:${it.color}"></span><span>${it.label} <span style="color:var(--ink-mute)">${it.en}</span></span>`;
+    legend.appendChild(c);
+  });
+}
+
+// Apply view colors
+function applyView(view){
+  const cards = grid.querySelectorAll('.el');
+  cards.forEach(card => {
+    if(view === 'category'){
+      card.dataset.cat = card.dataset.cat; // unchanged but reset attribute
+    }
+  });
+  // Set CSS var by view
+  const styleId = 'view-style';
+  let s = document.getElementById(styleId);
+  if(!s){ s = document.createElement('style'); s.id = styleId; document.head.appendChild(s); }
+  if(view === 'state'){
+    s.textContent = `
+      .el[data-state="solid"]{--cc:#7be495}
+      .el[data-state="liquid"]{--cc:#5eead4}
+      .el[data-state="gas"]{--cc:#a78bfa}
+    `;
+  } else if(view === 'block'){
+    s.textContent = `
+      .el[data-block="s"]{--cc:#ff5e7a}
+      .el[data-block="p"]{--cc:#60a5fa}
+      .el[data-block="d"]{--cc:#ffd23f}
+      .el[data-block="f"]{--cc:#fb7185}
+    `;
+  } else {
+    s.textContent = '';
+  }
+}
+
+document.querySelectorAll('.view-toggle:not(#curriculum-toggle) button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.view-toggle:not(#curriculum-toggle) button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyView(btn.dataset.view);
+    document.body.dataset.view = btn.dataset.view;
+    applyEnegHeatmap(btn.dataset.view === 'trend-eneg');
+    buildLegend();
+  });
+});
+
+// 课本范围筛选
+document.querySelectorAll('#curriculum-toggle button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#curriculum-toggle button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.body.classList.remove('cur-j','cur-s');
+    if(btn.dataset.cur !== 'all') document.body.classList.add('cur-' + btn.dataset.cur);
+  });
+});
+
+// 构建移动端列表
+function buildMobileList(){
+  const wrap = document.getElementById('mobile-list');
+  wrap.innerHTML = '';
+  const periods = {};
+  ELEMENTS.forEach(el => {
+    const p = el.cat === 'lanthanide' ? '6 · 镧系' : el.cat === 'actinide' ? '7 · 锕系' : `第 ${el.period} 周期`;
+    if(!periods[p]) periods[p] = [];
+    periods[p].push(el);
+  });
+  Object.entries(periods).forEach(([title, list]) => {
+    const sect = document.createElement('div');
+    sect.className = 'mobile-period';
+    sect.innerHTML = `<h3>${title} · ${list.length} elements</h3>`;
+    const g = document.createElement('div');
+    g.className = 'mobile-grid';
+    list.forEach(el => g.appendChild(makeCard(el)));
+    sect.appendChild(g);
+    wrap.appendChild(sect);
+  });
+}
+
+// =================== SEARCH ===================
+const searchInput = document.getElementById('search');
+searchInput.addEventListener('input', (e) => {
+  const q = e.target.value.trim().toLowerCase();
+  const cards = grid.querySelectorAll('.el');
+  if(!q){
+    cards.forEach(c => { c.classList.remove('dim','match'); });
+    return;
+  }
+  cards.forEach(c => {
+    const n = parseInt(c.dataset.n);
+    const el = ELEMENTS.find(x => x.n === n);
+    const hit = el.s.toLowerCase().includes(q) ||
+                el.name.includes(q) ||
+                el.en.toLowerCase().includes(q) ||
+                String(el.n) === q;
+    c.classList.toggle('dim', !hit);
+    c.classList.toggle('match', hit);
+  });
+});
+
+document.addEventListener('keydown', (e) => {
+  if(e.key === '/' && document.activeElement !== searchInput){
+    e.preventDefault(); searchInput.focus();
+  }
+  if(e.key === 'Escape'){
+    closeModal();
+    if(document.activeElement === searchInput){ searchInput.value=''; searchInput.dispatchEvent(new Event('input')); searchInput.blur(); }
+  }
+});
+
+// =================== MODAL ===================
+const modal = document.getElementById('modal');
+const modalContent = document.getElementById('modal-content');
+
+function fmt(v, unit=''){
+  if(v === null || v === undefined) return '<span style="color:var(--ink-mute)">—</span>';
+  return v + (unit ? ' ' + unit : '');
+}
+
+function atomSVG(el){
+  const shells = el.shells || [];
+  const cx = 200, cy = 200;
+  const baseR = 32;
+  const step = Math.min(22, (180 - baseR) / Math.max(shells.length,1));
+  let svg = `<svg class="atom-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">`;
+  // orbits
+  shells.forEach((cnt, i) => {
+    const r = baseR + (i+1) * step;
+    svg += `<circle class="orbit" cx="${cx}" cy="${cy}" r="${r}"/>`;
+    // electrons
+    for(let k=0; k<cnt; k++){
+      const angle = (k / cnt) * Math.PI * 2 + (i * 0.3);
+      const ex = cx + r * Math.cos(angle);
+      const ey = cy + r * Math.sin(angle);
+      svg += `<circle class="electron" cx="${ex}" cy="${ey}" r="2.5"/>`;
+    }
+  });
+  // nucleus
+  svg += `<circle class="nucleus" cx="${cx}" cy="${cy}" r="${baseR-6}"/>`;
+  svg += `<text x="${cx}" y="${cy+4}" text-anchor="middle" style="fill:#0a0d1a;font-size:14px;font-weight:700">${el.s}</text>`;
+  svg += `</svg>`;
+  return svg;
+}
+
+// 显式映射，替换之前 fragile 的链式 replace
+const CAT_VAR = {
+  "alkali-metal":"--c-alkali","alkaline-earth-metal":"--c-alkaline",
+  "transition-metal":"--c-transition","post-transition-metal":"--c-postmetal",
+  "metalloid":"--c-metalloid","nonmetal":"--c-nonmetal",
+  "halogen":"--c-halogen","noble-gas":"--c-noble",
+  "lanthanide":"--c-lanthanide","actinide":"--c-actinide","unknown":"--c-unknown"
+};
+
+function openModal(el){
+  const cat = CATEGORIES[el.cat] || {label:'未知', en:'Unknown'};
+  modalContent.style.setProperty('--cc', `var(${CAT_VAR[el.cat] || '--c-unknown'})`);
+
+  const dyear = el.discovered < 0 ? `公元前 ${Math.abs(el.discovered)} 年` : (el.discovered > 0 ? `${el.discovered} 年` : '—');
+
+  // 课本徽章
+  const curBadge = el.curriculum === 'j' ? '<span class="cur-badge j">📘 初中常考</span>'
+                 : el.curriculum === 's' ? '<span class="cur-badge s">📗 高中拓展</span>' : '';
+
+  // 钔牌信息块
+  let mendeleviumHTML = '';
+  if(el.deck){
+    const role = ROLE_BADGE[el.role] || ROLE_BADGE.normal;
+    // 同族炸弹搭档（同 group 且在 deck 里）
+    const bombMates = ELEMENTS.filter(x => x.group === el.group && x.deck && x.s !== el.s);
+    const bombHTML = bombMates.length
+      ? `<div class="bomb-list"><strong>💣 同族炸弹搭档：</strong>${bombMates.map(m => `<span class="sym-pill" title="${m.name}">${m.s}</span>`).join('')}</div>`
+      : '';
+    const valencesHTML = el.valences && el.valences.length
+      ? `<div class="bomb-list"><strong>⚗️ 化合价（组合牌依据）：</strong>${el.valences.map(v => `<span class="sym-pill">${v}</span>`).join('')}</div>`
+      : '';
+    mendeleviumHTML = `
+      <div class="mendelevium-card">
+        <div class="icon">${el.s}</div>
+        <div>
+          <h4>在《钔牌》桌游中</h4>
+          <div style="color:var(--ink-2);font-size:14px;font-family:'Patrick Hand','Ma Shan Zheng',sans-serif">${role.label} · 牌组中共 <strong style="color:#ff6b6b;font-size:20px;text-shadow:1.5px 1.5px 0 var(--ink)">${el.deck}</strong> 张</div>
+          <div class="meta">
+            <span class="pill role">${role.label}</span>
+            ${el.role==='thick'?'<span class="pill">不可单出</span>':''}
+            ${el.role==='md'?'<span class="pill">最大单牌 · 换牌效果</span>':''}
+            ${el.role==='pb'?'<span class="pill">最小单牌 · 再生效果</span>':''}
+            ${el.role==='grab'?'<span class="pill">出现立即抢拍</span>':''}
+          </div>
+          ${valencesHTML}
+          ${bombHTML}
+        </div>
+      </div>
+    `;
+  }
+
+  // 宇宙来源
+  let originHTML = '';
+  const oi = ORIGIN_INFO[el.origin];
+  if(oi){
+    originHTML = `
+      <div class="origin-tag" style="background:${oi.color}22">
+        <div class="o-icon">${oi.emoji}</div>
+        <div class="o-text">这种元素的<b>${oi.label}</b>诞生于<b>${oi.time}</b>——${oi.desc}</div>
+      </div>
+    `;
+  }
+
+  // 焰色反应
+  let flameHTML = '';
+  if(el.flame){
+    flameHTML = `
+      <div class="flame-detail">
+        <div class="fd-flame">${flameSVG(el.flame.color, 50)}</div>
+        <div class="fd-text">
+          <h5>🔥 焰色反应</h5>
+          <p>灼烧时火焰呈<b style="color:${el.flame.color}">${el.flame.name}</b>——化学课经典演示实验。</p>
+        </div>
+      </div>
+    `;
+  }
+
+  // 真实样子 + 发现者
+  let realHTML = '';
+  if(el.images){
+    const im = el.images;
+    const photoCard = im.photo
+      ? `<div class="real-card">
+           <div class="label">📸 真实样子</div>
+           <div class="img-wrap"><img src="${im.photo}" alt="${el.name}" loading="lazy"
+             onerror="this.parentElement.classList.add('fail');this.remove();"/></div>
+           <div class="caption">${im.photoCap || ''}</div>
+         </div>`
+      : `<div class="real-card">
+           <div class="label">📸 真实样子</div>
+           <div class="img-wrap empty">${im.photoCap || '暂无图片'}</div>
+         </div>`;
+    const personCard = im.person ? `
+      <div class="real-card">
+        <div class="label">👨‍🔬 发现者</div>
+        <div class="img-wrap">
+          ${im.person.portrait
+            ? `<img src="${im.person.portrait}" alt="${im.person.cn}" loading="lazy"
+                 onerror="this.parentElement.classList.add('fail');this.remove();"/>`
+            : `<div style="font-size:64px">🗿</div>`}
+        </div>
+        <div class="caption">${im.person.cn}</div>
+        <div class="person-meta">${im.person.name} · ${im.person.year}</div>
+      </div>` : '';
+    realHTML = `<div class="real-stuff">${photoCard}${personCard}</div>`;
+  }
+
+  // 拟人化角色卡
+  let personaHTML = '';
+  if(el.persona){
+    personaHTML = `
+      <div class="persona-bubble">
+        <div class="avatar">${el.persona.emoji}</div>
+        <div class="bubble">
+          <div class="intro">"${el.persona.intro}"</div>
+          <div class="tags">${el.persona.tags.map(t=>`<span>${t}</span>`).join('')}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  // 生活情境块
+  let lifeHTML = '';
+  if(el.life || el.fun){
+    lifeHTML = `
+      <div class="life-card">
+        <h4>🌍 生活中在哪里 · In Daily Life</h4>
+        ${el.life ? `<div class="life-row">${el.life}</div>` : ''}
+        ${el.fun ? `<div class="fun">💡 ${el.fun}</div>` : ''}
+      </div>
+    `;
+  }
+
+  modalContent.innerHTML = `
+    <div class="modal-head">
+      <div class="modal-symbol">
+        <div class="num">${el.n}</div>
+        <div class="sym">${el.s}</div>
+        <div class="mass">${el.mass}</div>
+      </div>
+      <div class="modal-title">
+        <h2>${el.name}${curBadge}</h2>
+        <div class="latin">${el.en}</div>
+        <div class="cat"><span class="dot"></span>${cat.label} · ${cat.en}</div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="detail-block">
+        <h3>基本属性 · Properties</h3>
+        <div class="prop-grid">
+          <div class="prop"><span class="k">原子序数 Z</span><span class="v">${el.n}</span></div>
+          <div class="prop"><span class="k">相对原子质量</span><span class="v">${el.mass}</span></div>
+          <div class="prop"><span class="k">周期 / 族</span><span class="v">${el.period} · ${el.group}</span></div>
+          <div class="prop"><span class="k">区块</span><span class="v">${el.block}-block</span></div>
+          <div class="prop"><span class="k">常温状态</span><span class="v serif">${STATE_LABELS[el.state]}</span></div>
+          <div class="prop"><span class="k">电负性 (Pauling)</span><span class="v">${fmt(el.eneg)}</span></div>
+        </div>
+      </div>
+      <div class="detail-block">
+        <h3>物理 · Physical</h3>
+        <div class="prop-grid">
+          <div class="prop"><span class="k">熔点</span><span class="v">${fmt(el.mp, '°C')}</span></div>
+          <div class="prop"><span class="k">沸点</span><span class="v">${fmt(el.bp, '°C')}</span></div>
+          <div class="prop"><span class="k">密度</span><span class="v">${fmt(el.density, 'g/cm³')}</span></div>
+          <div class="prop"><span class="k">电子构型</span><span class="v" style="font-size:13px">${el.ec}</span></div>
+        </div>
+      </div>
+      ${realHTML}
+      ${personaHTML}
+      ${lifeHTML}
+      ${mendeleviumHTML}
+      ${flameHTML}
+      ${originHTML}
+      <div class="detail-block" style="grid-column:1/-1">
+        <h3>电子壳层 · Electron Shells</h3>
+        <div class="atom-viz">${atomSVG(el)}</div>
+      </div>
+      <div class="discovery">
+        ${el.name}（${el.en}，符号 <strong>${el.s}</strong>）由 <strong>${el.discoverer}</strong> 于 ${dyear} 发现 / 首次分离。
+        其电子构型为 <strong style="font-family:JetBrains Mono,monospace">${el.ec}</strong>，
+        每层电子数为 <strong>${(el.shells||[]).join(' · ')}</strong>。
+      </div>
+    </div>
+  `;
+  modal.classList.add('open');
+}
+
+function closeModal(){ modal.classList.remove('open'); }
+modal.addEventListener('click', (e) => { if(e.target === modal) closeModal(); });
+
+// =================== 化合物侦探 ===================
+const PICKER_SYMS = ['H','C','N','O','F','Na','Mg','Al','Si','P','S','Cl','K','Ca','Fe','Cu','Zn','Br','Ag','I'];
+
+const COMPOUNDS = {};
+function _k(arr){return [...arr].sort().join('+')}
+function _add(syms, f, n, e, fact){ COMPOUNDS[_k(syms)] = {f,n,e,fact}; }
+// 两元素
+_add(['H','O'],     'H₂O',   '水',          '💧', '生命之源。地球 71% 被水覆盖。');
+_add(['Na','Cl'],   'NaCl',  '氯化钠 · 食盐',   '🧂', '你家厨房每天都用！海水咸味的来源。');
+_add(['C','O'],     'CO₂',   '二氧化碳',       '💨', '你呼出的气体，可乐里的气泡。');
+_add(['H','Cl'],    'HCl',   '盐酸',          '🧪', '胃酸的主要成分，能溶解金属。');
+_add(['K','Cl'],    'KCl',   '氯化钾',         '🧂', '低钠盐 / 化肥常用。');
+_add(['Na','O'],    'Na₂O',  '氧化钠',         '⚪', '与水反应生成烧碱 NaOH。');
+_add(['Mg','O'],    'MgO',   '氧化镁',         '⚪', '耐火砖、胃药主要成分。');
+_add(['Ca','O'],    'CaO',   '氧化钙 · 生石灰',  '🪨', '遇水放热——干燥剂常用。');
+_add(['Fe','O'],    'Fe₂O₃', '氧化铁 · 铁锈',   '🔩', '铁生锈了！火星地表的红色也是它。');
+_add(['Cu','O'],    'CuO',   '氧化铜',         '⚫', '黑色粉末，加热铜会变成它。');
+_add(['Zn','O'],    'ZnO',   '氧化锌',         '🧴', '防晒霜 / 痱子粉。');
+_add(['Al','O'],    'Al₂O₃', '氧化铝',         '💎', '红/蓝宝石主要成分，硬度极高。');
+_add(['Si','O'],    'SiO₂',  '二氧化硅',       '⏳', '沙子、石英、玻璃、芯片基底。');
+_add(['Ag','Cl'],   'AgCl',  '氯化银',         '📷', '感光，老式照相底片用它成像。');
+_add(['Na','Br'],   'NaBr',  '溴化钠',         '😴', '镇静剂原料。');
+_add(['K','I'],     'KI',    '碘化钾',         '🧂', '加碘盐里就有它。');
+_add(['Mg','Cl'],   'MgCl₂', '氯化镁',         '🌊', '苦卤主要成分，做豆腐的"盐卤"。');
+_add(['Ca','Cl'],   'CaCl₂', '氯化钙',         '❄️', '融雪剂 / 干燥剂。');
+_add(['H','N'],     'NH₃',   '氨气',          '💨', '刺鼻气味，化肥/清洁剂原料。');
+_add(['H','S'],     'H₂S',   '硫化氢',         '🥚', '臭鸡蛋的味道，有毒！');
+_add(['S','O'],     'SO₂',   '二氧化硫',       '🔥', '燃烧硫产生，酸雨的主因之一。');
+_add(['N','O'],     'NO₂',   '二氧化氮',       '🚗', '汽车尾气，红棕色有毒气体。');
+_add(['Fe','S'],    'FeS',   '硫化亚铁',       '🪨', '黄铁矿之一。');
+_add(['Cu','S'],    'CuS',   '硫化铜',         '🪨', '黑色，铜矿的常见形式。');
+// 三元素
+_add(['Ca','C','O'],   'CaCO₃', '碳酸钙',     '🥚', '鸡蛋壳、大理石、贝壳的主要成分。');
+_add(['Na','H','C','O'],'NaHCO₃','碳酸氢钠 · 小苏打','🧁','烘焙发面、灭火器、清洁剂万能选手。');
+_add(['Na','O','H'],   'NaOH',  '氢氧化钠 · 烧碱','🧪','强碱，做肥皂用，碰皮肤会烧伤。');
+_add(['K','O','H'],    'KOH',   '氢氧化钾',    '🧪', '强碱，电池电解液。');
+_add(['Ca','O','H'],   'Ca(OH)₂','氢氧化钙 · 熟石灰','🪨','刷墙变白用它。');
+_add(['H','N','O'],    'HNO₃',  '硝酸',       '🧪', '强氧化性酸，制造化肥/炸药。');
+_add(['H','S','O'],    'H₂SO₄', '硫酸',       '🧪', '工业之母，电池里就有它。');
+_add(['Na','S','O'],   'Na₂SO₄','硫酸钠 · 芒硝','🧂','造纸/玻璃工业。');
+_add(['Cu','S','O'],   'CuSO₄', '硫酸铜',     '🔷', '蓝色结晶，无水时变白可吸水。');
+_add(['Fe','S','O'],   'FeSO₄', '硫酸亚铁',   '💊', '补铁药丸的成分。');
+_add(['Na','H','O'],   'NaOH',  '氢氧化钠 · 烧碱','🧪','强碱，做肥皂用。');
+_add(['Mg','O','H'],   'Mg(OH)₂','氢氧化镁',  '💊', '胃药"乳镁"的主要成分。');
+_add(['K','N','O'],    'KNO₃',  '硝酸钾 · 火硝','🎆','黑火药原料，烟花配方。');
+_add(['Ag','N','O'],   'AgNO₃', '硝酸银',     '🧪', '化学实验常用，能镀银。');
+// 新增 3 元素常见化合物
+_add(['H','Cl','O'],   'HClO',  '次氯酸',     '🧴', '84 消毒液的主要有效成分，强氧化性杀菌。');
+_add(['Na','Cl','O'],  'NaClO', '次氯酸钠 · 84',  '🧴', '家用 84 消毒液主成分。注意：不能和洁厕灵混用！');
+_add(['K','Cl','O'],   'KClO₃', '氯酸钾',     '🎆', '老式火柴头 / 烟花配方。');
+_add(['K','Mn','O'],   'KMnO₄', '高锰酸钾',   '🟣', '紫色晶体，消毒+漂白万能选手。');
+_add(['K','Cr','O'],   'K₂Cr₂O₇','重铬酸钾', '🟠', '橙红色晶体，强氧化剂。');
+_add(['Na','C','O'],   'Na₂CO₃','碳酸钠 · 纯碱', '🧂', '蒸馒头时加一点让面团更松软。');
+_add(['Ca','C','O','H'],'Ca(HCO₃)₂','碳酸氢钙', '💧', '水壶里的水垢成因之一。');
+_add(['Na','Si','O'],  'Na₂SiO₃','硅酸钠 · 水玻璃', '🧪', '黏合剂、防火涂料。');
+_add(['N','H','Cl'],   'NH₄Cl', '氯化铵',     '🧴', '电池电解液 / 干电池里就有。');
+_add(['Cu','C','O','H'],'Cu₂(OH)₂CO₃','碱式碳酸铜·铜绿','🟢','古代铜器表面的绿色，自由女神像的颜色！');
+_add(['Fe','O','H'],   'Fe(OH)₃','氢氧化铁',  '🟫', '红褐色沉淀，水净化处理。');
+_add(['Al','O','H'],   'Al(OH)₃','氢氧化铝',  '💊', '常见胃药，中和胃酸。');
+_add(['H','C','O'],    'H₂CO₃', '碳酸',       '🥤', '可乐里的酸味，CO₂ 溶于水的产物。');
+_add(['H','P','O'],    'H₃PO₄', '磷酸',       '🥤', '可乐里的另一种酸，调味用。');
+_add(['Ca','S','O'],   'CaSO₄', '硫酸钙 · 石膏',  '🪨', '石膏像、石膏板的主成分。');
+_add(['Ba','S','O'],   'BaSO₄', '硫酸钡 · 钡餐',  '🏥', '医院做胃肠 X 光检查要喝的"钡餐"。');
+_add(['Mg','S','O'],   'MgSO₄', '硫酸镁 · 泻盐',  '💊', '泡脚 / 通便用。');
+_add(['Na','N','O'],   'NaNO₃', '硝酸钠',     '🥩', '熏肉防腐剂，让火腿肠保持粉红色。');
+_add(['Ca','N','O'],   'Ca(NO₃)₂','硝酸钙',  '🌱', '农业氮肥。');
+_add(['Cu','Cl'],      'CuCl₂', '氯化铜',     '🟢', '焰色反应呈蓝绿色，化学课常用。');
+_add(['Zn','Cl'],      'ZnCl₂', '氯化氯',     '🧪', '焊接助焊剂。');
+_add(['Pb','S'],       'PbS',   '硫化铅 · 方铅矿','🪨','古代制铅的主要矿石。');
+_add(['Hg','S'],       'HgS',   '硫化汞 · 朱砂',  '🔴','古代红色颜料，中医也用。');
+// 注：HClO/HClO₂/HClO₃/HClO₄ 同含 H+Cl+O，这里只显示最常考的 HClO
+// 同理 H+S+O 显示 H₂SO₄；H+N+O 显示 HNO₃；可以根据需要扩充
+
+const detSlots = [null, null, null];
+const slotEls = document.querySelectorAll('#det-slots .slot');
+const resultEl = document.getElementById('det-result');
+const pickerEl = document.getElementById('det-picker');
+
+function renderPicker(){
+  pickerEl.innerHTML = '';
+  PICKER_SYMS.forEach(sym => {
+    const el = ELEMENTS.find(e=>e.s===sym);
+    if(!el) return;
+    const d = document.createElement('div');
+    d.className = 'pick';
+    d.dataset.cat = el.cat;
+    d.dataset.sym = sym;
+    d.innerHTML = `<div class="p-sym">${sym}</div><div class="p-name">${el.name}</div>`;
+    d.addEventListener('click', () => addToSlot(sym));
+    pickerEl.appendChild(d);
+  });
+}
+
+function addToSlot(sym){
+  if(detSlots.includes(sym)) return; // 同一元素只占一格（简化）
+  const idx = detSlots.indexOf(null);
+  if(idx < 0) return; // 满了
+  detSlots[idx] = sym;
+  renderSlots();
+  validate();
+}
+
+function removeSlot(idx){
+  detSlots[idx] = null;
+  // 收紧空位
+  const filled = detSlots.filter(x=>x);
+  for(let i=0;i<3;i++) detSlots[i] = filled[i] || null;
+  renderSlots();
+  validate();
+}
+
+function renderSlots(){
+  slotEls.forEach((slot, i) => {
+    const sym = detSlots[i];
+    if(!sym){
+      slot.className = 'slot empty';
+      slot.innerHTML = '';
+      return;
+    }
+    const el = ELEMENTS.find(e=>e.s===sym);
+    slot.className = 'slot filled';
+    slot.dataset.cat = el.cat;
+    slot.innerHTML = `
+      <div class="s-num">${el.n}</div>
+      <div class="s-sym">${sym}</div>
+      <div class="s-name">${el.name}</div>
+      <div class="s-remove" data-rm="${i}">×</div>
+    `;
+    slot.querySelector('.s-remove').addEventListener('click', e=>{e.stopPropagation();removeSlot(i)});
+  });
+  // 更新 picker 禁用态
+  pickerEl.querySelectorAll('.pick').forEach(p => {
+    p.classList.toggle('disabled', detSlots.includes(p.dataset.sym));
+  });
+}
+
+function validate(){
+  const syms = detSlots.filter(x=>x);
+  if(syms.length === 0){
+    resultEl.className = 'result-card waiting';
+    resultEl.innerHTML = '?';
+    return;
+  }
+  if(syms.length === 1){
+    resultEl.className = 'result-card waiting';
+    resultEl.innerHTML = '<div style="font-size:15px;font-family:\'Patrick Hand\',sans-serif;color:#6b5d54">再加 1-2 个</div>';
+    return;
+  }
+  const hit = COMPOUNDS[_k(syms)];
+  if(hit){
+    resultEl.className = 'result-card success';
+    resultEl.innerHTML = `
+      <div class="emoji">${hit.e}</div>
+      <div class="formula">${hit.f}</div>
+      <div class="cname">${hit.n}</div>
+      <div class="cfact">${hit.fact}</div>
+    `;
+  } else {
+    resultEl.className = 'result-card fail';
+    resultEl.innerHTML = `
+      <div class="emoji">🤔</div>
+      <div class="formula" style="font-size:18px">没找到</div>
+      <div class="cfact">现实中这个组合<br>暂无常见化合物</div>
+    `;
+  }
+}
+
+document.getElementById('det-clear').addEventListener('click', ()=>{detSlots[0]=detSlots[1]=detSlots[2]=null;renderSlots();validate()});
+
+const HINTS = [['Na','Cl'],['H','O'],['Ca','C','O'],['Na','H','C','O'],['Fe','O'],['Si','O'],['Al','O'],['K','I'],['Cu','S','O'],['Mg','O']];
+document.getElementById('det-hint').addEventListener('click', ()=>{
+  const h = HINTS[Math.floor(Math.random()*HINTS.length)];
+  detSlots[0]=detSlots[1]=detSlots[2]=null;
+  h.forEach((s,i)=>detSlots[i]=s);
+  renderSlots();validate();
+});
+
+// =================== 电负性热力图 ===================
+function enegToColor(v){
+  if(v === null || v === undefined) return '#e0e0e0';
+  // 0.7 (Fr) - 3.98 (F)
+  const t = Math.min(1, Math.max(0, (v - 0.7) / (3.98 - 0.7)));
+  // 蓝色→黄色→红色，t=0 蓝 t=0.5 黄 t=1 红
+  const r = Math.round(t < 0.5 ? 60 + t*2*(255-60) : 255);
+  const g = Math.round(t < 0.5 ? 130 + t*2*(212-130) : 212 - (t-0.5)*2*(212-90));
+  const b = Math.round(t < 0.5 ? 246 - t*2*(246-59) : 59);
+  return `rgb(${r},${g},${b})`;
+}
+function applyEnegHeatmap(on){
+  document.querySelectorAll('.el').forEach(card => {
+    const el = ELEMENTS.find(e => e.n === parseInt(card.dataset.n));
+    if(!el) return;
+    if(on && el.eneg !== null && el.eneg !== undefined){
+      card.style.setProperty('--cc', enegToColor(el.eneg));
+      card.dataset.eneg = el.eneg;
+    } else {
+      card.style.removeProperty('--cc');
+      delete card.dataset.eneg;
+    }
+  });
+}
+
+// =================== 🪐 星辰板块 ===================
+function flameSVG(color, size){
+  const w = size||80, h = (size||80)*1.4;
+  return `<svg class="flame-svg" viewBox="0 0 80 110" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="g_${color.replace('#','')}" cx="50%" cy="90%" r="55%">
+        <stop offset="0%" stop-color="#fff" stop-opacity=".9"/>
+        <stop offset="40%" stop-color="${color}" stop-opacity=".95"/>
+        <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <path class="glow" d="M40 108 C 15 90, 18 50, 40 10 C 62 50, 65 90, 40 108 Z"
+          fill="${color}" opacity=".4"/>
+    <path class="core" d="M40 105 C 25 88, 28 55, 40 22 C 52 55, 55 88, 40 105 Z"
+          fill="url(#g_${color.replace('#','')})"/>
+    <ellipse cx="40" cy="92" rx="10" ry="14" fill="#fff" opacity=".7"/>
+  </svg>`;
+}
+
+function buildBodyComp(){
+  const wrap = document.getElementById('body-comp');
+  BODY_COMP.forEach(b => {
+    const row = document.createElement('div');
+    row.className = 'row';
+    row.dataset.e = b.sym;
+    row.innerHTML = `
+      <div class="top"><span>${b.sym} · ${b.name}</span><b>${b.pct}%</b></div>
+      <div class="bar-wrap"><div class="bar" style="width:${Math.max(b.pct, 2)}%"></div></div>
+      <div class="hint">${b.label}</div>
+    `;
+    wrap.appendChild(row);
+  });
+}
+
+function buildOrigins(){
+  const wrap = document.getElementById('origins');
+  Object.entries(ORIGIN_INFO).forEach(([key, info]) => {
+    const elsInBucket = ELEMENTS.filter(e => e.origin === key && (e.curriculum === 'j' || e.curriculum === 's' || ['Tc','Md','U','Au','Pt'].includes(e.s))).slice(0, 14);
+    const card = document.createElement('div');
+    card.className = 'origin-card ' + key;
+    card.style.setProperty('--oc', info.color);
+    card.innerHTML = `
+      <div class="icon">${info.emoji}</div>
+      <h4>${info.label}</h4>
+      <div class="when">${info.time}</div>
+      <div class="desc">${info.desc}</div>
+      <div class="syms">${elsInBucket.map(e=>`<span>${e.s}</span>`).join('')}</div>
+    `;
+    wrap.appendChild(card);
+  });
+}
+
+// =================== 🎬 焰色反应 ===================
+function buildFlames(){
+  const wrap = document.getElementById('flames-grid');
+  Object.entries(FLAMES).forEach(([sym, f]) => {
+    const el = ELEMENTS.find(e=>e.s===sym);
+    const card = document.createElement('div');
+    card.className = 'flame-card';
+    card.innerHTML = `
+      <div class="f-sym">${sym}</div>
+      <div class="f-name">${el ? el.name : ''}</div>
+      <div class="flame-wrap">${flameSVG(f.color, 80)}</div>
+      <div class="f-label">${f.name}</div>
+    `;
+    wrap.appendChild(card);
+  });
+}
+
+// =================== 📜 时间轴 ===================
+const MILESTONES = [
+  {year:-7000, text:'石器时代已识：Cu Pb Au'},
+  {year:1669,  text:'磷 P · 第一个有记载发现者（布兰特）'},
+  {year:1789,  text:'拉瓦锡发表第一份元素清单'},
+  {year:1869,  text:'门捷列夫发表周期表！'},
+  {year:1898,  text:'居里夫妇发现钋 Po 和镭 Ra'},
+  {year:2010,  text:'最新合成元素 鿬 Ts'},
+];
+
+function buildTimeline(){
+  const mini = document.getElementById('tl-mini');
+  const milestoneWrap = document.getElementById('tl-milestones');
+  // mini grid of all 118 simplified
+  ELEMENTS.forEach(el => {
+    const cell = document.createElement('div');
+    cell.className = 'tl-cell';
+    cell.dataset.year = el.discovered;
+    cell.dataset.n = el.n;
+    cell.style.setProperty('--cc', getComputedStyle(document.querySelector(`.el[data-n="${el.n}"]`)).getPropertyValue('--cc') || '#fff');
+    cell.textContent = el.s.length <= 2 ? el.s : el.s.slice(0,2);
+    cell.title = `${el.name} · ${el.discovered < 0 ? '前 '+(-el.discovered) : el.discovered}`;
+    mini.appendChild(cell);
+  });
+  // milestone chips
+  MILESTONES.forEach(m => {
+    const c = document.createElement('div');
+    c.className = 'tl-mile';
+    const y = m.year < 0 ? `前${-m.year}` : m.year;
+    c.innerHTML = `<b>${y}</b>${m.text}`;
+    c.addEventListener('click', ()=>{
+      slider.value = m.year;
+      slider.dispatchEvent(new Event('input'));
+    });
+    milestoneWrap.appendChild(c);
+  });
+  const slider = document.getElementById('tl-slider');
+  const yearEl = document.getElementById('tl-year');
+  const countEl = document.getElementById('tl-count');
+  function update(){
+    const y = parseInt(slider.value);
+    yearEl.textContent = y < 0 ? '前 ' + (-y) : y;
+    let count = 0;
+    mini.querySelectorAll('.tl-cell').forEach(cell => {
+      const dy = parseInt(cell.dataset.year);
+      if(dy <= y){ cell.classList.remove('hidden'); count++; }
+      else { cell.classList.add('hidden'); }
+    });
+    countEl.textContent = count;
+  }
+  slider.addEventListener('input', update);
+  update();
+}
+
+// =================== 🏆 Top 榜单 ===================
+function buildTops(){
+  const wrap = document.getElementById('tops-grid');
+  TOPS.forEach(t => {
+    const c = document.createElement('div');
+    c.className = 'top-card';
+    c.innerHTML = `
+      <div class="top-title">${t.title}</div>
+      <ol>${t.items.map((it,i) => `
+        <li><span class="rank">${i+1}</span><span class="sym">${it[0]}</span><span class="meta">${it[1]} · ${it[2]}</span></li>
+      `).join('')}</ol>
+    `;
+    wrap.appendChild(c);
+  });
+}
+
+// =================== 🤝 CP ===================
+function buildCouples(){
+  const wrap = document.getElementById('cp-grid');
+  COUPLES.forEach(cp => {
+    const elA = ELEMENTS.find(e=>e.s===cp.a);
+    const elB = ELEMENTS.find(e=>e.s===cp.b);
+    const c = document.createElement('div');
+    c.className = 'cp-card';
+    c.innerHTML = `
+      <div class="cp-pair">
+        <div class="sym" style="background:${elA ? '' : '#fff'}" data-cat="${elA?.cat||''}">${cp.a}</div>
+        <div class="heart">💕</div>
+        <div class="sym" style="background:${elB ? '' : '#fff'}" data-cat="${elB?.cat||''}">${cp.b}</div>
+      </div>
+      <h4>${cp.name}</h4>
+      <p>${cp.desc}</p>
+    `;
+    // 给 sym 应用 category 色
+    c.querySelectorAll('.sym').forEach((s,i) => {
+      const el = i===0 ? elA : elB;
+      if(el){
+        // 用与 .el[data-cat=...] 同样的浅色
+        const lookup = {
+          "alkali-metal":"#ffcdd2","alkaline-earth-metal":"#ffe0b2",
+          "transition-metal":"#fff9c4","post-transition-metal":"#c8e6c9",
+          "metalloid":"#b2dfdb","nonmetal":"#bbdefb",
+          "halogen":"#d1c4e9","noble-gas":"#f8bbd0",
+          "lanthanide":"#ffcdd2","actinide":"#ffccbc","unknown":"#e0e0e0"
+        };
+        s.style.background = lookup[el.cat] || '#fff';
+      }
+    });
+    wrap.appendChild(c);
+  });
+}
+
+// =================== 顶栏 active 高亮 ===================
+function initTopnavObserver(){
+  const sections = ['top','stars','flames','timeline','tops','couples','detective','mendelevium']
+    .map(id => ({id, el: document.getElementById(id)})).filter(x=>x.el);
+  const links = document.querySelectorAll('.nav-links a');
+  function setActive(id){
+    links.forEach(l => l.classList.toggle('active', l.dataset.target === id));
+  }
+  if(!('IntersectionObserver' in window)){ return; }
+  const obs = new IntersectionObserver(entries => {
+    // 选择当前最靠上的可见 section
+    const visible = entries.filter(e => e.isIntersecting).sort((a,b) => a.boundingClientRect.top - b.boundingClientRect.top);
+    if(visible[0]) setActive(visible[0].target.id);
+  }, {rootMargin: '-60px 0px -60% 0px', threshold: 0});
+  sections.forEach(s => obs.observe(s.el));
+  setActive('top');
+}
+
+// =================== 返回顶部按钮（带 rAF 节流） ===================
+function initBackToTop(){
+  const btn = document.getElementById('back-to-top');
+  if(!btn) return;
+  btn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+  let ticking = false;
+  const check = () => {
+    if(ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const y = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+      btn.classList.toggle('visible', y > 600);
+      ticking = false;
+    });
+  };
+  window.addEventListener('scroll', check, {passive:true});
+  document.addEventListener('scroll', check, {passive:true});
+  check();
+}
+
+// =================== 离屏暂停动画（性能优化） ===================
+function initAnimationPauser(){
+  if(!('IntersectionObserver' in window)) return;
+  const targets = ['header', '.flames', '.couples', '.periodic'].map(s => document.querySelector(s)).filter(Boolean);
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => e.target.classList.toggle('inview', e.isIntersecting));
+  }, {rootMargin:'100px'});
+  targets.forEach(t => obs.observe(t));
+}
+
+// =================== URL 深链：#H / #Na 等直接打开元素详情 ===================
+function initHashDeepLink(){
+  function openFromHash(){
+    const h = decodeURIComponent(location.hash.replace('#','')).trim();
+    if(!h) return;
+    // 优先匹配元素符号（精确）
+    let el = ELEMENTS.find(e => e.s.toLowerCase() === h.toLowerCase());
+    // 再匹配中文/英文名 / 原子序数
+    if(!el) el = ELEMENTS.find(e => e.name === h || e.en.toLowerCase() === h.toLowerCase() || String(e.n) === h);
+    if(el) openModal(el);
+  }
+  // 包装 openModal，打开时同步 hash（但要避免循环触发）
+  const _open = openModal;
+  let suppressHash = false;
+  window.openModal = function(el){
+    suppressHash = true;
+    history.replaceState(null, '', '#' + el.s);
+    setTimeout(()=>{suppressHash=false}, 50);
+    _open(el);
+    document.body.classList.add('modal-open');
+  };
+  // 关闭时清掉 hash
+  const _close = closeModal;
+  window.closeModal = function(){
+    if(location.hash) history.replaceState(null, '', location.pathname + location.search);
+    _close();
+    document.body.classList.remove('modal-open');
+  };
+  window.addEventListener('hashchange', () => { if(!suppressHash) openFromHash(); });
+  // 首次加载
+  openFromHash();
+}
+
+// =================== INIT ===================
+document.body.dataset.view = 'category';
+// 性能：根据屏宽只渲染一套元素卡（118 个 vs 236 个 = 节省一半 DOM）
+const _isMobile = window.matchMedia('(max-width:780px)').matches;
+if(_isMobile){ buildMobileList(); } else { buildGrid(); }
+// 跨断点时按需补建（用户旋转屏幕）
+window.matchMedia('(max-width:780px)').addEventListener?.('change', (e) => {
+  if(e.matches && !document.querySelector('#mobile-list .el')) buildMobileList();
+  if(!e.matches && !document.querySelector('#grid .el')) buildGrid();
+});
+buildLegend();
+renderPicker();
+renderSlots();
+buildBodyComp();
+buildOrigins();
+buildFlames();
+buildTimeline();
+buildTops();
+buildCouples();
+initTopnavObserver();
+initBackToTop();
+initHashDeepLink();
+initAnimationPauser();
+</script>
+<button class="back-to-top" id="back-to-top" aria-label="返回顶部" title="返回顶部">↑</button>
+</body>
+</html>
