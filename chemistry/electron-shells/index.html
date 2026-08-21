@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>电子排布建造器 · 1–20 号元素</title>
+<meta name="description" content="自己动手给原子一层层填电子。填错会被排布规律挡回来并告诉你违反了哪一条：每层最多 2n²、最外层最多 8、内层没排满不能往外排。排对了就能看到周期数 = 电子层数、主族序数 = 最外层电子数。">
+<link rel="canonical" href="https://sanhuang520-ship-it.github.io/learn-lab/chemistry/electron-shells/">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:site_name" content="学习实验室 · Learn Lab">
+<meta property="og:title" content="电子排布建造器 · 1–20 号元素">
+<meta property="og:description" content="一层层填电子，填错会被规律挡回来。排对了就看懂周期表为什么长这样。">
+<meta property="og:url" content="https://sanhuang520-ship-it.github.io/learn-lab/chemistry/electron-shells/">
+<meta property="og:image" content="https://sanhuang520-ship-it.github.io/learn-lab/assets/og/electron-shells.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="电子排布建造器 · 1–20 号元素">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="电子排布建造器 · 1–20 号元素">
+<meta name="twitter:description" content="一层层填电子，填错会被规律挡回来。排对了就看懂周期表为什么长这样。">
+<meta name="twitter:image" content="https://sanhuang520-ship-it.github.io/learn-lab/assets/og/electron-shells.png">
+<meta name="twitter:image:alt" content="电子排布建造器 · 1–20 号元素">
+<meta name="theme-color" content="#07090f">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://sanhuang520-ship-it.github.io/learn-lab/#website","name":"学习实验室 · Learn Lab","url":"https://sanhuang520-ship-it.github.io/learn-lab/","inLanguage":"zh-CN"},{"@type":"LearningResource","name":"电子排布建造器 · 1–20 号元素","url":"https://sanhuang520-ship-it.github.io/learn-lab/chemistry/electron-shells/","description":"交互式核外电子排布练习：自己一层层填电子，违反 2n²、最外层≤8、内层未满不外排等规律会被挡回并指出具体条目；排对后展示周期数=电子层数、主族序数=最外层电子数。","inLanguage":"zh-CN","isAccessibleForFree":true,"educationalLevel":["高中"],"learningResourceType":"交互练习","educationalUse":"练习","image":"https://sanhuang520-ship-it.github.io/learn-lab/assets/og/electron-shells.png","isPartOf":{"@id":"https://sanhuang520-ship-it.github.io/learn-lab/#website"}}]}</script>
+<style>
+  :root{
+    --void:#07090f; --ink:#111823; --ink2:#161f2c;
+    --line:rgba(140,170,220,.13); --line-hi:rgba(140,170,220,.32);
+    --text:#e8eef8; --muted:#9aabc2; --dim:#7d8da3;
+    --violet:#a78bfa; --sky:#38bdf8; --lime:#a3e635; --rose:#fb7185; --amber:#f5b942;
+    --fb:"Noto Sans SC",system-ui,-apple-system,sans-serif;
+    --fm:"JetBrains Mono",ui-monospace,SFMono-Regular,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--void);color:var(--text);font-family:var(--fb);line-height:1.75;
+    -webkit-font-smoothing:antialiased;padding:18px 18px 60px}
+  .wrap{max-width:780px;margin:0 auto}
+
+  .ll-back{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;padding:11px 14px;
+    border:1px solid var(--line-hi);border-radius:999px;background:var(--ink);color:var(--muted);
+    font:600 12px/1 var(--fm);letter-spacing:.08em;text-decoration:none;min-height:44px;
+    transition:color .2s,border-color .2s}
+  .ll-back:hover{color:var(--violet);border-color:var(--violet)}
+
+  h1{font-size:25px;font-weight:700;letter-spacing:.4px;margin-bottom:5px}
+  .en{font:600 11.5px/1 var(--fm);color:var(--violet);letter-spacing:.16em;margin-bottom:12px}
+  .lede{color:var(--muted);font-size:14.5px;margin-bottom:20px}
+
+  /* 元素选择 */
+  .picker{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;margin-bottom:20px}
+    /* position:relative 是必需的 —— .solved::after 的对勾要靠它定位，
+     否则会脱离到最近的定位祖先，压在元素符号上。 */
+  .el{position:relative;aspect-ratio:1;border:1px solid var(--line);border-radius:9px;
+    background:var(--ink);color:var(--muted);cursor:pointer;font-family:inherit;display:flex;
+    flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:2px;
+    transition:all .16s;min-height:44px}
+  .el b{font:700 14px/1 var(--fm)}
+  .el i{font-style:normal;font-size:9px;opacity:.65}
+  .el:hover{border-color:var(--line-hi);color:var(--text)}
+  .el[aria-pressed=true]{background:var(--ink2);border-color:var(--violet);color:var(--violet)}
+  .el.solved{border-color:rgba(163,230,53,.45)}
+  .el.solved::after{content:'✓';position:absolute;top:3px;right:5px;
+    font-size:10px;line-height:1;color:var(--lime)}
+
+  /* 主体 */
+  .stage{border:1px solid var(--line);border-radius:16px;background:var(--ink);padding:22px 20px}
+  .head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+  .head b{font:700 34px/1 var(--fm);color:var(--violet)}
+  .head .cn{font-size:20px;font-weight:700}
+  .head .z{font:600 12px/1 var(--fm);color:var(--dim);letter-spacing:.1em}
+  .task{color:var(--muted);font-size:14px;margin-bottom:18px}
+  .task b{color:var(--text)}
+
+  /* 电子层 */
+  .shells{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+  .shell{display:flex;align-items:center;gap:12px}
+  .sname{flex:0 0 68px;font:600 13px/1 var(--fm);color:var(--dim)}
+  .sname em{font-style:normal;font-size:10.5px;opacity:.7;display:block;margin-top:3px}
+  .dots{flex:1;display:flex;flex-wrap:wrap;gap:4px;align-content:center;min-height:34px;
+    border:1px dashed var(--line);border-radius:10px;padding:6px 9px;background:rgba(255,255,255,.012)}
+  .dot{width:13px;height:13px;border-radius:50%;background:var(--sky);flex:0 0 auto}
+  .snum{flex:0 0 54px;text-align:right;font:600 13px/1 var(--fm);color:var(--muted)}
+  .sbtn{flex:0 0 auto;display:flex;gap:5px}
+  .sbtn button{width:36px;height:36px;border-radius:9px;border:1px solid var(--line-hi);
+    background:var(--ink2);color:var(--text);cursor:pointer;font-size:17px;font-family:inherit;
+    line-height:1;transition:all .16s}
+  .sbtn button:hover:not(:disabled){border-color:var(--violet);color:var(--violet)}
+  .sbtn button:disabled{opacity:.28;cursor:not-allowed}
+
+  .left{font-size:13.5px;color:var(--muted);margin-bottom:14px}
+  .left b{color:var(--amber);font-family:var(--fm)}
+
+  /* 反馈 */
+  .fb{border-radius:11px;padding:13px 15px;font-size:14px;line-height:1.75;margin-bottom:14px}
+  .fb.err{border:1px solid rgba(251,113,133,.4);background:rgba(251,113,133,.07);color:var(--rose)}
+  .fb.ok{border:1px solid rgba(163,230,53,.4);background:rgba(163,230,53,.07);color:var(--lime)}
+  .fb ul{margin:6px 0 0 18px}
+  .fb li{margin-bottom:3px}
+  .fb .tip{display:block;margin-top:9px;color:var(--text);font-size:13.5px}
+
+  .result{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+  .result div{border:1px solid var(--line);border-radius:11px;padding:13px;background:var(--ink2);text-align:center}
+  .result span{display:block;font-size:11.5px;color:var(--dim);margin-bottom:5px}
+  .result b{font-size:17px;color:var(--lime)}
+
+  .acts{display:flex;gap:10px;margin-top:18px}
+  .acts button{flex:1;min-height:46px;border-radius:11px;font-size:14.5px;font-weight:600;
+    cursor:pointer;font-family:inherit;border:1px solid var(--line-hi);background:var(--ink2);
+    color:var(--text);transition:all .16s}
+  .acts button:hover{border-color:var(--violet)}
+  .acts .primary{background:var(--violet);border-color:var(--violet);color:#140b2e}
+
+  /* 规则卡 */
+  .rules{margin-top:22px;border:1px solid var(--line);border-radius:14px;background:var(--ink);overflow:hidden}
+  .rules h2{font:600 12px/1 var(--fm);color:var(--violet);letter-spacing:.14em;
+    padding:14px 18px;border-bottom:1px solid var(--line)}
+  .rules ol{list-style:none;padding:8px 0}
+  .rules li{display:flex;gap:13px;padding:8px 18px;font-size:14px;color:var(--muted);line-height:1.7}
+  .rules code{flex:0 0 30px;font:600 12px/1.7 var(--fm);color:var(--sky)}
+  .rules b{color:var(--text)}
+
+  .foot{margin-top:20px;font-size:12.5px;color:var(--muted);line-height:1.9}
+  .foot b{color:var(--text)}
+
+  @media(max-width:640px){
+    h1{font-size:21px}
+    .picker{grid-template-columns:repeat(5,1fr)}
+    .stage{padding:17px 14px}
+    .head b{font-size:28px}
+    .sname{flex:0 0 56px}
+    .snum{flex:0 0 44px}
+    .result{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="ll-back" href="../../">← 学习实验室</a>
+
+  <h1>电子排布建造器</h1>
+  <div class="en">ELECTRON SHELLS · 1–20 号元素</div>
+  <p class="lede">选一个元素，自己一层层把电子填进去。填错了会被排布规律挡回来，
+     并告诉你违反了哪一条。<b>排对之后，周期表为什么长成那样就一目了然了。</b></p>
+
+  <div class="picker" id="picker"></div>
+
+  <div class="stage" id="stage"></div>
+
+  <div class="rules">
+    <h2>核外电子排布规律</h2>
+    <ol>
+      <li><code>R1</code><span>每层最多容纳 <b>2n²</b> 个电子：K 层 2、L 层 8、M 层 18、N 层 32。</span></li>
+      <li><code>R2</code><span><b>最外层最多 8 个</b>（K 层作最外层时最多 2 个）。这条是最容易被忽略的。</span></li>
+      <li><code>R3</code><span>次外层最多 18 个。</span></li>
+      <li><code>R4</code><span>倒数第三层最多 32 个。</span></li>
+      <li><code>R5</code><span>由内向外排：<b>内层没排满，不能往外层排</b>。但「排满」有两种情况 —— 装到 2n²，或者装到 8 个因为它当时是最外层。</span></li>
+    </ol>
+  </div>
+
+  <div class="foot">
+    <p>只做 1–20 号。<b>从 21 号钪开始</b> M 层才继续往上填（2,8,9,2），
+       那时要用到能级与构造原理，属于选修《物质结构与性质》的内容。</p>
+    <p>全部 20 个元素的排布都由规则程序推导并交叉校验（电子总数 = 质子数、
+       周期数 = 电子层数、主族序数 = 最外层电子数），校验脚本在仓库里。</p>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var ELS = [{"z": 1, "sym": "H", "cn": "氢", "shells": [1], "period": 1, "group": 1, "groupCn": "ⅠA", "kind": "非金属", "tip": ""}, {"z": 2, "sym": "He", "cn": "氦", "shells": [2], "period": 1, "group": 2, "groupCn": "0", "kind": "稀有气体", "tip": "K 层就是最外层时最多只能装 2 个 —— 所以氦只有 2 个电子就已经稳定了。"}, {"z": 3, "sym": "Li", "cn": "锂", "shells": [2, 1], "period": 2, "group": 1, "groupCn": "ⅠA", "kind": "金属", "tip": ""}, {"z": 4, "sym": "Be", "cn": "铍", "shells": [2, 2], "period": 2, "group": 2, "groupCn": "ⅡA", "kind": "金属", "tip": ""}, {"z": 5, "sym": "B", "cn": "硼", "shells": [2, 3], "period": 2, "group": 3, "groupCn": "ⅢA", "kind": "准金属", "tip": ""}, {"z": 6, "sym": "C", "cn": "碳", "shells": [2, 4], "period": 2, "group": 4, "groupCn": "ⅣA", "kind": "非金属", "tip": ""}, {"z": 7, "sym": "N", "cn": "氮", "shells": [2, 5], "period": 2, "group": 5, "groupCn": "ⅤA", "kind": "非金属", "tip": ""}, {"z": 8, "sym": "O", "cn": "氧", "shells": [2, 6], "period": 2, "group": 6, "groupCn": "ⅥA", "kind": "非金属", "tip": ""}, {"z": 9, "sym": "F", "cn": "氟", "shells": [2, 7], "period": 2, "group": 7, "groupCn": "ⅦA", "kind": "非金属", "tip": ""}, {"z": 10, "sym": "Ne", "cn": "氖", "shells": [2, 8], "period": 2, "group": 8, "groupCn": "0", "kind": "稀有气体", "tip": "L 层装满 8 个，最外层达到稳定结构，氖是稀有气体。"}, {"z": 11, "sym": "Na", "cn": "钠", "shells": [2, 8, 1], "period": 3, "group": 1, "groupCn": "ⅠA", "kind": "金属", "tip": ""}, {"z": 12, "sym": "Mg", "cn": "镁", "shells": [2, 8, 2], "period": 3, "group": 2, "groupCn": "ⅡA", "kind": "金属", "tip": ""}, {"z": 13, "sym": "Al", "cn": "铝", "shells": [2, 8, 3], "period": 3, "group": 3, "groupCn": "ⅢA", "kind": "金属", "tip": ""}, {"z": 14, "sym": "Si", "cn": "硅", "shells": [2, 8, 4], "period": 3, "group": 4, "groupCn": "ⅣA", "kind": "准金属", "tip": ""}, {"z": 15, "sym": "P", "cn": "磷", "shells": [2, 8, 5], "period": 3, "group": 5, "groupCn": "ⅤA", "kind": "非金属", "tip": ""}, {"z": 16, "sym": "S", "cn": "硫", "shells": [2, 8, 6], "period": 3, "group": 6, "groupCn": "ⅥA", "kind": "非金属", "tip": ""}, {"z": 17, "sym": "Cl", "cn": "氯", "shells": [2, 8, 7], "period": 3, "group": 7, "groupCn": "ⅦA", "kind": "非金属", "tip": ""}, {"z": 18, "sym": "Ar", "cn": "氩", "shells": [2, 8, 8], "period": 3, "group": 8, "groupCn": "0", "kind": "稀有气体", "tip": "M 层明明能装 18 个，为什么氩只装到 8 就停？因为它是最外层，受「最外层最多 8」限制。"}, {"z": 19, "sym": "K", "cn": "钾", "shells": [2, 8, 8, 1], "period": 4, "group": 1, "groupCn": "ⅠA", "kind": "金属", "tip": "⭐ 钾是最容易写错的：第 19 个电子不能留在 M 层（那样最外层就 9 个了），只能另起 N 层。所以是 2,8,8,1 而不是 2,8,9。"}, {"z": 20, "sym": "Ca", "cn": "钙", "shells": [2, 8, 8, 2], "period": 4, "group": 2, "groupCn": "ⅡA", "kind": "金属", "tip": "钙同理，2,8,8,2。M 层要等到第 21 号钪才开始继续往上填。"}];
+  var CAP = [2,8,18,32], NAMES=['K','L','M','N'];
+  var cur = ELS[0], shells = [0,0,0,0], solved = {};
+
+  function violations(s){
+    var t = s.filter(function(x,i){ return x>0 || s.slice(i).some(function(y){return y>0;}); });
+    // 取到最后一个非零层
+    var lastIdx = -1;
+    for(var i=0;i<s.length;i++){ if(s[i]>0) lastIdx=i; }
+    if(lastIdx<0) return [];
+    var v=[];
+    for(var j=0;j<=lastIdx;j++){
+      if(s[j]>CAP[j]) v.push('R1 '+NAMES[j]+' 层最多 '+CAP[j]+' 个，你填了 '+s[j]+' 个');
+    }
+    var outCap = lastIdx===0 ? 2 : 8;
+    if(s[lastIdx]>outCap) v.push('R2 最外层（'+NAMES[lastIdx]+' 层）最多 '+outCap+' 个，你填了 '+s[lastIdx]+' 个');
+    if(lastIdx>=1 && s[lastIdx-1]>18) v.push('R3 次外层最多 18 个');
+    if(lastIdx>=2 && s[lastIdx-2]>32) v.push('R4 倒数第三层最多 32 个');
+    for(var k=0;k<lastIdx;k++){
+      if(s[k]===CAP[k] || s[k]===8) continue;
+      v.push('R5 '+NAMES[k]+' 层还没排满（'+s[k]+' 个）就往 '+NAMES[k+1]+' 层排了');
+    }
+    return v;
+  }
+
+  function used(){ return shells.reduce(function(a,b){return a+b;},0); }
+  function esc(x){ return String(x).replace(/[&<>"]/g,function(m){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]; }); }
+
+  function render(){
+    var v = violations(shells), left = cur.z - used();
+    var correct = left===0 && v.length===0 &&
+      JSON.stringify(shells.slice(0,cur.shells.length))===JSON.stringify(cur.shells) &&
+      shells.slice(cur.shells.length).every(function(x){return x===0;});
+    if(correct) solved[cur.z]=1;
+
+    var rows='';
+    for(var i=0;i<4;i++){
+      var dots='';
+      for(var d=0; d<Math.min(shells[i],32); d++) dots+='<span class="dot"></span>';
+      rows += '<div class="shell">'
+        + '<span class="sname">'+NAMES[i]+' 层<em>最多 '+CAP[i]+'</em></span>'
+        + '<span class="dots">'+dots+'</span>'
+        + '<span class="snum">'+shells[i]+'</span>'
+        + '<span class="sbtn">'
+        +   '<button data-i="'+i+'" data-d="-1"'+(shells[i]<=0?' disabled':'')+' aria-label="'+NAMES[i]+'层减一个电子">−</button>'
+        +   '<button data-i="'+i+'" data-d="1"'+(left<=0?' disabled':'')+' aria-label="'+NAMES[i]+'层加一个电子">+</button>'
+        + '</span></div>';
+    }
+
+    var fb='';
+    if(v.length){
+      fb = '<div class="fb err"><b>这样排不行：</b><ul>'
+         + v.map(function(x){return '<li>'+esc(x)+'</li>';}).join('') + '</ul></div>';
+    } else if(correct){
+      fb = '<div class="fb ok"><b>排对了 ✓</b>　'+esc(cur.sym)+' 的核外电子排布是 '
+         + cur.shells.join(', ')
+         + (cur.tip ? '<span class="tip">'+esc(cur.tip)+'</span>' : '')
+         + '</div>'
+         + '<div class="result">'
+         +   '<div><span>电子层数</span><b>'+cur.shells.length+' 层</b></div>'
+         +   '<div><span>= 周期数</span><b>第 '+cur.period+' 周期</b></div>'
+         +   '<div><span>最外层 '+cur.group+' 个 = 族</span><b>'+esc(cur.groupCn)+' 族</b></div>'
+         + '</div>';
+    }
+
+    document.getElementById('stage').innerHTML =
+        '<div class="head"><b>'+esc(cur.sym)+'</b><span class="cn">'+esc(cur.cn)+'</span>'
+      + '<span class="z">Z = '+cur.z+' · '+esc(cur.kind)+'</span></div>'
+      + '<p class="task">把 <b>'+cur.z+'</b> 个电子排进去。核外电子数等于质子数。</p>'
+      + '<div class="shells">'+rows+'</div>'
+      + '<p class="left">还剩 <b>'+left+'</b> 个电子没排'+(left<0?'（排多了）':'')+'</p>'
+      + fb
+      + '<div class="acts">'
+      +   '<button id="clear">清空重来</button>'
+      +   '<button class="primary" id="auto">直接看答案</button>'
+      + '</div>';
+
+    document.querySelectorAll('.sbtn button').forEach(function(b){
+      b.onclick=function(){
+        var i=+b.dataset.i, d=+b.dataset.d;
+        if(d>0 && cur.z-used()<=0) return;
+        shells[i]=Math.max(0,shells[i]+d);
+        render();
+      };
+    });
+    document.getElementById('clear').onclick=function(){ shells=[0,0,0,0]; render(); };
+    document.getElementById('auto').onclick=function(){
+      shells=[0,0,0,0];
+      cur.shells.forEach(function(n,i){ shells[i]=n; });
+      render();
+    };
+    paintPicker();
+  }
+
+  function paintPicker(){
+    document.querySelectorAll('.el').forEach(function(b){
+      var z=+b.dataset.z;
+      b.setAttribute('aria-pressed', String(z===cur.z));
+      b.classList.toggle('solved', !!solved[z]);
+    });
+  }
+
+  var pk=document.getElementById('picker');
+  ELS.forEach(function(e){
+    var b=document.createElement('button');
+    b.className='el'; b.dataset.z=e.z;
+    b.innerHTML='<b>'+e.sym+'</b><i>'+e.z+'</i>';
+    b.onclick=function(){ cur=e; shells=[0,0,0,0]; render(); };
+    pk.appendChild(b);
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,292 @@
+[
+ {
+  "z": 1,
+  "sym": "H",
+  "cn": "氢",
+  "shells": [
+   1
+  ],
+  "period": 1,
+  "group": 1,
+  "groupCn": "ⅠA",
+  "kind": "非金属",
+  "tip": ""
+ },
+ {
+  "z": 2,
+  "sym": "He",
+  "cn": "氦",
+  "shells": [
+   2
+  ],
+  "period": 1,
+  "group": 2,
+  "groupCn": "0",
+  "kind": "稀有气体",
+  "tip": "K 层就是最外层时最多只能装 2 个 —— 所以氦只有 2 个电子就已经稳定了。"
+ },
+ {
+  "z": 3,
+  "sym": "Li",
+  "cn": "锂",
+  "shells": [
+   2,
+   1
+  ],
+  "period": 2,
+  "group": 1,
+  "groupCn": "ⅠA",
+  "kind": "金属",
+  "tip": ""
+ },
+ {
+  "z": 4,
+  "sym": "Be",
+  "cn": "铍",
+  "shells": [
+   2,
+   2
+  ],
+  "period": 2,
+  "group": 2,
+  "groupCn": "ⅡA",
+  "kind": "金属",
+  "tip": ""
+ },
+ {
+  "z": 5,
+  "sym": "B",
+  "cn": "硼",
+  "shells": [
+   2,
+   3
+  ],
+  "period": 2,
+  "group": 3,
+  "groupCn": "ⅢA",
+  "kind": "准金属",
+  "tip": ""
+ },
+ {
+  "z": 6,
+  "sym": "C",
+  "cn": "碳",
+  "shells": [
+   2,
+   4
+  ],
+  "period": 2,
+  "group": 4,
+  "groupCn": "ⅣA",
+  "kind": "非金属",
+  "tip": ""
+ },
+ {
+  "z": 7,
+  "sym": "N",
+  "cn": "氮",
+  "shells": [
+   2,
+   5
+  ],
+  "period": 2,
+  "group": 5,
+  "groupCn": "ⅤA",
+  "kind": "非金属",
+  "tip": ""
+ },
+ {
+  "z": 8,
+  "sym": "O",
+  "cn": "氧",
+  "shells": [
+   2,
+   6
+  ],
+  "period": 2,
+  "group": 6,
+  "groupCn": "ⅥA",
+  "kind": "非金属",
+  "tip": ""
+ },
+ {
+  "z": 9,
+  "sym": "F",
+  "cn": "氟",
+  "shells": [
+   2,
+   7
+  ],
+  "period": 2,
+  "group": 7,
+  "groupCn": "ⅦA",
+  "kind": "非金属",
+  "tip": ""
+ },
+ {
+  "z": 10,
+  "sym": "Ne",
+  "cn": "氖",
+  "shells": [
+   2,
+   8
+  ],
+  "period": 2,
+  "group": 8,
+  "groupCn": "0",
+  "kind": "稀有气体",
+  "tip": "L 层装满 8 个，最外层达到稳定结构，氖是稀有气体。"
+ },
+ {
+  "z": 11,
+  "sym": "Na",
+  "cn": "钠",
+  "shells": [
+   2,
+   8,
+   1
+  ],
+  "period": 3,
+  "group": 1,
+  "groupCn": "ⅠA",
+  "kind": "金属",
+  "tip": ""
+ },
+ {
+  "z": 12,
+  "sym": "Mg",
+  "cn": "镁",
+  "shells": [
+   2,
+   8,
+   2
+  ],
+  "period": 3,
+  "group": 2,
+  "groupCn": "ⅡA",
+  "kind": "金属",
+  "tip": ""
+ },
+ {
+  "z": 13,
+  "sym": "Al",
+  "cn": "铝",
+  "shells": [
+   2,
+   8,
+   3
+  ],
+  "period": 3,
+  "group": 3,
+  "groupCn": "ⅢA",
+  "kind": "金属",
+  "tip": ""
+ },
+ {
+  "z": 14,
+  "sym": "Si",
+  "cn": "硅",
+  "shells": [
+   2,
+   8,
+   4
+  ],
+  "period": 3,
+  "group": 4,
+  "groupCn": "ⅣA",
+  "kind": "准金属",
+  "tip": ""
+ },
+ {
+  "z": 15,
+  "sym": "P",
+  "cn": "磷",
+  "shells": [
+   2,
+   8,
+   5
+  ],
+  "period": 3,
+  "group": 5,
+  "groupCn": "ⅤA",
+  "kind": "非金属",
+  "tip": ""
+ },
+ {
+  "z": 16,
+  "sym": "S",
+  "cn": "硫",
+  "shells": [
+   2,
+   8,
+   6
+  ],
+  "period": 3,
+  "group": 6,
+  "groupCn": "ⅥA",
+  "kind": "非金属",
+  "tip": ""
+ },
+ {
+  "z": 17,
+  "sym": "Cl",
+  "cn": "氯",
+  "shells": [
+   2,
+   8,
+   7
+  ],
+  "period": 3,
+  "group": 7,
+  "groupCn": "ⅦA",
+  "kind": "非金属",
+  "tip": ""
+ },
+ {
+  "z": 18,
+  "sym": "Ar",
+  "cn": "氩",
+  "shells": [
+   2,
+   8,
+   8
+  ],
+  "period": 3,
+  "group": 8,
+  "groupCn": "0",
+  "kind": "稀有气体",
+  "tip": "M 层明明能装 18 个，为什么氩只装到 8 就停？因为它是最外层，受「最外层最多 8」限制。"
+ },
+ {
+  "z": 19,
+  "sym": "K",
+  "cn": "钾",
+  "shells": [
+   2,
+   8,
+   8,
+   1
+  ],
+  "period": 4,
+  "group": 1,
+  "groupCn": "ⅠA",
+  "kind": "金属",
+  "tip": "⭐ 钾是最容易写错的：第 19 个电子不能留在 M 层（那样最外层就 9 个了），只能另起 N 层。所以是 2,8,8,1 而不是 2,8,9。"
+ },
+ {
+  "z": 20,
+  "sym": "Ca",
+  "cn": "钙",
+  "shells": [
+   2,
+   8,
+   8,
+   2
+  ],
+  "period": 4,
+  "group": 2,
+  "groupCn": "ⅡA",
+  "kind": "金属",
+  "tip": "钙同理，2,8,8,2。M 层要等到第 21 号钪才开始继续往上填。"
+ }
+]
