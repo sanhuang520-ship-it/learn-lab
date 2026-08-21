@@ -54,8 +54,8 @@
 - ~~**分享卡片**：给每个页面配 OG 图~~ ✅ 2026-08-21 完成（`tools/build-og.py` 用真实截图合成 1200×630）
 - **移动端巡检**：每加一个页面，都在 375px 宽下过一遍。
 - **原 periodic-table 仓库改跳转**：避免两份副本长期分叉。
-- **sitemap.xml + 简单 SEO** —— sitemap 与四页 canonical/og/twitter 已于 2026-08-21 完成；
-  结构化数据（JSON-LD）仍未做。
+- ~~**sitemap.xml + 简单 SEO**：标题、描述、结构化数据~~ ✅ 2026-08-21 完成
+  （sitemap + 四页 canonical/og/twitter + 四页 JSON-LD）
   注：本站是 GitHub Pages 项目站，robots.txt 放子路径爬虫不读，只能走 Search Console 提交。
 
 ---
@@ -70,4 +70,5 @@
 
 - **2026-07-26** —— 建站。搭好学习实验室首页，收入 元素周期表 / 核时 / 元素番茄 三个页面，外链 配平大挑战，写下这份路线。
 - **2026-08-21** —— 站点维护：四页补齐 OG 分享卡片（新增 `tools/build-og.py`）与 canonical/twitter；
-  新增 `sitemap.xml`；修掉 元素番茄 页 0 个 h1 的问题（`div.name` → `h1.name`，视觉零变化）。
+  新增 `sitemap.xml`；修掉 元素番茄 页 0 个 h1 的问题（`div.name` → `h1.name`，视觉零变化）；
+  四页补 JSON-LD（首页 WebSite + CollectionPage + 4 条 ItemList，子页 LearningResource / WebApplication）。
