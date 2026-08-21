@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>磷的一生 · The Light Bearer</title>
+<meta name="description" content="1669 年，一个炼金术士熬干 5500 升尿想炼黄金，却熬出了会发光的磷。九幕讲完这个元素：火柴厂女工发绿光的下颌骨、白磷弹、你的 DNA 骨架、被挖空的瑙鲁岛，以及它来自一颗死去的恒星。">
+<link rel="canonical" href="https://sanhuang520-ship-it.github.io/learn-lab/chemistry/phosphorus/">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:site_name" content="学习实验室 · Learn Lab">
+<meta property="og:title" content="磷的一生 · The Light Bearer">
+<meta property="og:description" content="他熬干 5500 升尿想炼黄金，却点亮了一个元素。九幕：绿光、火柴厂、白磷弹、DNA、瑙鲁、超新星。">
+<meta property="og:url" content="https://sanhuang520-ship-it.github.io/learn-lab/chemistry/phosphorus/">
+<meta property="og:image" content="https://sanhuang520-ship-it.github.io/learn-lab/assets/og/phosphorus.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="磷的一生 · The Light Bearer">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="磷的一生 · The Light Bearer">
+<meta name="twitter:description" content="他熬干 5500 升尿想炼黄金，却点亮了一个元素。九幕：绿光、火柴厂、白磷弹、DNA、瑙鲁、超新星。">
+<meta name="twitter:image" content="https://sanhuang520-ship-it.github.io/learn-lab/assets/og/phosphorus.png">
+<meta name="twitter:image:alt" content="磷的一生 · The Light Bearer">
+<meta name="theme-color" content="#05070a">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://sanhuang520-ship-it.github.io/learn-lab/#website","name":"学习实验室 · Learn Lab","url":"https://sanhuang520-ship-it.github.io/learn-lab/","inLanguage":"zh-CN"},{"@type":"Article","headline":"磷的一生 · The Light Bearer","url":"https://sanhuang520-ship-it.github.io/learn-lab/chemistry/phosphorus/","description":"从 1669 年布兰德熬尿炼磷，到火柴厂磷毒性颌骨坏死、白磷弹、DNA 骨架、瑙鲁磷矿与超新星起源，九幕讲完磷元素。","inLanguage":"zh-CN","image":"https://sanhuang520-ship-it.github.io/learn-lab/assets/og/phosphorus.png","about":{"@type":"Thing","name":"磷（Phosphorus, P, 15 号元素）"},"isPartOf":{"@id":"https://sanhuang520-ship-it.github.io/learn-lab/#website"}}]}</script>
+<style>
+  :root{
+    --void:#05070a; --ink:#0b1016;
+    --line:rgba(120,200,160,.14); --line-hi:rgba(120,200,160,.34);
+    --text:#e9f2ec; --muted:#9fb3a8; --dim:#7d9188;
+    --glow:#4fff9e; --glow-deep:#2ec88a; --ember:#f0873c;
+    --font-body:"Noto Sans SC",system-ui,-apple-system,sans-serif;
+    --font-mono:"JetBrains Mono",ui-monospace,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{
+    background:var(--void);color:var(--text);font-family:var(--font-body);
+    line-height:1.9;-webkit-font-smoothing:antialiased;
+    font-size:16px;letter-spacing:.01em;
+  }
+  .wrap{max-width:680px;margin:0 auto;padding:0 22px}
+
+  /* ── 顶部返回 ── */
+  .bar{position:sticky;top:0;z-index:20;background:rgba(5,7,10,.86);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .bar .wrap{display:flex;align-items:center;gap:14px;height:56px}
+  .ll-back{display:inline-flex;align-items:center;gap:6px;color:var(--dim);
+    font:600 12px/1 var(--font-mono);letter-spacing:.08em;text-decoration:none;
+    padding:11px 4px;min-height:44px;transition:color .2s}
+  .ll-back:hover{color:var(--glow)}
+  .bar-title{font:600 12px/1 var(--font-mono);color:var(--dim);letter-spacing:.14em;margin-left:auto}
+
+  /* ── 开篇 ── */
+  .hero{padding:80px 0 64px;position:relative;overflow:hidden}
+  .hero::after{content:'';position:absolute;left:50%;top:-120px;width:520px;height:520px;
+    transform:translateX(-50%);pointer-events:none;
+    background:radial-gradient(circle,rgba(79,255,158,.16) 0%,rgba(79,255,158,0) 68%)}
+  .hero .wrap{position:relative}
+  .kicker{font:600 12px/1 var(--font-mono);color:var(--glow-deep);letter-spacing:.24em;margin-bottom:20px}
+  h1{font-size:40px;line-height:1.28;font-weight:700;letter-spacing:.5px;margin-bottom:8px}
+  h1 em{font-style:normal;color:var(--glow);text-shadow:0 0 26px rgba(79,255,158,.42)}
+  .sub{font:600 12px/1 var(--font-mono);color:var(--dim);letter-spacing:.18em;margin-bottom:26px}
+  .standfirst{color:var(--muted);font-size:17px}
+
+  .elem{display:flex;align-items:center;gap:14px;margin-top:30px;padding:14px 18px;
+    border:1px solid var(--line);border-radius:12px;background:var(--ink);width:fit-content}
+  .elem b{font:700 30px/1 var(--font-mono);color:var(--glow)}
+  .elem-z{font:600 11px/1.5 var(--font-mono);color:var(--dim)}
+  .elem-n{font-size:14px;color:var(--muted)}
+
+  /* ── 幕 ── */
+  .scene{padding:52px 0;border-top:1px solid var(--line)}
+  .scene-no{font:600 11px/1 var(--font-mono);color:var(--glow-deep);letter-spacing:.2em;margin-bottom:14px}
+  .scene h2{font-size:25px;line-height:1.45;font-weight:700;margin-bottom:20px;letter-spacing:.3px}
+  .scene p{margin-bottom:17px;color:var(--muted)}
+  .scene p b{color:var(--text);font-weight:600}
+  .scene p .g{color:var(--glow)}
+
+  /* 幕间那句话 */
+  .beat{font-size:22px;line-height:1.7;font-weight:600;color:var(--text);
+    margin:30px 0;padding-left:20px;border-left:2px solid var(--glow)}
+
+  /* 图位：这是"纯文字版"阶段，插图还没画。
+     故意做成一条细标记而不是 3:4 的大空盒 —— 大空盒会把阅读节奏切断，
+     而这一版的唯一目的就是让文字先读得顺。第二阶段换成真插图时，
+     把 .plate 的 border/padding 去掉、塞 <img> 即可，位置都已经排好。 */
+  .plate{margin:22px 0;padding:9px 14px;border:1px dashed var(--line);
+    border-radius:8px;background:var(--ink);opacity:.75}
+  .plate span{font:600 10.5px/1.7 var(--font-mono);color:var(--dim);letter-spacing:.09em}
+  .plate span::before{content:'▧　';color:var(--glow-deep)}
+  .plate br{display:none}
+
+  /* 时间线 */
+  .tl{margin:26px 0;border:1px solid var(--line);border-radius:12px;background:var(--ink);overflow:hidden}
+  .tl-h{padding:13px 18px;border-bottom:1px solid var(--line);
+    font:600 12px/1 var(--font-mono);color:var(--glow-deep);letter-spacing:.14em}
+  .tl ol{list-style:none;margin:0;padding:6px 0}
+  .tl li{display:flex;gap:16px;padding:9px 18px;font-size:14.5px;color:var(--muted);line-height:1.7}
+  .tl time{flex:0 0 62px;font:600 13px/1.7 var(--font-mono);color:var(--text)}
+
+  /* 你身体里的磷 */
+  .body-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:26px 0}
+  .body-grid div{border:1px solid var(--line);border-radius:12px;padding:16px 14px;background:var(--ink)}
+  .body-grid b{display:block;color:var(--glow);font-size:15px;margin-bottom:6px}
+  .body-grid span{font-size:13.5px;color:var(--muted);line-height:1.65}
+
+  /* 注记 */
+  .aside{border:1px solid var(--line);border-left:3px solid var(--ember);border-radius:10px;
+    padding:15px 17px;margin:24px 0;font-size:14.5px;color:var(--muted);background:var(--ink)}
+  .aside b{color:var(--text)}
+
+  /* 收尾 */
+  .end{padding:64px 0 30px;border-top:1px solid var(--line);text-align:center;position:relative}
+  .end::before{content:'';position:absolute;left:50%;top:0;width:400px;height:260px;
+    transform:translateX(-50%);pointer-events:none;
+    background:radial-gradient(circle,rgba(79,255,158,.12) 0%,rgba(79,255,158,0) 70%)}
+  .end p{position:relative;font-size:21px;line-height:1.85;font-weight:600;margin-bottom:14px}
+  .end .g{color:var(--glow);text-shadow:0 0 22px rgba(79,255,158,.36)}
+
+  /* 出处 */
+  .src{padding:34px 0 70px;border-top:1px solid var(--line);font-size:13px;color:var(--dim);line-height:1.9}
+  .src h3{font:600 11px/1 var(--font-mono);color:var(--dim);letter-spacing:.16em;margin-bottom:12px}
+  .src a{color:var(--glow-deep);text-decoration:none;border-bottom:1px solid transparent}
+  .src a:hover{border-bottom-color:var(--glow-deep)}
+  .src li{margin-bottom:7px;list-style:none}
+
+  @media(max-width:640px){
+    body{font-size:15.5px}
+    .wrap{padding:0 18px}
+    h1{font-size:29px}
+    .scene h2{font-size:21px}
+    .beat{font-size:19px}
+    .end p{font-size:18px}
+    .body-grid{grid-template-columns:1fr}
+    .hero{padding:56px 0 44px}
+    .scene{padding:42px 0}
+  }
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="wrap">
+    <a class="ll-back" href="../../">← 学习实验室</a>
+    <span class="bar-title">P · 15</span>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">CHEMISTRY · 元素故事</div>
+    <h1>他熬干 5500 升尿想炼黄金<br>却<em>点亮</em>了一个元素</h1>
+    <div class="sub">THE LIGHT BEARER</div>
+    <p class="standfirst">1669 年，德国汉堡的一间地下室。一个炼金术士守着一口煮尿的锅，
+       等着黄金浮出来。他等到的东西，在黑暗里自己发光。</p>
+
+    <div class="elem">
+      <b>P</b>
+      <span>
+        <span class="elem-z">15 · PHOSPHORUS</span><br>
+        <span class="elem-n">磷 · 第 15 号元素</span>
+      </span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="scene">
+    <div class="wrap">
+      <div class="scene-no">幕 01 · 1669 · 汉堡</div>
+      <h2>他在煮尿。整整 5500 升。</h2>
+      <div class="plate"><span>插图位 · 暗夜地下室与炼金炉<br>（第二阶段补）</span></div>
+      <p>亨尼希·布兰德花了几个月，从士兵营房、从酒馆地窖里收集人尿。先放到腐烂发臭，再一遍遍煮、熬、蒸馏。整间屋子的味道可想而知。</p>
+      <p>邻居以为他疯了。家人几乎不敢靠近他。</p>
+      <p>而他自己坚信：<b>黄金就藏在这堆液体里</b>。</p>
+      <p>布兰德不是科学家，是个炼金术士。那个年代的炼金术士都在找"贤者之石"——能把廉价金属变成黄金的神秘物质。布兰德的推理很朴素：人的尿是金黄色的，那黄金的"精华"会不会就藏在里面？</p>
+      <p>今天听起来像笑话。但请记住，那是个连"元素"是什么都还没搞清楚的年代。</p>
+    </div>
+  </section>
+
+  <section class="scene">
+    <div class="wrap">
+      <div class="scene-no">幕 02 · 那个夜晚</div>
+      <h2>然后，那东西开始发光。</h2>
+      <div class="plate"><span>插图位 · 黑暗中冒出的幽绿冷光<br>（第二阶段补）</span></div>
+      <p class="beat">一种诡异的幽绿冷光，在黑暗中静静燃烧，却不发热，怎么也扑不灭。</p>
+      <p>他没炼出黄金，却炼出了一种从未有人见过的、<b class="g">会自己发光</b>的白色蜡状物质。</p>
+    </div>
+  </section>
+
+  <section class="scene">
+    <div class="wrap">
+      <div class="scene-no">幕 03 · 命名</div>
+      <h2>他给它起名：光的携带者。</h2>
+      <p>希腊语 <b>Phosphorus</b>，φῶς（光）+ φέρω（携带）。</p>
+      <p>这就是磷——人类历史上第一个<b>有明确发现者、有确切发现年份</b>的化学元素。它不是从矿石里挖出来的，是从人的身体里熬出来的。</p>
+      <div class="aside">
+        布兰德到死都不知道自己守着的是什么。他后来把配方卖了钱，磷的秘密辗转流传，
+        最终成了整个欧洲上流社会争相围观的"魔法"。<b>贵族花大价钱买磷，在派对上炫耀这种"鬼火"。</b>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene">
+    <div class="wrap">
+      <div class="scene-no">幕 04 · 19 世纪</div>
+      <h2>两百年后，磷走进了千家万户。</h2>
+      <div class="plate"><span>插图位 · 火柴厂车间全景<br>（第二阶段补）</span></div>
+      <p>人类发明了<b>火柴</b>——轻轻一擦就能生火，靠的正是白磷。火柴瞬间成为家家户户的必需品，无数工厂开足马力生产。</p>
+      <p>代价，落在了最底层的火柴厂女工身上。</p>
+    </div>
+  </section>
+
+  <section class="scene">
+    <div class="wrap">
+      <div class="scene-no">幕 05 · 代价</div>
+      <h2>而代价，落在了她们身上。</h2>
+      <div class="plate"><span>插图位 · 火柴女工·下颌隐约幽绿<br>（第二阶段补）</span></div>
+      <p>她们每天在密闭车间里，徒手蘸取白磷制作火柴头。白磷有剧毒，长期吸入蒸气会引发一种极其恐怖的职业病——<b>磷毒性颌骨坏死</b>（phossy jaw）。</p>
+      <p>下颌骨慢慢烂掉、流脓、剧痛难忍，严重者引发致命的脑部感染。</p>
+      <p class="beat">而最瘆人的是：在黑暗中，<span class="g">她们坏死的下颌骨会发出幽幽绿光</span>。</p>
+      <p>一张张年轻的脸，在暗夜里泛着和布兰德当年看到的一模一样的光。只不过这一次，那是死亡的颜色。</p>
+
+      <div class="tl">
+        <div class="tl-h">白磷火柴是怎么被禁掉的</div>
+        <ol>
+          <li><time>1872</time><span>芬兰率先立法限制白磷火柴</span></li>
+          <li><time>1874</time><span>丹麦跟进</span></li>
+          <li><time>1888</time><span>伦敦 Bryant &amp; May 火柴厂女工大罢工，把这件事推到公众面前</span></li>
+          <li><time>1897</time><span>法国立法禁用</span></li>
+          <li><time>1906</time><span><b>伯尔尼公约</b>：国际层面禁止白磷用于火柴</span></li>
+          <li><time>1910</time><span>英国《白磷火柴禁止法》1 月 1 日生效</span></li>
+        </ol>
+      </div>
+      <div class="aside">
+        <b>一个常被讲错的因果：</b>1888 年的大罢工常被说成"推动各国立法禁用白磷"，
+        但芬兰、丹麦其实在罢工之前十几年就已经立法了。罢工的直接诉求是工资和工时，
+        它真正的作用是把火柴女工的处境推到公众视野里，为后来的国际禁令积累了压力。
+        我们今天用的安全火柴，用的是无毒的<b>红磷</b>。
+      </div>
+    </div>
+  </section>
+
+  <section class="scene">
+    <div class="wrap">
+      <div class="scene-no">幕 06 · 战场</div>
+      <h2>它也曾成为地狱之火。</h2>
+      <div class="plate"><span>插图位 · 白磷弹在夜空中爆开<br>（第二阶段补）</span></div>
+      <p>白磷一接触空气就自燃，燃烧温度极高，黏在皮肤上会持续燃烧，普通的水浇不灭。释放的浓烟还能遮天蔽日。</p>
+      <p>那个曾在派对上被贵族当作魔法欣赏的幽绿冷光，变成了战场上真正的地狱之火。</p>
+    </div>
+  </section>
+
+  <section class="scene">
+    <div class="wrap">
+      <div class="scene-no">幕 07 · 转折</div>
+      <h2>但没有磷，就没有你。</h2>
+      <div class="plate"><span>插图位 · 幽绿 DNA 螺旋悬浮宇宙<br>（第二阶段补）</span></div>
+      <p>看到这里你可能觉得磷是个不折不扣的坏蛋。事实恰恰相反。现在摸一摸自己的身体：</p>
+
+      <div class="body-grid">
+        <div><b>DNA</b><span>那条承载全部遗传信息的双螺旋，骨架就是磷酸连起来的。没有磷，基因无法存在。</span></div>
+        <div><b>ATP</b><span>细胞的"充电宝"。从心跳、呼吸到此刻你读懂这行字，每一次能量的使用都靠它，而它储能的核心正是磷。</span></div>
+        <div><b>骨骼与牙齿</b><span>主要成分是磷酸钙。你能站着、能咬东西，也要谢谢磷。</span></div>
+      </div>
+
+      <p class="beat">那个从尿里熬出来、在黑暗中发出死亡之光的元素，同时也是构筑一切生命的基石。</p>
+    </div>
+  </section>
+
+  <section class="scene">
+    <div class="wrap">
+      <div class="scene-no">幕 08 · 瑙鲁</div>
+      <h2>而磷矿，正在被我们挖光。</h2>
+      <div class="plate"><span>插图位 · 瑙鲁俯瞰·被挖空的岛<br>（第二阶段补）</span></div>
+      <p>全世界的农田要高产就离不开<b>磷肥</b>。今天地球能养活八十亿人，磷肥居功至伟。</p>
+      <p>但磷是<b>不可再生</b>的。我们用的磷几乎全部来自地下有限的磷矿。</p>
+      <p>太平洋上的小岛国<b>瑙鲁</b>，曾坐拥全球最优质的磷矿（由千万年的鸟粪堆积而成），一度成为人均收入名列世界前茅的富国。国民不用工作，政府发钱，出门坐豪车。</p>
+      <p>然后，磷矿被挖光了。整座岛千疮百孔，寸草不生，经济一夜崩塌。瑙鲁成了"资源诅咒"最刺眼的标本。</p>
+      <div class="aside">
+        全球磷矿还能用多久，学界分歧很大：有研究认为几十年内就会触及峰值，
+        也有估算认为已探明储量还够用几百年。<b>可以确定的是它不可再生、分布极不均匀，
+        大部分集中在少数几个国家手里。</b>确切年限请以最新的地质调查数据为准。
+      </div>
+    </div>
+  </section>
+
+  <section class="scene">
+    <div class="wrap">
+      <div class="scene-no">幕 09 · 起源</div>
+      <h2>你体内的磷，来自一颗死去的恒星。</h2>
+      <div class="plate"><span>插图位 · 超新星爆发·星尘飘向蓝色地球<br>（第二阶段补）</span></div>
+      <p>你身体里的每一个磷原子，都不是地球本地产的。它们诞生于大质量恒星内部的核聚变，在<b>超新星爆发</b>的烈焰中被抛向宇宙。</p>
+      <p>这些星尘飘散亿万年，最终成为了地球，成为了海洋，成为了生命，最后成为了此刻正在读这行字的你。</p>
+    </div>
+  </section>
+
+</main>
+
+<section class="end">
+  <div class="wrap">
+    <p>所以布兰德当年守着一锅尿看到的那点幽绿，<br>
+       其实是<span class="g">一颗死去的恒星</span>，<br>
+       在人类文明里第一次睁开了眼睛。</p>
+    <p style="font-size:17px;font-weight:400;color:var(--muted);margin-top:22px">
+      他想找黄金。<br>他找到了光、生命，和我们与整个宇宙的血缘。</p>
+  </div>
+</section>
+
+<section class="src">
+  <div class="wrap">
+    <h3>关键事实的出处</h3>
+    <ul>
+      <li>· 坏死颌骨在黑暗中发绿光、各国禁用白磷火柴的年份 ——
+        <a href="https://en.wikipedia.org/wiki/Phossy_jaw" target="_blank" rel="noopener">Wikipedia: Phossy jaw</a>
+        与 <a href="https://www.rcseng.ac.uk/library-and-publications/library/blog/phossy-jaw-and-the-matchgirls/" target="_blank" rel="noopener">英国皇家外科学院：Phossy jaw and the matchgirls</a></li>
+      <li>· 5500 升尿是流传最广的数字，不同文献出入较大，当作数量级看即可。</li>
+      <li>· 磷矿枯竭年限学界无共识，本页只写"不可再生、分布不均"这两条确定的。</li>
+    </ul>
+  </div>
+</section>
+
+</body>
+</html>
