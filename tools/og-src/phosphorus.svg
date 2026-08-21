@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#4fff9e" stop-opacity="0.30"/>
+      <stop offset="0.5" stop-color="#4fff9e" stop-opacity="0.09"/>
+      <stop offset="1" stop-color="#4fff9e" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="16"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" fill="#05070a"/>
+  <circle cx="880" cy="300" r="330" fill="url(#glow)"/>
+  <text x="880" y="376" font-family="JetBrains Mono,PingFang SC,Helvetica,monospace" font-size="250"
+        font-weight="700" fill="#4fff9e" text-anchor="middle" opacity="0.30" filter="url(#soft)">P</text>
+  <text x="880" y="376" font-family="JetBrains Mono,PingFang SC,Helvetica,monospace" font-size="250"
+        font-weight="700" fill="#4fff9e" text-anchor="middle">P</text>
+  <text x="880" y="428" font-family="JetBrains Mono,PingFang SC,Helvetica,monospace" font-size="22"
+        fill="#9fb3a8" text-anchor="middle" letter-spacing="6">15 · PHOSPHORUS</text>
+  <rect x="80" y="150" width="60" height="5" rx="2.5" fill="#2ec88a"/>
+  <text x="80" y="248" font-family="PingFang SC,Helvetica,sans-serif" font-size="62" font-weight="700" fill="#e9f2ec">磷的一生</text>
+  <text x="80" y="312" font-family="PingFang SC,Helvetica,sans-serif" font-size="27" fill="#9fb3a8">他熬干 5500 升尿想炼黄金</text>
+  <text x="80" y="352" font-family="PingFang SC,Helvetica,sans-serif" font-size="27" fill="#9fb3a8">却点亮了一个元素</text>
+  <text x="80" y="430" font-family="JetBrains Mono,PingFang SC,Helvetica,monospace" font-size="19" fill="#7d9188" letter-spacing="3">绿光 · 火柴厂 · 白磷弹 · DNA · 瑙鲁 · 超新星</text>
+  <rect x="80" y="486" width="620" height="1" fill="#e9f2ec" opacity="0.12"/>
+  <text x="80" y="536" font-family="PingFang SC,Helvetica,sans-serif" font-size="24" fill="#2ec88a">学习实验室 · Learn Lab</text>
+</svg>
