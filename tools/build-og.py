@@ -38,6 +38,8 @@ CARDS = {
                      "#0E1220", "#6EA8FF", "#F2F5FF", "学习实验室 · Learn Lab"),
     "pomodoro": ("pomodoro.webp", "元素番茄", "一颗星的一生 = 一个番茄",
                  "#141018", "#FF6B5A", "#FFF2EE", "学习实验室 · Learn Lab"),
+    "digestive-defense": ("digestive-defense.webp", "消化卫士", "酶架在消化道上，拦下营养分子",
+                          "#0D0025", "#A3E635", "#EEF7DD", "学习实验室 · Learn Lab"),
 }
 
 
