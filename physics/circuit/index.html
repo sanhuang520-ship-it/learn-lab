@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>电路搭建台 · 串并联与欧姆定律</title>
+<meta name="description" content="自己搭串联、并联、混联电路，实时算出每个电阻的电流和电压。改一个阻值，整条电路跟着变。并联接一个 0Ω 会短路——它会当场冒烟给你看。">
+<link rel="canonical" href="https://sanhuang520-ship-it.github.io/learn-lab/physics/circuit/">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:site_name" content="学习实验室 · Learn Lab">
+<meta property="og:title" content="电路搭建台 · 串并联与欧姆定律">
+<meta property="og:description" content="自己搭电路，实时算电流电压。短路会当场冒烟。">
+<meta property="og:url" content="https://sanhuang520-ship-it.github.io/learn-lab/physics/circuit/">
+<meta property="og:image" content="https://sanhuang520-ship-it.github.io/learn-lab/assets/og/circuit.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="电路搭建台 · 串并联与欧姆定律">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="电路搭建台 · 串并联与欧姆定律">
+<meta name="twitter:description" content="自己搭电路，实时算电流电压。短路会当场冒烟。">
+<meta name="twitter:image" content="https://sanhuang520-ship-it.github.io/learn-lab/assets/og/circuit.png">
+<meta name="twitter:image:alt" content="电路搭建台 · 串并联与欧姆定律">
+<meta name="theme-color" content="#07090f">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://sanhuang520-ship-it.github.io/learn-lab/#website","name":"学习实验室 · Learn Lab","url":"https://sanhuang520-ship-it.github.io/learn-lab/","inLanguage":"zh-CN"},{"@type":"LearningResource","name":"电路搭建台 · 串并联与欧姆定律","url":"https://sanhuang520-ship-it.github.io/learn-lab/physics/circuit/","description":"交互式串并联电路计算：自由增删电阻与支路，实时求出总电阻、干路电流与各段分压分流；并联出现 0Ω 支路会识别为短路并解释后果。","inLanguage":"zh-CN","isAccessibleForFree":true,"educationalLevel":["初中"],"learningResourceType":"交互模拟","educationalUse":"探究","image":"https://sanhuang520-ship-it.github.io/learn-lab/assets/og/circuit.png","isPartOf":{"@id":"https://sanhuang520-ship-it.github.io/learn-lab/#website"}}]}</script>
+<style>
+  :root{
+    --void:#07090f; --ink:#111823; --ink2:#161f2c;
+    --line:rgba(140,170,220,.13); --line-hi:rgba(140,170,220,.32);
+    --text:#e8eef8; --muted:#9aabc2; --dim:#7d8da3;
+    --amp:#f5b942; --volt:#38bdf8; --ohm:#a78bfa; --rose:#fb7185; --lime:#a3e635;
+    --fb:"Noto Sans SC",system-ui,-apple-system,sans-serif;
+    --fm:"JetBrains Mono",ui-monospace,SFMono-Regular,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--void);color:var(--text);font-family:var(--fb);line-height:1.75;
+    -webkit-font-smoothing:antialiased;padding:18px 18px 60px}
+  .wrap{max-width:800px;margin:0 auto}
+  .ll-back{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;padding:11px 14px;
+    border:1px solid var(--line-hi);border-radius:999px;background:var(--ink);color:var(--muted);
+    font:600 12px/1 var(--fm);letter-spacing:.08em;text-decoration:none;min-height:44px;transition:all .2s}
+  .ll-back:hover{color:var(--amp);border-color:var(--amp)}
+  h1{font-size:25px;font-weight:700;letter-spacing:.4px;margin-bottom:5px}
+  .en{font:600 11.5px/1 var(--fm);color:var(--amp);letter-spacing:.16em;margin-bottom:12px}
+  .lede{color:var(--muted);font-size:14.5px;margin-bottom:18px}
+  .lede b{color:var(--text)}
+
+  .presets{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+  .pst{font-size:13px;padding:9px 14px;border-radius:999px;border:1px solid var(--line);
+    background:transparent;color:var(--muted);cursor:pointer;min-height:42px;font-family:inherit;transition:all .16s}
+  .pst:hover{border-color:var(--line-hi);color:var(--text)}
+
+  .board{border:1px solid var(--line);border-radius:16px;background:var(--ink);padding:20px 18px;margin-bottom:16px}
+  .ptitle{font:600 11px/1 var(--fm);color:var(--amp);letter-spacing:.14em;margin-bottom:14px}
+
+  .emf{display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+  .emf label{font-size:14px;color:var(--muted)}
+  .emf input{width:84px;background:var(--ink2);border:1px solid var(--line-hi);border-radius:9px;
+    color:var(--volt);font:700 17px/1 var(--fm);padding:11px 12px;min-height:46px;text-align:center;outline:none}
+  .emf input:focus{border-color:var(--volt)}
+  .emf .unit{color:var(--dim);font-family:var(--fm);font-size:14px}
+
+  /* 电路块 */
+  .blocks{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}
+  .blk{border:1px solid var(--line);border-radius:13px;background:var(--ink2);padding:14px 15px}
+  .bhead{display:flex;align-items:center;gap:10px;margin-bottom:11px;flex-wrap:wrap}
+  .btype{font:600 11px/1 var(--fm);letter-spacing:.1em;padding:5px 10px;border-radius:999px}
+  .btype.s{color:var(--volt);border:1px solid rgba(56,189,248,.4);background:rgba(56,189,248,.08)}
+  .btype.p{color:var(--ohm);border:1px solid rgba(167,139,250,.4);background:rgba(167,139,250,.08)}
+  .bstat{margin-left:auto;font:600 12.5px/1 var(--fm);color:var(--muted)}
+  .bstat b{color:var(--text)}
+  .del{border:1px solid var(--line-hi);background:transparent;color:var(--dim);border-radius:8px;
+    width:34px;height:34px;cursor:pointer;font-size:16px;line-height:1;font-family:inherit}
+  .del:hover{color:var(--rose);border-color:var(--rose)}
+
+  .rs{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .rbox{display:flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:10px;
+    background:var(--ink);padding:7px 10px}
+  .rbox input{width:56px;background:transparent;border:none;color:var(--ohm);
+    font:700 15px/1 var(--fm);text-align:center;outline:none;min-height:32px}
+  .rbox span{font:600 12px/1 var(--fm);color:var(--dim)}
+  .rbox em{font-style:normal;font:600 11px/1.5 var(--fm);color:var(--muted);white-space:nowrap}
+  .rbox .x{border:none;background:transparent;color:var(--dim);cursor:pointer;font-size:15px;
+    padding:0 2px;line-height:1;font-family:inherit}
+  .rbox .x:hover{color:var(--rose)}
+  .addr{border:1px dashed var(--line-hi);background:transparent;color:var(--dim);border-radius:10px;
+    padding:9px 13px;cursor:pointer;font-size:13px;font-family:inherit;min-height:44px}
+  .addr:hover{color:var(--ohm);border-color:var(--ohm)}
+
+  .addblk{display:flex;gap:9px;margin-bottom:16px}
+  .addblk button{flex:1;min-height:46px;border-radius:11px;border:1px dashed var(--line-hi);
+    background:transparent;color:var(--muted);cursor:pointer;font-size:14px;font-family:inherit;transition:all .16s}
+  .addblk button:hover{color:var(--text);border-color:var(--line-hi);background:var(--ink2)}
+
+  /* 读数 */
+  .meters{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .meter{border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--ink2);text-align:center}
+  .meter span{display:block;font-size:11.5px;color:var(--dim);margin-bottom:5px;font-family:var(--fm)}
+  .meter b{font:700 20px/1.3 var(--fm)}
+  .meter.r b{color:var(--ohm)} .meter.i b{color:var(--amp)} .meter.u b{color:var(--volt)}
+
+  .smoke{margin-top:14px;border:1px solid rgba(251,113,133,.45);background:rgba(251,113,133,.09);
+    border-radius:12px;padding:15px 16px;font-size:14.5px;line-height:1.8;color:var(--rose)}
+  .smoke b{color:var(--text)}
+
+  .law{margin-top:20px;border:1px solid var(--line);border-radius:14px;background:var(--ink);overflow:hidden}
+  .law h2{font:600 12px/1 var(--fm);color:var(--amp);letter-spacing:.14em;padding:14px 18px;
+    border-bottom:1px solid var(--line)}
+  .law ul{list-style:none;padding:8px 0}
+  .law li{padding:8px 18px;font-size:14px;color:var(--muted);line-height:1.75}
+  .law code{color:var(--lime);font-family:var(--fm);font-size:13.5px}
+  .law b{color:var(--text)}
+
+  .foot{margin-top:18px;font-size:12.5px;color:var(--muted);line-height:1.9}
+  .foot b{color:var(--text)}
+
+  @media(max-width:640px){
+    h1{font-size:21px}
+    .board{padding:16px 13px}
+    .meters{grid-template-columns:1fr}
+    .addblk{flex-direction:column}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="ll-back" href="../../">← 学习实验室</a>
+
+  <h1>电路搭建台</h1>
+  <div class="en">CIRCUIT BENCH · 串并联与欧姆定律</div>
+  <p class="lede">自己往电路里加电阻，串一段、并一段都行。<b>改任意一个阻值，
+     整条电路的电流电压立刻跟着变</b>——不用等老师算给你看。
+     并联里放一个 0Ω 试试，它会当场冒烟。</p>
+
+  <div class="presets" id="presets"></div>
+
+  <div class="board">
+    <div class="ptitle">① 电源</div>
+    <div class="emf">
+      <label for="emf">电源电压 U =</label>
+      <input type="text" id="emf" inputmode="decimal" value="6" aria-label="电源电压">
+      <span class="unit">V</span>
+    </div>
+
+    <div class="ptitle">② 电路（从上到下依次串联）</div>
+    <div class="blocks" id="blocks"></div>
+    <div class="addblk">
+      <button id="addS">+ 加一个串联电阻</button>
+      <button id="addP">+ 加一组并联电阻</button>
+    </div>
+
+    <div class="ptitle">③ 读数</div>
+    <div class="meters">
+      <div class="meter r"><span>总电阻 R</span><b id="mR">—</b></div>
+      <div class="meter i"><span>干路电流 I</span><b id="mI">—</b></div>
+      <div class="meter u"><span>电源电压 U</span><b id="mU">—</b></div>
+    </div>
+    <div id="smoke"></div>
+  </div>
+
+  <div class="law">
+    <h2>三条要背下来的</h2>
+    <ul>
+      <li><code>I = U / R</code>　<b>欧姆定律</b>：导体中的电流跟电压成正比、跟电阻成反比。</li>
+      <li><b>串联</b>：<code>R总 = R₁+R₂+…</code>　电流<b>处处相等</b>，电压按电阻<b>成正比</b>分配（大电阻分大电压）。</li>
+      <li><b>并联</b>：<code>1/R总 = 1/R₁+1/R₂+…</code>　电压<b>各支路相同</b>，电流按电阻<b>成反比</b>分配。
+        <br>并联总电阻<b>一定小于任何一条支路</b> —— 多开一条路，总的更好走。</li>
+    </ul>
+  </div>
+
+  <div class="foot">
+    <p>⚠️ 这里按<b>理想电源</b>算：不计电源内阻、不计导线电阻。真实电路里电池有内阻，
+       接近短路时端电压会明显下降，不会像这里算出无穷大电流。这是初中电学的标准简化。</p>
+    <p>求解器用 5 道教材例题反查过（串联分压之和 = 总电压、并联分流之和 = 干路电流、
+       并联总电阻恒小于任一支路、短路识别），校验脚本在仓库里。</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var PRESETS = [
+    {n:'两个 10Ω 串联',  u:6,  c:[{t:'s',r:10},{t:'s',r:10}]},
+    {n:'两个 10Ω 并联',  u:6,  c:[{t:'p',rs:[10,10]}]},
+    {n:'6Ω∥3Ω 再串 2Ω', u:12, c:[{t:'p',rs:[6,3]},{t:'s',r:2}]},
+    {n:'三个 6Ω 并联',   u:6,  c:[{t:'p',rs:[6,6,6]}]},
+    {n:'制造一次短路',   u:6,  c:[{t:'p',rs:[10,0]}]}
+  ];
+  var emf = 6, blocks = [{t:'s',r:10},{t:'s',r:10}];
+
+  function num(v, dflt){ var n = parseFloat(v); return isFinite(n) && n >= 0 ? n : dflt; }
+  function fmt(x){
+    if(x === null || !isFinite(x)) return '—';
+    var r = Math.round(x*1000)/1000;
+    return (Math.abs(r - Math.round(r)) < 1e-9) ? String(Math.round(r)) : r.toFixed(2).replace(/0+$/,'').replace(/\.$/,'');
+  }
+
+  function rPar(rs){
+    if(rs.some(function(r){ return r === 0; })) return 0;
+    var s = 0; rs.forEach(function(r){ s += 1/r; });
+    return s ? 1/s : Infinity;
+  }
+
+  function solve(){
+    var out = blocks.map(function(b){
+      return {b: b, R: b.t === 's' ? b.r : rPar(b.rs)};
+    });
+    var R = out.reduce(function(a,x){ return a + x.R; }, 0);
+    if(R === 0) return {short: true, parts: out, R: 0};
+    var I = emf / R;
+    out.forEach(function(x){
+      x.I = I; x.U = I * x.R;
+      if(x.b.t === 'p'){
+        x.branch = x.b.rs.map(function(r){ return {r: r, U: x.U, I: r ? x.U/r : Infinity}; });
+      }
+    });
+    return {short: false, parts: out, R: R, I: I};
+  }
+
+  function render(){
+    var s = solve();
+    var box = document.getElementById('blocks');
+    box.innerHTML = '';
+
+    s.parts.forEach(function(p, bi){
+      var b = p.b;
+      var el = document.createElement('div');
+      el.className = 'blk';
+      var stat = s.short ? '<span class="bstat">—</span>'
+        : '<span class="bstat">R <b>'+fmt(p.R)+'Ω</b>　U <b>'+fmt(p.U)+'V</b>　I <b>'+fmt(p.I)+'A</b></span>';
+      var head = '<div class="bhead">'
+        + '<span class="btype '+b.t+'">'+(b.t === 's' ? '串联电阻' : '并联组')+'</span>'
+        + stat
+        + '<button class="del" data-del="'+bi+'" aria-label="删除这一块">×</button></div>';
+
+      var body = '<div class="rs">';
+      if(b.t === 's'){
+        body += '<span class="rbox"><input type="text" inputmode="decimal" value="'+b.r
+              + '" data-b="'+bi+'" data-i="-1" aria-label="电阻值"><span>Ω</span></span>';
+      } else {
+        b.rs.forEach(function(r, ri){
+          var br = (!s.short && p.branch) ? p.branch[ri] : null;
+          body += '<span class="rbox"><input type="text" inputmode="decimal" value="'+r
+                + '" data-b="'+bi+'" data-i="'+ri+'" aria-label="支路电阻"><span>Ω</span>'
+                + (br ? '<em>'+fmt(br.I)+'A</em>' : '')
+                + (b.rs.length > 1 ? '<button class="x" data-rm="'+bi+'|'+ri+'" aria-label="删除这条支路">×</button>' : '')
+                + '</span>';
+        });
+        body += '<button class="addr" data-addr="'+bi+'">+ 支路</button>';
+      }
+      body += '</div>';
+      el.innerHTML = head + body;
+      box.appendChild(el);
+    });
+
+    document.getElementById('mR').textContent = s.short ? '0 Ω' : fmt(s.R)+' Ω';
+    document.getElementById('mI').textContent = s.short ? '∞' : fmt(s.I)+' A';
+    document.getElementById('mU').textContent = fmt(emf)+' V';
+
+    document.getElementById('smoke').innerHTML = s.short
+      ? '<div class="smoke">💨 <b>短路了。</b>有一条支路电阻是 0Ω，电流全从那里走，'
+        + '总电阻变成 0 —— 按欧姆定律 I = U/R，电流会趋于无穷大。<br>'
+        + '真实电路里这会烧毁电源或导线，所以<b>绝对不能把电源两极直接用导线连起来</b>。'
+        + '（这里按理想电源算，才会显示 ∞；真电池有内阻，电流是有限的，但依然足以发热起火。）</div>'
+      : '';
+
+    bind();
+  }
+
+  function bind(){
+    document.querySelectorAll('.blk input').forEach(function(inp){
+      inp.onchange = inp.onblur = function(){
+        var bi = +inp.dataset.b, ri = +inp.dataset.i;
+        var v = num(inp.value, null);
+        if(v === null){ render(); return; }
+        if(ri < 0) blocks[bi].r = v; else blocks[bi].rs[ri] = v;
+        render();
+      };
+      inp.onkeydown = function(e){ if(e.key === 'Enter') inp.blur(); };
+    });
+    document.querySelectorAll('[data-del]').forEach(function(b){
+      b.onclick = function(){
+        if(blocks.length <= 1) return;
+        blocks.splice(+b.dataset.del, 1); render();
+      };
+    });
+    document.querySelectorAll('[data-addr]').forEach(function(b){
+      b.onclick = function(){ blocks[+b.dataset.addr].rs.push(10); render(); };
+    });
+    document.querySelectorAll('[data-rm]').forEach(function(b){
+      b.onclick = function(){
+        var p = b.dataset.rm.split('|');
+        blocks[+p[0]].rs.splice(+p[1], 1); render();
+      };
+    });
+  }
+
+  document.getElementById('emf').onchange = function(){
+    emf = num(this.value, emf); this.value = emf; render(); };
+  document.getElementById('addS').onclick = function(){ blocks.push({t:'s',r:10}); render(); };
+  document.getElementById('addP').onclick = function(){ blocks.push({t:'p',rs:[10,10]}); render(); };
+
+  var pw = document.getElementById('presets');
+  PRESETS.forEach(function(p){
+    var b = document.createElement('button');
+    b.className='pst'; b.textContent = p.n;
+    b.onclick = function(){
+      emf = p.u; document.getElementById('emf').value = p.u;
+      blocks = JSON.parse(JSON.stringify(p.c));
+      render();
+    };
+    pw.appendChild(b);
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
