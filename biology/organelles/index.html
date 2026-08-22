@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>细胞器巡览 · 一个器官讲一句它在干嘛</title>
+<meta name="description" content="10 个细胞器，点一个讲清它在干嘛。按有膜没膜、单膜双膜分类，并串出分泌蛋白的完整路径：核糖体 → 内质网 → 高尔基体 → 细胞膜 → 细胞外——消化卫士里那些酶就是这么造出来的。">
+<link rel="canonical" href="https://sanhuang520-ship-it.github.io/learn-lab/biology/organelles/">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:site_name" content="学习实验室 · Learn Lab">
+<meta property="og:title" content="细胞器巡览 · 一个器官讲一句它在干嘛">
+<meta property="og:description" content="10 个细胞器，按膜结构分类，并串出分泌蛋白从合成到排出的完整路径。">
+<meta property="og:url" content="https://sanhuang520-ship-it.github.io/learn-lab/biology/organelles/">
+<meta property="og:image" content="https://sanhuang520-ship-it.github.io/learn-lab/assets/og/organelles.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="细胞器巡览 · 一个器官讲一句它在干嘛">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="细胞器巡览 · 一个器官讲一句它在干嘛">
+<meta name="twitter:description" content="10 个细胞器，按膜结构分类，并串出分泌蛋白从合成到排出的完整路径。">
+<meta name="twitter:image" content="https://sanhuang520-ship-it.github.io/learn-lab/assets/og/organelles.png">
+<meta name="twitter:image:alt" content="细胞器巡览 · 一个器官讲一句它在干嘛">
+<meta name="theme-color" content="#07090f">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://sanhuang520-ship-it.github.io/learn-lab/#website","name":"学习实验室 · Learn Lab","url":"https://sanhuang520-ship-it.github.io/learn-lab/","inLanguage":"zh-CN"},{"@type":"LearningResource","name":"细胞器巡览 · 一个器官讲一句它在干嘛","url":"https://sanhuang520-ship-it.github.io/learn-lab/biology/organelles/","description":"10 个细胞器的功能与分布，支持按膜结构分类查看，并串出分泌蛋白从核糖体到细胞外的完整合成与运输路径。","inLanguage":"zh-CN","isAccessibleForFree":true,"educationalLevel":["高中"],"learningResourceType":"交互图解","educationalUse":"学习","image":"https://sanhuang520-ship-it.github.io/learn-lab/assets/og/organelles.png","isPartOf":{"@id":"https://sanhuang520-ship-it.github.io/learn-lab/#website"}}]}</script>
+<style>
+  :root{
+    --void:#07090f; --ink:#111823; --ink2:#161f2c;
+    --line:rgba(140,170,220,.13); --line-hi:rgba(140,170,220,.32);
+    --text:#e8eef8; --muted:#9aabc2; --dim:#7d8da3;
+    --cyan:#22d3ee; --leaf:#5ec97a; --amber:#f5b942; --violet:#a78bfa; --rose:#fb7185;
+    --fb:"Noto Sans SC",system-ui,-apple-system,sans-serif;
+    --fm:"JetBrains Mono",ui-monospace,SFMono-Regular,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--void);color:var(--text);font-family:var(--fb);line-height:1.75;
+    -webkit-font-smoothing:antialiased;padding:18px 18px 60px}
+  .wrap{max-width:800px;margin:0 auto}
+  .ll-back{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;padding:11px 14px;
+    border:1px solid var(--line-hi);border-radius:999px;background:var(--ink);color:var(--muted);
+    font:600 12px/1 var(--fm);letter-spacing:.08em;text-decoration:none;min-height:44px;transition:all .2s}
+  .ll-back:hover{color:var(--cyan);border-color:var(--cyan)}
+  h1{font-size:25px;font-weight:700;letter-spacing:.4px;margin-bottom:5px}
+  .en{font:600 11.5px/1 var(--fm);color:var(--cyan);letter-spacing:.16em;margin-bottom:12px}
+  .lede{color:var(--muted);font-size:14.5px;margin-bottom:18px}
+  .lede b{color:var(--text)}
+
+  .modes{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+  .mode{font-size:13px;padding:9px 15px;border-radius:999px;border:1px solid var(--line);
+    background:transparent;color:var(--muted);cursor:pointer;min-height:42px;font-family:inherit;transition:all .16s}
+  .mode:hover{border-color:var(--line-hi);color:var(--text)}
+  .mode[aria-pressed=true]{background:var(--ink2);border-color:var(--cyan);color:var(--cyan);font-weight:600}
+
+  /* 细胞示意 */
+  .cell{position:relative;border:2px solid rgba(34,211,238,.3);border-radius:44px;
+    background:radial-gradient(ellipse at 40% 35%, rgba(34,211,238,.055), transparent 62%), var(--ink);
+    padding:22px 18px;margin-bottom:18px}
+  .chips{display:flex;flex-wrap:wrap;gap:9px;justify-content:center}
+  .chip{border:1px solid var(--line-hi);border-radius:13px;background:var(--ink2);color:var(--muted);
+    cursor:pointer;font-family:inherit;padding:12px 15px;min-height:52px;text-align:left;transition:all .16s}
+  .chip b{display:block;font-size:14.5px;font-weight:600;color:var(--text)}
+  .chip span{display:block;font:600 10px/1.5 var(--fm);color:var(--dim);letter-spacing:.06em;margin-top:2px}
+  .chip:hover{border-color:var(--cyan)}
+  .chip[aria-pressed=true]{border-color:var(--cyan);background:rgba(34,211,238,.1)}
+  .chip[aria-pressed=true] b{color:var(--cyan)}
+  .chip.dim{opacity:.3}
+  .chip.step{border-color:var(--amber);background:rgba(245,185,66,.1)}
+  .chip.step b{color:var(--amber)}
+  .chip .no{display:inline-block;width:19px;height:19px;border-radius:50%;background:var(--amber);
+    color:#1d1403;font:700 11px/19px var(--fm);text-align:center;margin-right:6px}
+
+  /* 详情 */
+  .detail{border:1px solid var(--line);border-radius:16px;background:var(--ink);padding:22px 20px;min-height:190px}
+  .dhead{display:flex;align-items:baseline;gap:11px;flex-wrap:wrap;margin-bottom:4px}
+  .dhead b{font-size:23px;font-weight:700}
+  .dhead .den{font:600 11.5px/1 var(--fm);color:var(--dim);letter-spacing:.1em}
+  .badge{font:600 11px/1 var(--fm);border-radius:999px;padding:5px 10px;letter-spacing:.06em}
+  .badge.none{color:var(--rose);border:1px solid rgba(251,113,133,.4);background:rgba(251,113,133,.08)}
+  .badge.single{color:var(--leaf);border:1px solid rgba(94,201,122,.4);background:rgba(94,201,122,.08)}
+  .badge.double{color:var(--violet);border:1px solid rgba(167,139,250,.4);background:rgba(167,139,250,.08)}
+  .djob{font-size:16px;color:var(--cyan);font-weight:600;margin-bottom:12px}
+  .ddetail{font-size:14.5px;color:var(--muted);line-height:1.85;margin-bottom:14px}
+  .dwho{font-size:13.5px;color:var(--text);border-left:2px solid var(--line-hi);padding-left:11px;margin-bottom:12px}
+  .dsrc{font:600 11.5px/1.6 var(--fm);color:var(--dim);letter-spacing:.04em}
+
+  /* 路径 */
+  .path{margin-top:16px;border:1px solid rgba(245,185,66,.34);border-radius:14px;
+    background:rgba(245,185,66,.05);padding:16px 18px}
+  .path h2{font:600 12px/1 var(--fm);color:var(--amber);letter-spacing:.14em;margin-bottom:12px}
+  .pflow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:14.5px;margin-bottom:12px}
+  .pflow i{font-style:normal;color:var(--amber);font-weight:600}
+  .pflow em{font-style:normal;color:var(--dim)}
+  .path p{font-size:14px;color:var(--muted);line-height:1.8}
+  .path b{color:var(--text)}
+  .path a{color:var(--amber);text-decoration:none;border-bottom:1px solid rgba(245,185,66,.4)}
+
+  .foot{margin-top:20px;font-size:12.5px;color:var(--muted);line-height:1.9}
+  .foot b{color:var(--text)}
+
+  @media(max-width:640px){
+    h1{font-size:21px}
+    .cell{border-radius:26px;padding:16px 12px}
+    .chips{gap:7px}
+    .chip{padding:10px 12px;min-height:48px;flex:1 1 calc(50% - 4px)}
+    .detail{padding:17px 15px}
+    .dhead b{font-size:20px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="ll-back" href="../../">← 学习实验室</a>
+
+  <h1>细胞器巡览</h1>
+  <div class="en">ORGANELLES · 一个器官讲一句它在干嘛</div>
+  <p class="lede">点任意一个看它的活儿。也可以切到<b>膜结构</b>看考点分类，
+     或者切到<b>分泌蛋白路径</b>——<b>消化卫士里那些酶，就是这么一站站造出来再送出细胞的。</b></p>
+
+  <div class="modes" id="modes"></div>
+
+  <div class="cell"><div class="chips" id="chips"></div></div>
+
+  <div class="detail" id="detail"></div>
+
+  <div class="path" id="pathbox" hidden>
+    <h2>分泌蛋白的一生</h2>
+    <div class="pflow" id="pflow"></div>
+    <p>以<b>消化酶</b>为例：核糖体上合成出肽链，进内质网做初步加工折叠，
+       送到高尔基体做最后修饰并打包进囊泡，囊泡运到细胞膜、与膜融合把酶排出细胞外，
+       最后进入消化道开始干活。<br>
+       <b>这一路要消耗能量，由线粒体供应 ATP。</b>
+       线粒体不在路径上，但没有它这条流水线转不动。<br>
+       想看这些酶排出去之后干什么，去玩
+       <a href="../digestive-defense/">消化卫士 →</a></p>
+  </div>
+
+  <div class="foot">
+    <p>共 <b id="total">—</b> 个细胞器。每条都标了教材出处；
+       膜结构分类与分泌蛋白路径顺序由校验脚本比对考点，脚本在仓库里。</p>
+    <p>⚠️ 溶酶体被称为细胞的「消化系统」，那是<b>细胞内</b>的消化，
+       和消化道里的消化不是一回事，别混。</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var ORG = [{"id": "nucleus", "name": "细胞核", "en": "Nucleus", "job": "存放遗传物质、指挥细胞活动", "detail": "DNA 几乎全在这里。细胞核通过控制蛋白质的合成来指挥整个细胞——它不直接干活，但所有活的说明书都在它手上。核膜上有核孔，mRNA 从这里出去。", "who": "真核细胞都有（成熟的哺乳动物红细胞例外，它把核丢了以腾出空间装血红蛋白）", "membrane": "double", "link": null, "src": "人教版必修一 第三章 细胞的基本结构"}, {"id": "ribosome", "name": "核糖体", "en": "Ribosome", "job": "合成蛋白质的机器", "detail": "没有膜。分游离的和附着在内质网上的两种：游离核糖体造细胞自己用的蛋白，附着的造要分泌出去的蛋白——比如消化酶。", "who": "原核细胞和真核细胞都有，是唯一二者共有的细胞器", "membrane": "none", "link": "digestive", "src": "人教版必修一 第三章"}, {"id": "er", "name": "内质网", "en": "Endoplasmic Reticulum", "job": "蛋白质和脂质的加工厂与运输通道", "detail": "粗面内质网上贴着核糖体，负责加工新合成的蛋白；光面内质网不贴核糖体，负责合成脂质。分泌蛋白在这里完成初步折叠和加工，再送去高尔基体。", "who": "真核细胞", "membrane": "single", "link": "digestive", "src": "人教版必修一 第三章"}, {"id": "golgi", "name": "高尔基体", "en": "Golgi Apparatus", "job": "给蛋白质做最后加工、分类、打包发货", "detail": "分泌蛋白的最后一站。在这里完成进一步修饰，再装进囊泡运到细胞膜、由膜融合把它排出细胞外。植物细胞里它还参与细胞壁的形成。", "who": "真核细胞", "membrane": "single", "link": "digestive", "src": "人教版必修一 第三章"}, {"id": "mitochondrion", "name": "线粒体", "en": "Mitochondrion", "job": "细胞的动力车间，进行有氧呼吸", "detail": "有氧呼吸的主要场所，绝大部分 ATP 在这里产生。内膜向内折叠成嵴，大大增加了膜面积。它有自己的 DNA 和核糖体，能半自主复制。", "who": "真核细胞（哺乳动物成熟红细胞没有）", "membrane": "double", "link": null, "src": "人教版必修一 第三章 / 第五章 细胞的能量供应"}, {"id": "chloroplast", "name": "叶绿体", "en": "Chloroplast", "job": "光合作用的场所", "detail": "把光能转成化学能，装进有机物里。内部有类囊体薄膜堆叠成基粒，色素就分布在类囊体薄膜上。和线粒体一样有自己的 DNA。", "who": "绿色植物细胞（动物细胞没有）", "membrane": "double", "link": null, "src": "人教版必修一 第三章 / 第五章"}, {"id": "lysosome", "name": "溶酶体", "en": "Lysosome", "job": "细胞内的消化车间", "detail": "里面装着多种水解酶，负责分解衰老损伤的细胞器、以及吞噬进来的细菌病毒。被称为细胞的「消化系统」——注意这是细胞内的消化，和消化道里的消化不是一回事。", "who": "动物细胞明显，植物细胞较少", "membrane": "single", "link": "digestive", "src": "人教版必修一 第三章"}, {"id": "vacuole", "name": "液泡", "en": "Vacuole", "job": "储存物质、维持细胞形态", "detail": "植物细胞里往往占据大半个细胞体积。里面的细胞液含糖类、无机盐、色素等。它靠吸水膨胀产生的压力让植物挺立——花蔫了就是液泡失水了。", "who": "成熟植物细胞（动物细胞基本没有）", "membrane": "single", "link": null, "src": "人教版必修一 第三章"}, {"id": "centrosome", "name": "中心体", "en": "Centrosome", "job": "与细胞有丝分裂时纺锤体的形成有关", "detail": "没有膜，由两个互相垂直的中心粒组成。分裂时它发出星射线形成纺锤体，牵引染色体移动。", "who": "动物细胞和低等植物细胞", "membrane": "none", "link": null, "src": "人教版必修一 第三章"}, {"id": "cellmembrane", "name": "细胞膜", "en": "Cell Membrane", "job": "把细胞和外界隔开，控制物质进出", "detail": "主要由磷脂双分子层和蛋白质构成。它不是死板的墙——具有一定的流动性，而且对物质进出有选择性：该进的进、该出的出、该拦的拦。分泌蛋白最后就是通过它排出细胞。", "who": "所有细胞", "membrane": "single", "link": "digestive", "src": "人教版必修一 第三章 / 第四章 细胞的物质输入和输出"}];
+  var PATH = ['ribosome','er','golgi','cellmembrane'];
+  var MEMB = {none:'无膜', single:'单层膜', double:'双层膜'};
+  var MODES = [
+    {k:'all',  n:'全部'},
+    {k:'memb', n:'按膜结构'},
+    {k:'path', n:'分泌蛋白路径'}
+  ];
+  var mode = 'all', cur = ORG[0];
+  var byId = {}; ORG.forEach(function(o){ byId[o.id] = o; });
+
+  function esc(s){ return String(s).replace(/[&<>]/g,function(m){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;'}[m]; }); }
+
+  function renderChips(){
+    var box = document.getElementById('chips');
+    box.innerHTML = '';
+    ORG.forEach(function(o){
+      var b = document.createElement('button');
+      b.className = 'chip'; b.dataset.id = o.id;
+      b.setAttribute('aria-pressed', String(o.id === cur.id));
+      var idx = PATH.indexOf(o.id);
+      if(mode === 'path'){
+        if(idx >= 0){ b.classList.add('step'); }
+        else { b.classList.add('dim'); }
+      }
+      b.innerHTML = (mode === 'path' && idx >= 0 ? '<span class="no">'+(idx+1)+'</span>' : '')
+        + '<b>' + esc(o.name) + '</b>'
+        + '<span>' + (mode === 'memb' ? MEMB[o.membrane] : esc(o.en)) + '</span>';
+      b.onclick = function(){ cur = o; render(); };
+      box.appendChild(b);
+    });
+  }
+
+  function renderDetail(){
+    var o = cur;
+    document.getElementById('detail').innerHTML =
+        '<div class="dhead"><b>' + esc(o.name) + '</b>'
+      + '<span class="den">' + esc(o.en) + '</span>'
+      + '<span class="badge ' + o.membrane + '">' + MEMB[o.membrane] + '</span></div>'
+      + '<div class="djob">' + esc(o.job) + '</div>'
+      + '<div class="ddetail">' + esc(o.detail) + '</div>'
+      + '<div class="dwho">分布：' + esc(o.who) + '</div>'
+      + '<div class="dsrc">依据：' + esc(o.src) + '</div>';
+  }
+
+  function renderPath(){
+    var box = document.getElementById('pathbox');
+    box.hidden = (mode !== 'path');
+    if(box.hidden) return;
+    var h = '';
+    PATH.forEach(function(id, i){
+      h += '<i>' + esc(byId[id].name) + '</i>';
+      h += '<em>→</em>';
+    });
+    h += '<i>细胞外</i>';
+    document.getElementById('pflow').innerHTML = h;
+  }
+
+  function render(){ renderChips(); renderDetail(); renderPath(); }
+
+  var mw = document.getElementById('modes');
+  MODES.forEach(function(m){
+    var b = document.createElement('button');
+    b.className = 'mode'; b.textContent = m.n;
+    b.setAttribute('aria-pressed', String(m.k === mode));
+    b.onclick = function(){
+      mode = m.k;
+      Array.prototype.forEach.call(mw.children, function(x){
+        x.setAttribute('aria-pressed', String(x === b)); });
+      if(mode === 'path') cur = byId[PATH[0]];
+      render();
+    };
+    mw.appendChild(b);
+  });
+
+  document.getElementById('total').textContent = ORG.length;
+  render();
+})();
+</script>
+</body>
+</html>

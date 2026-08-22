@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="g" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#22d3ee" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#22d3ee" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="#07090f"/>
+  <ellipse cx="920" cy="315" rx="250" ry="210" fill="url(#g)"/>
+  <ellipse cx="920" cy="315" rx="228" ry="192" fill="#111823" stroke="rgba(34,211,238,.34)" stroke-width="3"/>
+
+  <!-- 四站 -->
+  <g font-family="PingFang SC,Helvetica,sans-serif" text-anchor="middle">
+    <g>
+      <circle cx="820" cy="212" r="30" fill="rgba(245,185,66,.14)" stroke="#f5b942" stroke-width="2"/>
+      <text x="820" y="221" font-size="25" font-weight="700" fill="#f5b942">1</text>
+      <text x="820" y="268" font-size="19" fill="#e8eef8">核糖体</text>
+    </g>
+    <g>
+      <circle cx="1010" cy="248" r="30" fill="rgba(245,185,66,.14)" stroke="#f5b942" stroke-width="2"/>
+      <text x="1010" y="257" font-size="25" font-weight="700" fill="#f5b942">2</text>
+      <text x="1010" y="304" font-size="19" fill="#e8eef8">内质网</text>
+    </g>
+    <g>
+      <circle cx="990" cy="378" r="30" fill="rgba(245,185,66,.14)" stroke="#f5b942" stroke-width="2"/>
+      <text x="990" y="387" font-size="25" font-weight="700" fill="#f5b942">3</text>
+      <text x="990" y="434" font-size="19" fill="#e8eef8">高尔基体</text>
+    </g>
+    <g>
+      <circle cx="820" cy="400" r="30" fill="rgba(245,185,66,.14)" stroke="#f5b942" stroke-width="2"/>
+      <text x="820" y="409" font-size="25" font-weight="700" fill="#f5b942">4</text>
+      <text x="820" y="456" font-size="19" fill="#e8eef8">细胞膜</text>
+    </g>
+    <g stroke="#f5b942" stroke-width="2" opacity="0.5" fill="none">
+      <path d="M850 220 Q930 214 982 236"/>
+      <path d="M1016 280 Q1024 330 1006 350"/>
+      <path d="M960 390 Q900 408 851 401"/>
+    </g>
+  </g>
+
+  <rect x="80" y="150" width="58" height="5" rx="2.5" fill="#22d3ee"/>
+  <text x="80" y="244" font-family="PingFang SC,Helvetica,sans-serif" font-size="56" font-weight="700" fill="#e8eef8">细胞器巡览</text>
+  <text x="80" y="300" font-family="PingFang SC,Helvetica,sans-serif" font-size="26" fill="#9aabc2">一个器官讲一句它在干嘛</text>
+  <g font-family="PingFang SC,Helvetica,sans-serif" font-size="23" fill="#7d8da3">
+    <text x="80" y="364">10 个细胞器 · 按膜结构分类</text>
+  </g>
+  <rect x="80" y="396" width="530" height="58" rx="12" fill="#111823" stroke="rgba(245,185,66,.34)"/>
+  <text x="104" y="433" font-family="PingFang SC,Helvetica,sans-serif" font-size="22" font-weight="600" fill="#f5b942">分泌蛋白：核糖体 → 内质网 → 高尔基体 → 膜</text>
+  <text x="80" y="502" font-family="PingFang SC,Helvetica,sans-serif" font-size="21" fill="#7d8da3">消化卫士里那些酶，就是这么造出来的</text>
+  <text x="80" y="562" font-family="PingFang SC,Helvetica,sans-serif" font-size="23" fill="#22d3ee">学习实验室 · Learn Lab</text>
+</svg>

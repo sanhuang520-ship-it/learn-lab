@@ -28,6 +28,7 @@ CHECKS = [
     ('核外电子排布',     'electron-shells', 'verify_shells.py',    ['elements.json']),
     ('实验安全条目',     'lab-safety',      'check_items.py',      ['items.json']),
     ('遗传分离比例',     'mendel',          'verify_genetics.py',  []),
+    ('细胞器条目',       'organelles',      'verify_cells.py',     ['organelles.json']),
 ]
 
 # 页面, 页面内计数用的正则, 源文件, 源文件里的条目数
