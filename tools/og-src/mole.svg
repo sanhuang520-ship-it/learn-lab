@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="g" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#f5b942" stop-opacity="0.20"/>
+      <stop offset="1" stop-color="#f5b942" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="#07090f"/>
+  <circle cx="930" cy="300" r="340" fill="url(#g)"/>
+
+  <!-- 四向换算示意 -->
+  <g font-family="PingFang SC,Helvetica,sans-serif" text-anchor="middle">
+    <circle cx="950" cy="300" r="52" fill="#f5b942"/>
+    <text x="950" y="292" font-size="30" font-weight="700" fill="#1d1403">n</text>
+    <text x="950" y="320" font-size="14" fill="#1d1403">物质的量</text>
+
+    <g fill="#111823" stroke="rgba(140,170,220,.22)">
+      <rect x="878" y="128" width="144" height="60" rx="12"/>
+      <rect x="878" y="412" width="144" height="60" rx="12"/>
+      <rect x="1020" y="270" width="140" height="60" rx="12"/>
+    </g>
+    <g font-size="25" font-weight="600" fill="#a3e635">
+      <text x="950" y="167">m 质量</text>
+      <text x="950" y="451">N 粒子数</text>
+      <text x="1090" y="309">V 体积</text>
+    </g>
+    <g stroke="#38bdf8" stroke-width="2" opacity="0.55">
+      <line x1="950" y1="188" x2="950" y2="246"/>
+      <line x1="950" y1="354" x2="950" y2="412"/>
+      <line x1="1004" y1="300" x2="1020" y2="300"/>
+    </g>
+  </g>
+
+  <rect x="80" y="146" width="58" height="5" rx="2.5" fill="#f5b942"/>
+  <text x="80" y="240" font-family="PingFang SC,Helvetica,sans-serif" font-size="58" font-weight="700" fill="#e8eef8">摩尔计算闯关</text>
+  <text x="80" y="296" font-family="PingFang SC,Helvetica,sans-serif" font-size="26" fill="#9aabc2">物质的量 · 四向换算 · 五关限时</text>
+  <rect x="80" y="340" width="530" height="64" rx="12" fill="#111823" stroke="rgba(251,113,133,.32)"/>
+  <text x="104" y="380" font-family="PingFang SC,Helvetica,sans-serif" font-size="24" font-weight="600" fill="#fb7185">22.4 L/mol 只在标准状况下对气体成立</text>
+  <text x="80" y="446" font-family="PingFang SC,Helvetica,sans-serif" font-size="22" fill="#7d8da3">248 道题，答案全部程序重算校验</text>
+  <text x="80" y="556" font-family="PingFang SC,Helvetica,sans-serif" font-size="23" fill="#f5b942">学习实验室 · Learn Lab</text>
+</svg>
