@@ -31,6 +31,7 @@ CHECKS = [
     ('细胞器条目',       'organelles',      'verify_cells.py',     ['organelles.json']),
     ('电路求解',         'circuit',         'verify_circuit.py',   []),
     ('力的合成',         'force',           'verify_vectors.py',   []),
+    ('溶解度数据',       'solubility',      'verify_solubility.py',['data.json']),
 ]
 
 # 页面, 页面内计数用的正则, 源文件, 源文件里的条目数

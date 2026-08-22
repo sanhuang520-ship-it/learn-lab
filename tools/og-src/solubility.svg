@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs><radialGradient id="g" cx="0.5" cy="0.5" r="0.5">
+    <stop offset="0" stop-color="#38bdf8" stop-opacity="0.16"/>
+    <stop offset="1" stop-color="#38bdf8" stop-opacity="0"/></radialGradient></defs>
+  <rect width="1200" height="630" fill="#07090f"/>
+  <circle cx="880" cy="310" r="270" fill="url(#g)"/>
+  <g stroke="rgba(140,170,220,.16)" stroke-width="1.5">
+    <line x1="700.0" y1="470.0" x2="1015.0" y2="470.0"/>
+    <line x1="700.0" y1="150.0" x2="700.0" y2="470.0"/>
+  </g>
+  <text x="700.0" y="138.0" font-family="JetBrains Mono,monospace" font-size="15" fill="#7d8da3">溶解度 g/100g 水</text>
+  <text x="700.0" y="496.0" font-family="JetBrains Mono,monospace" font-size="15" fill="#7d8da3">温度 ℃ →</text>
+  <path d="M 700.0 453.0 L 731.5 443.2 L 763.0 429.6 L 794.5 411.4 L 826.0 388.2 L 857.5 360.6 L 889.0 329.2 L 920.5 293.4 L 952.0 253.7 L 983.5 211.4 L 1015.0 155.1" fill="none" stroke="#38bdf8" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+  <text x="1026" y="160" font-family="PingFang SC,Helvetica,sans-serif" font-size="17" fill="#38bdf8">硝酸钾</text>
+  <path d="M 700.0 424.3 L 731.5 424.2 L 763.0 423.9 L 794.5 423.5 L 826.0 423.2 L 857.5 422.6 L 889.0 422.3 L 920.5 421.6 L 952.0 420.8 L 983.5 420.1 L 1015.0 419.1" fill="none" stroke="#a3e635" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+  <text x="1026" y="424" font-family="PingFang SC,Helvetica,sans-serif" font-size="17" fill="#a3e635">氯化钠</text>
+  <path d="M 700.0 446.3 L 731.5 447.5 L 763.0 448.9 L 794.5 450.4 L 826.0 452.0 L 857.5 453.6 L 889.0 455.2 L 920.5 456.4 L 952.0 458.0 L 983.5 459.1 L 1015.0 460.1" fill="none" stroke="#c084fc" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+  <text x="1026" y="465" font-family="PingFang SC,Helvetica,sans-serif" font-size="17" fill="#c084fc">氢氧化钙×100</text>
+  <rect x="80" y="146" width="58" height="5" rx="2.5" fill="#38bdf8"/>
+  <text x="80" y="240" font-family="PingFang SC,Helvetica,sans-serif" font-size="56" font-weight="700" fill="#e8eef8">溶解度曲线</text>
+  <text x="80" y="296" font-family="PingFang SC,Helvetica,sans-serif" font-size="26" fill="#9aabc2">什么时候降温 · 什么时候蒸发</text>
+  <g font-family="PingFang SC,Helvetica,sans-serif" font-size="23">
+    <text x="80" y="362" fill="#38bdf8">曲线陡 → 降温结晶</text>
+    <text x="80" y="400" fill="#a3e635">曲线平 → 蒸发结晶</text>
+  </g>
+  <rect x="80" y="428" width="470" height="58" rx="12" fill="#111823" stroke="rgba(192,132,252,.36)"/>
+  <text x="104" y="465" font-family="PingFang SC,Helvetica,sans-serif" font-size="22" font-weight="600" fill="#c084fc">氢氧化钙反着来：越热溶得越少</text>
+  <text x="80" y="556" font-family="PingFang SC,Helvetica,sans-serif" font-size="23" fill="#38bdf8">学习实验室 · Learn Lab</text>
+</svg>

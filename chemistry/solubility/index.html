@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>溶解度曲线 · 什么时候降温、什么时候蒸发</title>
+<meta name="description" content="拖温度看五条溶解度曲线怎么走。硝酸钾陡升、氯化钠几乎平、氢氧化钙反着来——曲线的陡缓直接决定该用降温结晶还是蒸发结晶。还能算饱和溶液的溶质质量分数。">
+<link rel="canonical" href="https://sanhuang520-ship-it.github.io/learn-lab/chemistry/solubility/">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:site_name" content="学习实验室 · Learn Lab">
+<meta property="og:title" content="溶解度曲线 · 什么时候降温、什么时候蒸发">
+<meta property="og:description" content="曲线陡不陡，决定该降温结晶还是蒸发结晶。氢氧化钙是那个反着来的例外。">
+<meta property="og:url" content="https://sanhuang520-ship-it.github.io/learn-lab/chemistry/solubility/">
+<meta property="og:image" content="https://sanhuang520-ship-it.github.io/learn-lab/assets/og/solubility.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="溶解度曲线 · 什么时候降温、什么时候蒸发">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="溶解度曲线 · 什么时候降温、什么时候蒸发">
+<meta name="twitter:description" content="曲线陡不陡，决定该降温结晶还是蒸发结晶。">
+<meta name="twitter:image" content="https://sanhuang520-ship-it.github.io/learn-lab/assets/og/solubility.png">
+<meta name="twitter:image:alt" content="溶解度曲线 · 什么时候降温、什么时候蒸发">
+<meta name="theme-color" content="#07090f">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://sanhuang520-ship-it.github.io/learn-lab/#website","name":"学习实验室 · Learn Lab","url":"https://sanhuang520-ship-it.github.io/learn-lab/","inLanguage":"zh-CN"},{"@type":"LearningResource","name":"溶解度曲线 · 什么时候降温、什么时候蒸发","url":"https://sanhuang520-ship-it.github.io/learn-lab/chemistry/solubility/","description":"五种物质溶解度曲线的交互对照：拖温度看数值变化，自动判定降温结晶或蒸发结晶，并换算饱和溶液的溶质质量分数。含氢氧化钙这一反常例外。","inLanguage":"zh-CN","isAccessibleForFree":true,"educationalLevel":["初中"],"learningResourceType":"交互图表","educationalUse":"探究","image":"https://sanhuang520-ship-it.github.io/learn-lab/assets/og/solubility.png","isPartOf":{"@id":"https://sanhuang520-ship-it.github.io/learn-lab/#website"}}]}</script>
+<style>
+  :root{
+    --void:#07090f; --ink:#111823; --ink2:#161f2c;
+    --line:rgba(140,170,220,.13); --line-hi:rgba(140,170,220,.32);
+    --text:#e8eef8; --muted:#9aabc2; --dim:#7d8da3;
+    --sky:#38bdf8; --lime:#a3e635; --amber:#f5b942; --rose:#fb7185; --violet:#c084fc;
+    --fb:"Noto Sans SC",system-ui,-apple-system,sans-serif;
+    --fm:"JetBrains Mono",ui-monospace,SFMono-Regular,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--void);color:var(--text);font-family:var(--fb);line-height:1.75;
+    -webkit-font-smoothing:antialiased;padding:18px 18px 60px}
+  .wrap{max-width:820px;margin:0 auto}
+  .ll-back{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;padding:11px 14px;
+    border:1px solid var(--line-hi);border-radius:999px;background:var(--ink);color:var(--muted);
+    font:600 12px/1 var(--fm);letter-spacing:.08em;text-decoration:none;min-height:44px;transition:all .2s}
+  .ll-back:hover{color:var(--sky);border-color:var(--sky)}
+  h1{font-size:25px;font-weight:700;letter-spacing:.4px;margin-bottom:5px}
+  .en{font:600 11.5px/1 var(--fm);color:var(--sky);letter-spacing:.16em;margin-bottom:12px}
+  .lede{color:var(--muted);font-size:14.5px;margin-bottom:18px}
+  .lede b{color:var(--text)}
+
+  .legend{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .lg{display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:999px;
+    background:transparent;color:var(--muted);cursor:pointer;padding:8px 14px;min-height:42px;
+    font-size:13px;font-family:inherit;transition:all .16s}
+  .lg i{width:11px;height:11px;border-radius:3px;display:block;flex:0 0 auto}
+  .lg:hover{border-color:var(--line-hi);color:var(--text)}
+  .lg.off{opacity:.34}
+  .lg.off i{background:var(--dim) !important}
+
+  .chart{border:1px solid var(--line);border-radius:16px;background:var(--ink);padding:14px;margin-bottom:14px}
+  svg{display:block;width:100%;height:auto;touch-action:none}
+
+  .tctl{border:1px solid var(--line);border-radius:13px;background:var(--ink2);
+    padding:15px 17px;margin-bottom:16px}
+  .tctl .row{display:flex;align-items:baseline;gap:11px;margin-bottom:10px;flex-wrap:wrap}
+  .tctl label{font-size:13px;color:var(--dim);font-family:var(--fm)}
+  .tctl .tv{font:700 24px/1 var(--fm);color:var(--sky)}
+  input[type=range]{width:100%;accent-color:var(--sky);height:30px;cursor:pointer}
+
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{padding:11px 10px;text-align:right;border-bottom:1px solid var(--line)}
+  th{font:600 11.5px/1.4 var(--fm);color:var(--dim);letter-spacing:.06em;text-align:right}
+  th:first-child,td:first-child{text-align:left}
+  td.n{font-family:var(--fm);font-weight:600}
+  .sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:8px;vertical-align:middle}
+  tr.off{opacity:.3}
+  .tag{font:600 11px/1 var(--fm);border-radius:999px;padding:4px 9px;white-space:nowrap}
+  .tag.cool{color:var(--sky);border:1px solid rgba(56,189,248,.4);background:rgba(56,189,248,.08)}
+  .tag.evap{color:var(--lime);border:1px solid rgba(163,230,53,.4);background:rgba(163,230,53,.08)}
+  .tag.odd{color:var(--violet);border:1px solid rgba(192,132,252,.4);background:rgba(192,132,252,.08)}
+
+  .panel{border:1px solid var(--line);border-radius:14px;background:var(--ink);
+    padding:16px 18px;margin-top:16px}
+  .panel h2{font:600 12px/1 var(--fm);color:var(--sky);letter-spacing:.14em;margin-bottom:12px}
+  .panel p{font-size:14px;color:var(--muted);line-height:1.85;margin-bottom:9px}
+  .panel p:last-child{margin-bottom:0}
+  .panel b{color:var(--text)}
+  .panel code{color:var(--lime);font-family:var(--fm);font-size:13.5px}
+  .panel .warn{color:var(--rose)}
+
+  .foot{margin-top:18px;font-size:12.5px;color:var(--muted);line-height:1.9}
+  .foot b{color:var(--text)}
+
+  @media(max-width:640px){
+    h1{font-size:21px}
+    .chart{padding:9px}
+    table{font-size:13px}
+    th,td{padding:9px 6px}
+    .hidesm{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="ll-back" href="../../">← 学习实验室</a>
+
+  <h1>溶解度曲线</h1>
+  <div class="en">SOLUBILITY · 什么时候降温、什么时候蒸发</div>
+  <p class="lede">溶解度 = <b>一定温度</b>下，某物质在 <b>100 g 水</b>里<b>达到饱和</b>时溶解的<b>质量</b>。
+     拖下面的温度条，看五条曲线怎么走 ——
+     <b>曲线陡不陡，直接决定这东西该用降温结晶还是蒸发结晶。</b></p>
+
+  <div class="legend" id="legend"></div>
+
+  <div class="chart">
+    <svg id="cv" viewBox="0 0 760 400" role="img" aria-label="溶解度曲线图"></svg>
+  </div>
+
+  <div class="tctl">
+    <div class="row">
+      <label for="temp">温度</label>
+      <span class="tv" id="tv">20 ℃</span>
+    </div>
+    <input type="range" id="temp" min="0" max="100" step="1" value="20" aria-label="温度">
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>物质</th>
+        <th>溶解度 S</th>
+        <th class="hidesm">饱和溶液质量分数</th>
+        <th>提纯方法</th>
+      </tr>
+    </thead>
+    <tbody id="tb"></tbody>
+  </table>
+
+  <div class="panel">
+    <h2>怎么判断该降温还是蒸发</h2>
+    <p><b>看曲线陡不陡。</b>溶解度随温度变化<b>大</b>的（曲线陡，如硝酸钾）→ 用<b>降温结晶</b>：
+       高温配成浓溶液，一降温溶解度骤降，大量析出。</p>
+    <p>溶解度随温度变化<b>小</b>的（曲线平，如氯化钠）→ 用<b>蒸发结晶</b>：
+       降温没用，只能把水蒸掉。海水晒盐就是这个道理。</p>
+    <p class="warn">⚠️ <b>氢氧化钙是那个反着来的例外</b>：温度越高溶解度越小。
+       所以石灰水<b>加热反而会变浑浊</b>。这条几乎每年都考。</p>
+  </div>
+
+  <div class="panel">
+    <h2>从溶解度算饱和溶液的质量分数</h2>
+    <p><code>w = S / (100 + S) × 100%</code></p>
+    <p>⚠️ 分母是 <b>100 + S</b>，不是 100 —— 因为分母要的是<b>溶液</b>质量
+       （100 g 水 + S 克溶质），不是溶剂质量。这是最常错的一步。</p>
+    <p>由此还能看出：<b>不管 S 多大，饱和溶液的质量分数永远小于 100%</b>，
+       而且 S 越大 w 越大。</p>
+  </div>
+
+  <div class="foot">
+    <p>数据为教学常用取值，与人教版九年级下册第九单元附表一致
+       （20 ℃：硝酸钾 31.6 g、氯化钠 36.0 g、氢氧化钙 0.165 g）。</p>
+    <p>⚠️ 氢氧化钙的曲线在图上按<b>放大 100 倍</b>绘制，否则贴着横轴根本看不见 ——
+       表格里给的是真实数值。</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var DATA = {"note": "溶解度 = 在一定温度下，某固体物质在 100 g 溶剂（通常是水）里达到饱和状态时所溶解的质量，单位 g。数据为教学常用取值，与人教版九年级化学下册第九单元附表一致。", "substances": [{"id": "kno3", "name": "硝酸钾", "formula": "KNO3", "color": "#38bdf8", "trend": "陡升", "points": {"0": 13.3, "10": 20.9, "20": 31.6, "30": 45.8, "40": 63.9, "50": 85.5, "60": 110, "70": 138, "80": 169, "90": 202, "100": 246}, "note": "随温度升高溶解度**急剧增大**。这是「降温结晶」的典型对象——高温配成浓溶液，一降温就大量析出。"}, {"id": "nacl", "name": "氯化钠", "formula": "NaCl", "color": "#a3e635", "trend": "几乎不变", "points": {"0": 35.7, "10": 35.8, "20": 36.0, "30": 36.3, "40": 36.6, "50": 37.0, "60": 37.3, "70": 37.8, "80": 38.4, "90": 39.0, "100": 39.8}, "note": "溶解度**受温度影响很小**（0→100 ℃ 只从 35.7 涨到 39.8）。所以从海水/盐水里提取它靠**蒸发结晶**，不是降温。"}, {"id": "kcl", "name": "氯化钾", "formula": "KCl", "color": "#f5b942", "trend": "缓升", "points": {"0": 27.6, "10": 31.0, "20": 34.0, "30": 37.0, "40": 40.0, "50": 42.6, "60": 45.5, "70": 48.3, "80": 51.1, "90": 53.9, "100": 56.7}, "note": "介于两者之间，随温度平缓上升。"}, {"id": "nh4cl", "name": "氯化铵", "formula": "NH4Cl", "color": "#fb7185", "trend": "较陡升", "points": {"0": 29.4, "10": 33.3, "20": 37.2, "30": 41.4, "40": 45.8, "50": 50.4, "60": 55.2, "70": 60.2, "80": 65.6, "90": 71.3, "100": 77.3}, "note": "随温度明显增大，但不如硝酸钾陡。"}, {"id": "caoh2", "name": "氢氧化钙", "formula": "Ca(OH)2", "color": "#c084fc", "trend": "下降", "points": {"0": 0.185, "10": 0.176, "20": 0.165, "30": 0.153, "40": 0.141, "50": 0.128, "60": 0.116, "70": 0.106, "80": 0.094, "90": 0.085, "100": 0.077}, "note": "⚠️ **反常**：溶解度随温度升高而**减小**。所以石灰水加热反而会变浑浊。这是必考的例外。"}]};
+  var SUBS = DATA.substances;
+  var TEMPS = [0,10,20,30,40,50,60,70,80,90,100];
+  var CA_SCALE = 100;                 // 氢氧化钙曲线放大倍数（否则看不见）
+  var temp = 20, off = {};
+
+  // 图区（viewBox 760×400）
+  var L = 62, R = 728, T = 24, B = 344, YMAX = 250;
+
+  function fmt(x, d){
+    var r = Math.round(x * Math.pow(10,d||2)) / Math.pow(10,d||2);
+    return (Math.abs(r - Math.round(r)) < 1e-9) ? String(Math.round(r)) : String(r);
+  }
+  function sAt(s, t){
+    // 相邻温度点之间线性插值（教材曲线也是这么连的）
+    var lo = Math.floor(t/10)*10, hi = Math.min(lo+10, 100);
+    var a = s.points[String(lo)], b = s.points[String(hi)];
+    return hi === lo ? a : a + (b-a) * (t-lo)/10;
+  }
+  function drawScale(s){ return s.id === 'caoh2' ? CA_SCALE : 1; }
+  function X(t){ return L + (R-L) * t/100; }
+  function Y(v){ return B - (B-T) * Math.min(v, YMAX)/YMAX; }
+
+  function draw(){
+    var g = '';
+    // 网格与坐标
+    for(var v=0; v<=YMAX; v+=50){
+      g += '<line x1="'+L+'" y1="'+Y(v)+'" x2="'+R+'" y2="'+Y(v)
+        +  '" stroke="var(--line)" stroke-width="1"/>'
+        +  '<text x="'+(L-10)+'" y="'+(Y(v)+4)+'" fill="var(--dim)" text-anchor="end"'
+        +  ' font-family="JetBrains Mono,monospace" font-size="12">'+v+'</text>';
+    }
+    for(var t=0; t<=100; t+=20){
+      g += '<line x1="'+X(t)+'" y1="'+T+'" x2="'+X(t)+'" y2="'+B
+        +  '" stroke="var(--line)" stroke-width="1"/>'
+        +  '<text x="'+X(t)+'" y="'+(B+22)+'" fill="var(--dim)" text-anchor="middle"'
+        +  ' font-family="JetBrains Mono,monospace" font-size="12">'+t+'</text>';
+    }
+    g += '<text x="'+L+'" y="'+(T-8)+'" fill="var(--dim)" font-family="JetBrains Mono,monospace"'
+      +  ' font-size="12">溶解度 g / 100g 水</text>';
+    g += '<text x="'+R+'" y="'+(B+22)+'" fill="var(--dim)" text-anchor="end"'
+      +  ' font-family="JetBrains Mono,monospace" font-size="12">温度 ℃</text>';
+
+    // 曲线
+    SUBS.forEach(function(s){
+      if(off[s.id]) return;
+      var k = drawScale(s), d = '';
+      TEMPS.forEach(function(t, i){
+        d += (i ? ' L ' : 'M ') + X(t) + ' ' + Y(s.points[String(t)] * k);
+      });
+      g += '<path d="'+d+'" fill="none" stroke="'+s.color+'" stroke-width="2.5"'
+        +  ' stroke-linejoin="round" stroke-linecap="round"/>';
+      // 末端标签
+      var yEnd = Y(s.points['100'] * k);
+      g += '<text x="'+(R+4)+'" y="'+(yEnd+4)+'" fill="'+s.color
+        +  '" font-family="JetBrains Mono,monospace" font-size="11" text-anchor="end"'
+        +  ' opacity="0.9">'+s.name+(k>1?' ×'+k:'')+'</text>';
+    });
+
+    // 温度游标
+    g += '<line x1="'+X(temp)+'" y1="'+T+'" x2="'+X(temp)+'" y2="'+B
+      +  '" stroke="var(--sky)" stroke-width="2" stroke-dasharray="4 4"/>';
+    SUBS.forEach(function(s){
+      if(off[s.id]) return;
+      var v = sAt(s, temp) * drawScale(s);
+      if(v > YMAX) return;
+      g += '<circle cx="'+X(temp)+'" cy="'+Y(v)+'" r="5" fill="'+s.color
+        +  '" stroke="var(--void)" stroke-width="2"/>';
+    });
+    document.getElementById('cv').innerHTML = g;
+  }
+
+  function method(s){
+    if(s.id === 'caoh2') return ['odd','溶解度反着变'];
+    var ratio = s.points['100'] / s.points['0'];
+    return ratio < 1.5 ? ['evap','蒸发结晶'] : ['cool','降温结晶'];
+  }
+
+  function render(){
+    document.getElementById('tv').textContent = temp + ' ℃';
+    var rows = '';
+    SUBS.forEach(function(s){
+      var S = sAt(s, temp), w = S/(100+S)*100, m = method(s);
+      rows += '<tr class="'+(off[s.id]?'off':'')+'">'
+        + '<td><span class="sw" style="background:'+s.color+'"></span>'+s.name+'</td>'
+        + '<td class="n" style="color:'+s.color+'">'+fmt(S, S<1?3:1)+' g</td>'
+        + '<td class="n hidesm">'+fmt(w, w<1?2:1)+'%</td>'
+        + '<td><span class="tag '+m[0]+'">'+m[1]+'</span></td></tr>';
+    });
+    document.getElementById('tb').innerHTML = rows;
+    draw();
+  }
+
+  var lg = document.getElementById('legend');
+  SUBS.forEach(function(s){
+    var b = document.createElement('button');
+    b.className = 'lg';
+    b.innerHTML = '<i style="background:'+s.color+'"></i>'+s.name+' <span style="opacity:.6">'
+      + s.formula.replace(/(\d+)/g,'<sub>$1</sub>')+'</span>';
+    b.onclick = function(){
+      off[s.id] = !off[s.id];
+      b.classList.toggle('off', !!off[s.id]);
+      render();
+    };
+    lg.appendChild(b);
+  });
+
+  document.getElementById('temp').oninput = function(){
+    temp = parseInt(this.value, 10); render(); };
+
+  render();
+})();
+</script>
+</body>
+</html>
