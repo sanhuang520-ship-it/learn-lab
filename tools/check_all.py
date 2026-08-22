@@ -30,6 +30,7 @@ CHECKS = [
     ('遗传分离比例',     'mendel',          'verify_genetics.py',  []),
     ('细胞器条目',       'organelles',      'verify_cells.py',     ['organelles.json']),
     ('电路求解',         'circuit',         'verify_circuit.py',   []),
+    ('力的合成',         'force',           'verify_vectors.py',   []),
 ]
 
 # 页面, 页面内计数用的正则, 源文件, 源文件里的条目数

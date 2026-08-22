@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="g" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#f5b942" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#f5b942" stop-opacity="0"/>
+    </radialGradient>
+    <marker id="a1" markerUnits="userSpaceOnUse" markerWidth="20" markerHeight="16" refX="18" refY="8" orient="auto"><polygon points="0,0 20,8 0,16" fill="#38bdf8"/></marker>
+    <marker id="a2" markerUnits="userSpaceOnUse" markerWidth="20" markerHeight="16" refX="18" refY="8" orient="auto"><polygon points="0,0 20,8 0,16" fill="#a78bfa"/></marker>
+    <marker id="a3" markerUnits="userSpaceOnUse" markerWidth="20" markerHeight="16" refX="18" refY="8" orient="auto"><polygon points="0,0 20,8 0,16" fill="#f5b942"/></marker>
+  </defs>
+  <rect width="1200" height="630" fill="#07090f"/>
+  <circle cx="900" cy="360" r="280" fill="url(#g)"/>
+
+  <!-- 平行四边形：F₁ 水平、F₂ 夹 60°、两力等长 110px。
+       合力端点由矢量和算出（30° 方向、长 √3×110≈190.5），不是随手画的。 -->
+  <g>
+    <line x1="910" y1="440" x2="965" y2="345" stroke="rgba(140,170,220,.32)" stroke-width="2" stroke-dasharray="6 6"/>
+    <line x1="855" y1="345" x2="965" y2="345" stroke="rgba(140,170,220,.32)" stroke-width="2" stroke-dasharray="6 6"/>
+    <path d="M 852 440 A 52 52 0 0 0 826 395" fill="none" stroke="#7d8da3" stroke-width="2"/>
+    <text x="872" y="418" font-family="JetBrains Mono,monospace" font-size="17" fill="#7d8da3">60°</text>
+
+    <line x1="800" y1="440" x2="910" y2="440" stroke="#38bdf8" stroke-width="5" marker-end="url(#a1)"/>
+    <text x="924" y="447" font-family="JetBrains Mono,monospace" font-size="22" font-weight="700" fill="#38bdf8">F₁</text>
+
+    <line x1="800" y1="440" x2="855" y2="345" stroke="#a78bfa" stroke-width="5" marker-end="url(#a2)"/>
+    <text x="828" y="332" font-family="JetBrains Mono,monospace" font-size="22" font-weight="700" fill="#a78bfa">F₂</text>
+
+    <line x1="800" y1="440" x2="965" y2="345" stroke="#f5b942" stroke-width="7" marker-end="url(#a3)"/>
+    <text x="996" y="338" font-family="JetBrains Mono,monospace" font-size="24" font-weight="700" fill="#f5b942">F</text>
+    <circle cx="800" cy="440" r="7" fill="#e8eef8"/>
+  </g>
+
+  <rect x="80" y="150" width="58" height="5" rx="2.5" fill="#f5b942"/>
+  <text x="80" y="244" font-family="PingFang SC,Helvetica,sans-serif" font-size="56" font-weight="700" fill="#e8eef8">力的合成</text>
+  <text x="80" y="300" font-family="PingFang SC,Helvetica,sans-serif" font-size="26" fill="#9aabc2">平行四边形定则 · 拖着改夹角</text>
+  <rect x="80" y="340" width="516" height="60" rx="12" fill="#111823" stroke="rgba(251,113,133,.34)"/>
+  <text x="104" y="378" font-family="PingFang SC,Helvetica,sans-serif" font-size="23" font-weight="600" fill="#fb7185">合力可以比两个分力都小</text>
+  <text x="80" y="448" font-family="JetBrains Mono,PingFang SC,monospace" font-size="22" fill="#a3e635">|F₁ − F₂| ≤ F ≤ F₁ + F₂</text>
+  <text x="80" y="496" font-family="PingFang SC,Helvetica,sans-serif" font-size="21" fill="#7d8da3">两个 5N 夹 120°，合力还是 5N</text>
+  <text x="80" y="562" font-family="PingFang SC,Helvetica,sans-serif" font-size="23" fill="#f5b942">学习实验室 · Learn Lab</text>
+</svg>

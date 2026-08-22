@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>力的合成 · 合力为什么能比分力小</title>
+<meta name="description" content="拖动改两个力的大小和夹角，实时看平行四边形定则怎么画出合力。夹角拉到 120° 会发现：两个 5N 的合力还是 5N。合力范围永远是 |F₁−F₂| 到 F₁+F₂。">
+<link rel="canonical" href="https://sanhuang520-ship-it.github.io/learn-lab/physics/force/">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:site_name" content="学习实验室 · Learn Lab">
+<meta property="og:title" content="力的合成 · 合力为什么能比分力小">
+<meta property="og:description" content="拖动改夹角，实时看平行四边形定则。两个 5N 夹角 120° 时合力还是 5N。">
+<meta property="og:url" content="https://sanhuang520-ship-it.github.io/learn-lab/physics/force/">
+<meta property="og:image" content="https://sanhuang520-ship-it.github.io/learn-lab/assets/og/force.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="力的合成 · 合力为什么能比分力小">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="力的合成 · 合力为什么能比分力小">
+<meta name="twitter:description" content="拖动改夹角，实时看平行四边形定则。">
+<meta name="twitter:image" content="https://sanhuang520-ship-it.github.io/learn-lab/assets/og/force.png">
+<meta name="twitter:image:alt" content="力的合成 · 合力为什么能比分力小">
+<meta name="theme-color" content="#07090f">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://sanhuang520-ship-it.github.io/learn-lab/#website","name":"学习实验室 · Learn Lab","url":"https://sanhuang520-ship-it.github.io/learn-lab/","inLanguage":"zh-CN"},{"@type":"LearningResource","name":"力的合成 · 合力为什么能比分力小","url":"https://sanhuang520-ship-it.github.io/learn-lab/physics/force/","description":"共点力合成的交互演示：拖动改两力大小与夹角，实时画出平行四边形并算出合力大小与方向，直观呈现合力范围 |F₁−F₂| ≤ F ≤ F₁+F₂。","inLanguage":"zh-CN","isAccessibleForFree":true,"educationalLevel":["初中","高中"],"learningResourceType":"交互演示","educationalUse":"探究","image":"https://sanhuang520-ship-it.github.io/learn-lab/assets/og/force.png","isPartOf":{"@id":"https://sanhuang520-ship-it.github.io/learn-lab/#website"}}]}</script>
+<style>
+  :root{
+    --void:#07090f; --ink:#111823; --ink2:#161f2c;
+    --line:rgba(140,170,220,.13); --line-hi:rgba(140,170,220,.32);
+    --text:#e8eef8; --muted:#9aabc2; --dim:#7d8da3;
+    --f1:#38bdf8; --f2:#a78bfa; --sum:#f5b942; --lime:#a3e635; --rose:#fb7185;
+    --fb:"Noto Sans SC",system-ui,-apple-system,sans-serif;
+    --fm:"JetBrains Mono",ui-monospace,SFMono-Regular,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--void);color:var(--text);font-family:var(--fb);line-height:1.75;
+    -webkit-font-smoothing:antialiased;padding:18px 18px 60px}
+  .wrap{max-width:800px;margin:0 auto}
+  .ll-back{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;padding:11px 14px;
+    border:1px solid var(--line-hi);border-radius:999px;background:var(--ink);color:var(--muted);
+    font:600 12px/1 var(--fm);letter-spacing:.08em;text-decoration:none;min-height:44px;transition:all .2s}
+  .ll-back:hover{color:var(--sum);border-color:var(--sum)}
+  h1{font-size:25px;font-weight:700;letter-spacing:.4px;margin-bottom:5px}
+  .en{font:600 11.5px/1 var(--fm);color:var(--sum);letter-spacing:.16em;margin-bottom:12px}
+  .lede{color:var(--muted);font-size:14.5px;margin-bottom:18px}
+  .lede b{color:var(--text)}
+
+  .presets{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+  .pst{font-size:13px;padding:9px 14px;border-radius:999px;border:1px solid var(--line);
+    background:transparent;color:var(--muted);cursor:pointer;min-height:42px;font-family:inherit;transition:all .16s}
+  .pst:hover{border-color:var(--line-hi);color:var(--text)}
+
+  .stage{border:1px solid var(--line);border-radius:16px;background:var(--ink);
+    padding:14px;margin-bottom:16px}
+  svg{display:block;width:100%;height:auto;touch-action:none}
+
+  .ctrls{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px}
+  .ctrl{border:1px solid var(--line);border-radius:13px;background:var(--ink2);padding:14px 15px}
+  .ctrl label{display:block;font-size:12.5px;color:var(--dim);margin-bottom:8px;font-family:var(--fm)}
+  .ctrl .v{font:700 21px/1.2 var(--fm);margin-bottom:9px}
+  .ctrl.a .v{color:var(--f1)} .ctrl.b .v{color:var(--f2)} .ctrl.t .v{color:var(--text)}
+  input[type=range]{width:100%;accent-color:var(--sum);height:30px;cursor:pointer}
+
+  .out{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+  .card{border:1px solid var(--line);border-radius:13px;background:var(--ink2);padding:16px;text-align:center}
+  .card span{display:block;font-size:11.5px;color:var(--dim);margin-bottom:6px;font-family:var(--fm)}
+  .card b{font:700 24px/1.2 var(--fm);color:var(--sum)}
+  .card em{display:block;font-style:normal;font-size:12.5px;color:var(--muted);margin-top:5px}
+
+  .range{border:1px solid var(--line);border-radius:13px;background:var(--ink);padding:15px 17px;margin-bottom:14px}
+  .range .rt{font:600 11px/1 var(--fm);color:var(--dim);letter-spacing:.12em;margin-bottom:11px}
+  .rbar{position:relative;height:34px;border-radius:8px;background:var(--ink2);overflow:hidden}
+  .rbar .fill{position:absolute;top:0;bottom:0;background:linear-gradient(90deg,rgba(245,185,66,.18),rgba(245,185,66,.32))}
+  .rbar .mark{position:absolute;top:0;bottom:0;width:3px;background:var(--sum);border-radius:2px}
+  .rlab{display:flex;justify-content:space-between;margin-top:8px;font:600 12px/1 var(--fm);color:var(--muted)}
+
+  .note{border-radius:12px;padding:14px 16px;font-size:14.5px;line-height:1.8;margin-bottom:14px}
+  .note.hit{border:1px solid rgba(163,230,53,.4);background:rgba(163,230,53,.07);color:var(--lime)}
+  .note.warn{border:1px solid rgba(251,113,133,.4);background:rgba(251,113,133,.07);color:var(--rose)}
+  .note b{color:var(--text)}
+
+  .law{margin-top:20px;border:1px solid var(--line);border-radius:14px;background:var(--ink);overflow:hidden}
+  .law h2{font:600 12px/1 var(--fm);color:var(--sum);letter-spacing:.14em;padding:14px 18px;
+    border-bottom:1px solid var(--line)}
+  .law ul{list-style:none;padding:8px 0}
+  .law li{padding:8px 18px;font-size:14px;color:var(--muted);line-height:1.75}
+  .law code{color:var(--lime);font-family:var(--fm);font-size:13.5px}
+  .law b{color:var(--text)}
+
+  .foot{margin-top:18px;font-size:12.5px;color:var(--muted);line-height:1.9}
+  .foot b{color:var(--text)}
+
+  @media(max-width:640px){
+    h1{font-size:21px}
+    .ctrls{grid-template-columns:1fr}
+    .out{grid-template-columns:1fr}
+    .stage{padding:10px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="ll-back" href="../../">← 学习实验室</a>
+
+  <h1>力的合成</h1>
+  <div class="en">VECTOR ADDITION · 合力为什么能比分力小</div>
+  <p class="lede">两个力拉同一个物体，效果等于一个力 —— 那个力叫<b>合力</b>。
+     拖下面的滑块改大小和夹角，<b>平行四边形会跟着变，合力当场算出来</b>。
+     把两个 5N 的夹角拖到 120° 看看，你会发现合力还是 5N。</p>
+
+  <div class="presets" id="presets"></div>
+
+  <div class="stage">
+    <svg id="cv" viewBox="0 0 620 320" role="img" aria-label="力的合成示意图"></svg>
+  </div>
+
+  <div class="ctrls">
+    <div class="ctrl a">
+      <label for="s1">F₁ 大小</label>
+      <div class="v" id="v1">5 N</div>
+      <input type="range" id="s1" min="1" max="10" step="0.5" value="5" aria-label="F1 大小">
+    </div>
+    <div class="ctrl b">
+      <label for="s2">F₂ 大小</label>
+      <div class="v" id="v2">5 N</div>
+      <input type="range" id="s2" min="1" max="10" step="0.5" value="5" aria-label="F2 大小">
+    </div>
+    <div class="ctrl t">
+      <label for="st">两力夹角 θ</label>
+      <div class="v" id="vt">60°</div>
+      <input type="range" id="st" min="0" max="180" step="1" value="60" aria-label="两力夹角">
+    </div>
+  </div>
+
+  <div class="out">
+    <div class="card"><span>合力大小 F</span><b id="oF">—</b><em id="oFm"></em></div>
+    <div class="card"><span>合力方向（与 F₁ 的夹角）</span><b id="oA">—</b><em>逆时针为正</em></div>
+  </div>
+
+  <div class="range">
+    <div class="rt">合力的取值范围</div>
+    <div class="rbar"><span class="fill" id="rfill"></span><span class="mark" id="rmark"></span></div>
+    <div class="rlab"><span id="rlo">—</span><span id="rhi">—</span></div>
+  </div>
+
+  <div id="notes"></div>
+
+  <div class="law">
+    <h2>要记住的三条</h2>
+    <ul>
+      <li><b>平行四边形定则</b>：两个力为邻边作平行四边形，<b>同一顶点引出的对角线</b>就是合力。</li>
+      <li><code>|F₁ − F₂| ≤ F ≤ F₁ + F₂</code>　合力范围只跟两力大小有关，
+        <b>夹角决定它落在范围里的哪一点</b>。同向取到上限，反向取到下限。</li>
+      <li><b>合力不一定比分力大。</b>这是最反直觉的一点 ——
+        两个 5N 夹角 120° 时合力只有 5N；夹角 180° 时合力是 0。
+        合力是「效果上等效」，不是「加起来」。</li>
+    </ul>
+  </div>
+
+  <div class="foot">
+    <p>⚠️ 这里只做<b>共点力</b>（两个力作用在同一点）的合成。
+       不在同一点的力还会产生转动效果，那是力矩，不在这一课范围内。</p>
+    <p>计算用余弦定理 <code>F = √(F₁² + F₂² + 2F₁F₂cosθ)</code>，
+       与按分量合成的结果交叉校验过；合力范围、随夹角单调递减也都验过，脚本在仓库里。</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var PRESETS = [
+    {n:'3N + 4N 垂直',      f1:3, f2:4, t:90},
+    {n:'两个 5N 夹 60°',    f1:5, f2:5, t:60},
+    {n:'两个 5N 夹 120°',   f1:5, f2:5, t:120},
+    {n:'合力比分力还小',    f1:5, f2:5, t:150},
+    {n:'同向（θ=0°）',      f1:6, f2:4, t:0},
+    {n:'反向（θ=180°）',    f1:6, f2:4, t:180},
+    {n:'合力为零',          f1:5, f2:5, t:180}
+  ];
+  var f1 = 5, f2 = 5, th = 60;
+  var OX = 120, OY = 262, SCALE = 19;   // 原点与 1N 对应的像素（画布 620×320）
+
+  function fmt(x){
+    var r = Math.round(x*100)/100;
+    return (Math.abs(r - Math.round(r)) < 1e-9) ? String(Math.round(r)) : r.toFixed(2).replace(/0+$/,'').replace(/\.$/,'');
+  }
+  function compose(){
+    var t = th * Math.PI/180;
+    var x = f1 + f2*Math.cos(t), y = f2*Math.sin(t);
+    return {x:x, y:y, mag:Math.hypot(x,y), ang:Math.atan2(y,x)*180/Math.PI};
+  }
+
+  function arrow(x1,y1,x2,y2,color,w,label,dash){
+    var dx=x2-x1, dy=y2-y1, L=Math.hypot(dx,dy);
+    if(L < 1) return '';
+    var ux=dx/L, uy=dy/L, hl=Math.min(13, L*0.32);
+    var bx=x2-ux*hl, by=y2-uy*hl, px=-uy, py=ux, hw=hl*0.42;
+    var g = '<line x1="'+x1+'" y1="'+y1+'" x2="'+bx+'" y2="'+by+'" stroke="'+color
+          + '" stroke-width="'+w+'" stroke-linecap="round"'+(dash?' stroke-dasharray="5 5"':'')+'/>'
+          + '<polygon points="'+x2+','+y2+' '+(bx+px*hw)+','+(by+py*hw)+' '+(bx-px*hw)+','+(by-py*hw)
+          + '" fill="'+color+'"/>';
+    if(label){
+      g += '<text x="'+(x2+ux*20)+'" y="'+(y2+uy*20+5)+'" fill="'+color
+        +  '" font-family="JetBrains Mono,monospace" font-size="16" font-weight="700"'
+        +  ' text-anchor="middle">'+label+'</text>';
+    }
+    return g;
+  }
+
+  function draw(){
+    var r = compose();
+    // y 轴在 SVG 里向下，画的时候取反
+    var p1 = {x: OX + f1*SCALE,        y: OY};
+    var t = th*Math.PI/180;
+    var p2 = {x: OX + f2*Math.cos(t)*SCALE, y: OY - f2*Math.sin(t)*SCALE};
+    var pr = {x: OX + r.x*SCALE,       y: OY - r.y*SCALE};
+
+    var g = '';
+    // 平行四边形的两条虚边
+    g += '<line x1="'+p1.x+'" y1="'+p1.y+'" x2="'+pr.x+'" y2="'+pr.y
+      +  '" stroke="var(--line-hi)" stroke-width="1.5" stroke-dasharray="5 5"/>';
+    g += '<line x1="'+p2.x+'" y1="'+p2.y+'" x2="'+pr.x+'" y2="'+pr.y
+      +  '" stroke="var(--line-hi)" stroke-width="1.5" stroke-dasharray="5 5"/>';
+    // 夹角弧
+    if(th > 2){
+      var R = 42;
+      var ax = OX + R, ay = OY;
+      var bx = OX + R*Math.cos(t), by = OY - R*Math.sin(t);
+      g += '<path d="M '+ax+' '+ay+' A '+R+' '+R+' 0 0 0 '+bx+' '+by
+        +  '" fill="none" stroke="var(--dim)" stroke-width="1.5"/>';
+      var mid = t/2;
+      g += '<text x="'+(OX+(R+18)*Math.cos(mid))+'" y="'+(OY-(R+18)*Math.sin(mid)+5)
+        +  '" fill="var(--dim)" font-family="JetBrains Mono,monospace" font-size="14"'
+        +  ' text-anchor="middle">'+th+'°</text>';
+    }
+    // 三支箭头
+    g += arrow(OX,OY,p1.x,p1.y,'var(--f1)',3.5,'F₁');
+    g += arrow(OX,OY,p2.x,p2.y,'var(--f2)',3.5,'F₂');
+    if(r.mag > 0.02) g += arrow(OX,OY,pr.x,pr.y,'var(--sum)',5,'F');
+    else g += '<circle cx="'+OX+'" cy="'+OY+'" r="7" fill="var(--rose)"/>'
+           +  '<text x="'+(OX+26)+'" y="'+(OY+5)+'" fill="var(--rose)"'
+           +  ' font-family="JetBrains Mono,monospace" font-size="15" font-weight="700">F = 0</text>';
+    // 作用点
+    g += '<circle cx="'+OX+'" cy="'+OY+'" r="4" fill="var(--text)"/>';
+    document.getElementById('cv').innerHTML = g;
+  }
+
+  function render(){
+    var r = compose();
+    var lo = Math.abs(f1-f2), hi = f1+f2;
+    document.getElementById('v1').textContent = fmt(f1)+' N';
+    document.getElementById('v2').textContent = fmt(f2)+' N';
+    document.getElementById('vt').textContent = th+'°';
+    document.getElementById('oF').textContent = fmt(r.mag)+' N';
+    document.getElementById('oA').textContent = fmt(r.ang)+'°';
+
+    // ⚠️ 两力相等时（如 5N+5N 夹 120°），合力可能正好等于分力 ——
+    //    那既不是"更小"也不是"介于之间"，必须单列，否则文案会误导。
+    var minF = Math.min(f1,f2), maxF = Math.max(f1,f2);
+    var oFm;
+    if(r.mag < minF - 1e-6)       oFm = '比两个分力都小';
+    else if(r.mag > maxF + 1e-6)  oFm = '比两个分力都大';
+    else if(Math.abs(r.mag-f1) < 1e-6 && Math.abs(r.mag-f2) < 1e-6) oFm = '和两个分力一样大';
+    else                          oFm = '介于两个分力之间';
+    document.getElementById('oFm').textContent = oFm;
+
+    var pct = hi > lo ? (r.mag - lo)/(hi - lo)*100 : 0;
+    document.getElementById('rfill').style.width = pct.toFixed(1)+'%';
+    document.getElementById('rmark').style.left = 'calc('+pct.toFixed(1)+'% - 1.5px)';
+    document.getElementById('rlo').textContent = '|F₁−F₂| = '+fmt(lo)+' N';
+    document.getElementById('rhi').textContent = 'F₁+F₂ = '+fmt(hi)+' N';
+
+    var n = '';
+    if(r.mag < 0.02){
+      n = '<div class="note warn"><b>合力是 0。</b>两个力大小相等、方向相反，'
+        + '效果互相抵消 —— 物体受这两个力和不受力是一样的。这就是<b>二力平衡</b>。</div>';
+    } else if(Math.abs(r.mag-f1) < 1e-6 && Math.abs(r.mag-f2) < 1e-6 && th > 1){
+      n = '<div class="note hit"><b>两个 '+fmt(f1)+'N 的合力，还是 '+fmt(f1)+'N。</b>'
+        + '夹角 120° 时正好如此 —— 这说明合力<b>不是把分力加起来</b>。'
+        + '再把夹角往大里拖，合力会继续变小，直到 180° 变成 0。</div>';
+    } else if(r.mag < minF - 1e-6){
+      n = '<div class="note hit"><b>注意：合力比两个分力都小。</b>'
+        + fmt(f1)+'N 和 '+fmt(f2)+'N 夹角 '+th+'°，合力只有 '+fmt(r.mag)+'N。<br>'
+        + '合力是「效果上等效于那两个力」，<b>不是把它们加起来</b>。夹角越大，抵消得越多。</div>';
+    } else if(th === 0){
+      n = '<div class="note hit"><b>同向时合力取到上限</b> F₁+F₂ = '+fmt(hi)+'N，这是能达到的最大值。</div>';
+    } else if(th === 180){
+      n = '<div class="note hit"><b>反向时合力取到下限</b> |F₁−F₂| = '+fmt(lo)+'N，这是能达到的最小值。</div>';
+    } else if(th === 90){
+      n = '<div class="note hit"><b>垂直时</b>可以直接用勾股定理：√('+fmt(f1)+'² + '+fmt(f2)
+        + '²) = '+fmt(r.mag)+'N。</div>';
+    }
+    document.getElementById('notes').innerHTML = n;
+    draw();
+  }
+
+  [['s1',function(v){ f1=v; }],['s2',function(v){ f2=v; }],['st',function(v){ th=v; }]]
+    .forEach(function(p){
+      var el = document.getElementById(p[0]);
+      el.oninput = function(){ p[1](parseFloat(el.value)); render(); };
+    });
+
+  var pw = document.getElementById('presets');
+  PRESETS.forEach(function(p){
+    var b = document.createElement('button');
+    b.className='pst'; b.textContent = p.n;
+    b.onclick = function(){
+      f1=p.f1; f2=p.f2; th=p.t;
+      document.getElementById('s1').value=f1;
+      document.getElementById('s2').value=f2;
+      document.getElementById('st').value=th;
+      render();
+    };
+    pw.appendChild(b);
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
