@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="g" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#fb7185" stop-opacity="0.20"/>
+      <stop offset="1" stop-color="#fb7185" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="#07090f"/>
+  <circle cx="940" cy="300" r="330" fill="url(#g)"/>
+
+  <!-- 烧杯：酸入水 -->
+  <g transform="translate(860,190)">
+    <path d="M20 30 L20 170 Q20 195 45 195 L155 195 Q180 195 180 170 L180 30 Z"
+          fill="#111823" stroke="rgba(140,170,220,.3)" stroke-width="3"/>
+    <path d="M24 105 L24 170 Q24 191 45 191 L155 191 Q176 191 176 170 L176 105 Z" fill="#38bdf8" opacity="0.34"/>
+    <line x1="20" y1="30" x2="180" y2="30" stroke="rgba(140,170,220,.3)" stroke-width="3"/>
+    <g stroke="#f5b942" stroke-width="4" stroke-linecap="round">
+      <line x1="100" y1="-52" x2="100" y2="-6"/>
+      <path d="M88 -20 L100 -4 L112 -20" fill="none"/>
+    </g>
+    <text x="100" y="-68" font-family="PingFang SC,Helvetica,sans-serif" font-size="22" font-weight="600" fill="#f5b942" text-anchor="middle">浓硫酸</text>
+    <text x="100" y="155" font-family="PingFang SC,Helvetica,sans-serif" font-size="24" font-weight="600" fill="#38bdf8" text-anchor="middle">水</text>
+  </g>
+  <text x="960" y="452" font-family="PingFang SC,Helvetica,sans-serif" font-size="25" font-weight="700" fill="#a3e635" text-anchor="middle">酸入水 · 不能反</text>
+
+  <rect x="80" y="146" width="58" height="5" rx="2.5" fill="#fb7185"/>
+  <text x="80" y="240" font-family="PingFang SC,Helvetica,sans-serif" font-size="56" font-weight="700" fill="#e8eef8">实验室安全判断</text>
+  <text x="80" y="296" font-family="PingFang SC,Helvetica,sans-serif" font-size="26" fill="#9aabc2">30 条该与不该 · 开学第一节实验课就用得上</text>
+  <g font-family="PingFang SC,Helvetica,sans-serif" font-size="23" fill="#7d8da3">
+    <text x="80" y="360">加热 · 稀释浓硫酸 · 取用药品 · 闻气体</text>
+    <text x="80" y="398">着火处理 · 量筒读数</text>
+  </g>
+  <rect x="80" y="432" width="500" height="56" rx="12" fill="#111823" stroke="rgba(251,113,133,.32)"/>
+  <text x="104" y="468" font-family="PingFang SC,Helvetica,sans-serif" font-size="22" font-weight="600" fill="#fb7185">每条都标教材依据，不写原创安全判断</text>
+  <text x="80" y="556" font-family="PingFang SC,Helvetica,sans-serif" font-size="23" fill="#fb7185">学习实验室 · Learn Lab</text>
+</svg>
