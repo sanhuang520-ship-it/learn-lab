@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>孟德尔豌豆 · 3:1 是怎么来的</title>
+<meta name="description" content="自己选亲本杂交，跑几株到几万株，看表现型比例怎么从乱七八糟慢慢逼近 3:1。棋盘法、基因型比 1:2:1、测交 1:1 都能动手验证。重点是理解 3:1 是统计规律，样本小的时候根本不成立。">
+<link rel="canonical" href="https://sanhuang520-ship-it.github.io/learn-lab/biology/mendel-pea/">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:site_name" content="学习实验室 · Learn Lab">
+<meta property="og:title" content="孟德尔豌豆 · 3:1 是怎么来的">
+<meta property="og:description" content="自己选亲本杂交，跑几株到几万株，看比例怎么逼近 3:1。3:1 是统计规律，不是每一窝都是。">
+<meta property="og:url" content="https://sanhuang520-ship-it.github.io/learn-lab/biology/mendel-pea/">
+<meta property="og:image" content="https://sanhuang520-ship-it.github.io/learn-lab/assets/og/mendel-pea.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="孟德尔豌豆 · 3:1 是怎么来的">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="孟德尔豌豆 · 3:1 是怎么来的">
+<meta name="twitter:description" content="自己选亲本杂交，跑几株到几万株，看比例怎么逼近 3:1。">
+<meta name="twitter:image" content="https://sanhuang520-ship-it.github.io/learn-lab/assets/og/mendel-pea.png">
+<meta name="twitter:image:alt" content="孟德尔豌豆 · 3:1 是怎么来的">
+<meta name="theme-color" content="#07090f">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://sanhuang520-ship-it.github.io/learn-lab/#website","name":"学习实验室 · Learn Lab","url":"https://sanhuang520-ship-it.github.io/learn-lab/","inLanguage":"zh-CN"},{"@type":"LearningResource","name":"孟德尔豌豆 · 3:1 是怎么来的","url":"https://sanhuang520-ship-it.github.io/learn-lab/biology/mendel-pea/","description":"一对相对性状分离定律的交互模拟：自选亲本基因型杂交，棋盘法算理论比例，再随机模拟 4 到 20000 株，直观看到 3:1 是统计规律而非每窝必然。","inLanguage":"zh-CN","isAccessibleForFree":true,"educationalLevel":["高中"],"learningResourceType":"交互模拟","educationalUse":"探究","image":"https://sanhuang520-ship-it.github.io/learn-lab/assets/og/mendel-pea.png","isPartOf":{"@id":"https://sanhuang520-ship-it.github.io/learn-lab/#website"}}]}</script>
+<style>
+  :root{
+    --void:#07090f; --ink:#111823; --ink2:#161f2c;
+    --line:rgba(140,170,220,.13); --line-hi:rgba(140,170,220,.32);
+    --text:#e8eef8; --muted:#9aabc2; --dim:#7d8da3;
+    --leaf:#5ec97a; --leaf-d:#2f8f4c; --sky:#38bdf8; --amber:#f5b942; --rose:#fb7185;
+    --fb:"Noto Sans SC",system-ui,-apple-system,sans-serif;
+    --fm:"JetBrains Mono",ui-monospace,SFMono-Regular,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--void);color:var(--text);font-family:var(--fb);line-height:1.75;
+    -webkit-font-smoothing:antialiased;padding:18px 18px 60px}
+  .wrap{max-width:760px;margin:0 auto}
+  .ll-back{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;padding:11px 14px;
+    border:1px solid var(--line-hi);border-radius:999px;background:var(--ink);color:var(--muted);
+    font:600 12px/1 var(--fm);letter-spacing:.08em;text-decoration:none;min-height:44px;
+    transition:color .2s,border-color .2s}
+  .ll-back:hover{color:var(--leaf);border-color:var(--leaf)}
+  h1{font-size:25px;font-weight:700;letter-spacing:.4px;margin-bottom:5px}
+  .en{font:600 11.5px/1 var(--fm);color:var(--leaf);letter-spacing:.16em;margin-bottom:12px}
+  .lede{color:var(--muted);font-size:14.5px;margin-bottom:20px}
+  .lede b{color:var(--text)}
+
+  .panel{border:1px solid var(--line);border-radius:16px;background:var(--ink);padding:20px 18px;margin-bottom:16px}
+  .ptitle{font:600 11px/1 var(--fm);color:var(--leaf);letter-spacing:.14em;margin-bottom:14px}
+
+  /* 亲本选择 */
+  .parents{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center}
+  .pcol{text-align:center}
+  .plabel{font-size:12px;color:var(--dim);margin-bottom:8px;font-family:var(--fm)}
+  .gbtns{display:flex;gap:6px;justify-content:center}
+  .gbtn{flex:1;min-height:52px;border-radius:10px;border:1px solid var(--line);background:var(--ink2);
+    color:var(--muted);cursor:pointer;font:700 16px/1 var(--fm);transition:all .16s}
+  .gbtn:hover{border-color:var(--line-hi);color:var(--text)}
+  .gbtn[aria-pressed=true]{border-color:var(--leaf);color:var(--leaf);background:rgba(94,201,122,.1)}
+  .cross{font-size:22px;color:var(--dim)}
+  .ptrait{margin-top:8px;font-size:12.5px;color:var(--muted)}
+
+  /* 棋盘法 */
+  .pun{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;max-width:280px;margin:0 auto}
+  .pun div{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:8px;
+    font:700 16px/1 var(--fm)}
+  .pun .hd{background:transparent;color:var(--dim);font-size:15px}
+  .pun .cell{background:var(--ink2);border:1px solid var(--line)}
+  .pun .cell.dom{color:var(--leaf);border-color:rgba(94,201,122,.34)}
+  .pun .cell.rec{color:var(--amber);border-color:rgba(245,185,66,.34)}
+
+  .theory{margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .theory div{border:1px solid var(--line);border-radius:11px;padding:12px;background:var(--ink2);text-align:center}
+  .theory span{display:block;font-size:11.5px;color:var(--dim);margin-bottom:5px}
+  .theory b{font:700 16px/1.4 var(--fm);color:var(--leaf)}
+
+  /* 模拟 */
+  .sizes{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+  .sz{flex:1;min-width:66px;min-height:44px;border-radius:10px;border:1px solid var(--line);
+    background:var(--ink2);color:var(--muted);cursor:pointer;font:600 13px/1 var(--fm);transition:all .16s}
+  .sz:hover{border-color:var(--line-hi);color:var(--text)}
+  .run{width:100%;min-height:50px;border-radius:12px;border:none;background:var(--leaf);
+    color:#052610;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:14px}
+
+  .plants{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:14px;max-height:150px;overflow:hidden}
+  .plants i{width:9px;height:9px;border-radius:2px;display:block}
+  .plants i.t{background:var(--leaf)}
+  .plants i.s{background:var(--amber)}
+  .plants-note{font-size:12px;color:var(--dim);margin-bottom:14px;font-family:var(--fm)}
+
+  .bars{display:flex;flex-direction:column;gap:10px}
+  .brow{display:flex;align-items:center;gap:11px;font-size:13.5px}
+  .bname{flex:0 0 76px;color:var(--muted)}
+  .btrack{flex:1;height:26px;border-radius:7px;background:var(--ink2);overflow:hidden;position:relative}
+  .bfill{height:100%;transition:width .5s ease}
+  .bfill.t{background:linear-gradient(90deg,var(--leaf-d),var(--leaf))}
+  .bfill.s{background:linear-gradient(90deg,#9a7420,var(--amber))}
+  .bval{flex:0 0 118px;text-align:right;font:600 13px/1 var(--fm);color:var(--text)}
+
+  .verdict{margin-top:16px;border-radius:11px;padding:13px 15px;font-size:14px;line-height:1.8}
+  .verdict.near{border:1px solid rgba(94,201,122,.4);background:rgba(94,201,122,.07)}
+  .verdict.far{border:1px solid rgba(245,185,66,.4);background:rgba(245,185,66,.07)}
+  .verdict b{color:var(--text)}
+
+  .note{margin-top:22px;border:1px solid var(--line);border-radius:14px;background:var(--ink);overflow:hidden}
+  .note h2{font:600 12px/1 var(--fm);color:var(--leaf);letter-spacing:.14em;padding:14px 18px;
+    border-bottom:1px solid var(--line)}
+  .note ul{list-style:none;padding:8px 0}
+  .note li{padding:8px 18px;font-size:14px;color:var(--muted);line-height:1.75}
+  .note b{color:var(--text)}
+  .note code{color:var(--leaf);font-family:var(--fm);font-size:13.5px}
+  .note .warn{color:var(--rose)}
+
+  .foot{margin-top:18px;font-size:12.5px;color:var(--muted);line-height:1.9}
+  .foot b{color:var(--text)}
+
+  @media(max-width:640px){
+    h1{font-size:21px}
+    .panel{padding:16px 14px}
+    .parents{grid-template-columns:1fr;gap:14px}
+    .cross{display:none}
+    .theory{grid-template-columns:1fr}
+    .bname{flex:0 0 60px}
+    .bval{flex:0 0 96px;font-size:12px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="ll-back" href="../../">← 学习实验室</a>
+
+  <h1>孟德尔豌豆</h1>
+  <div class="en">MENDEL'S PEAS · 3:1 是怎么来的</div>
+  <p class="lede">豌豆茎的高度：<b>D 高茎（显性）· d 矮茎（隐性）</b>。
+     自己选亲本杂交，然后跑几株、几百株、几万株看看 ——
+     <b>3:1 是统计规律，不是每一窝都正好 3:1。</b></p>
+
+  <div class="panel">
+    <div class="ptitle">① 选亲本</div>
+    <div class="parents">
+      <div class="pcol">
+        <div class="plabel">父本 P₁</div>
+        <div class="gbtns" id="p1"></div>
+        <div class="ptrait" id="t1">—</div>
+      </div>
+      <div class="cross">×</div>
+      <div class="pcol">
+        <div class="plabel">母本 P₂</div>
+        <div class="gbtns" id="p2"></div>
+        <div class="ptrait" id="t2">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="ptitle">② 棋盘法算理论比例</div>
+    <div class="pun" id="pun"></div>
+    <div class="theory">
+      <div><span>基因型比</span><b id="thGeno">—</b></div>
+      <div><span>表现型比</span><b id="thPheno">—</b></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="ptitle">③ 实际种下去试试</div>
+    <div class="sizes" id="sizes"></div>
+    <button class="run" id="run">种 <span id="szLabel">20</span> 株看看 🌱</button>
+    <div class="plants" id="plants"></div>
+    <div class="plants-note" id="pnote"></div>
+    <div class="bars" id="bars"></div>
+    <div id="verdict"></div>
+  </div>
+
+  <div class="note">
+    <h2>三件容易记混的事</h2>
+    <ul>
+      <li><b>3:1 是表现型比，1:2:1 是基因型比。</b>DD 和 Dd 长得一样高，但基因型不同 ——
+        这正是孟德尔当年想通的关键。</li>
+      <li><code>Dd × dd → 1:1</code> 叫<b>测交</b>。它是用来<b>检验某株高茎豌豆到底是 DD 还是 Dd</b> 的手段：
+        如果后代出现矮茎，那它一定是 Dd。</li>
+      <li class="warn">⚠️ <b>3:1 只在样本足够大时才显现。</b>你种 4 株很可能一株矮的都没有，
+        那不代表遗传定律错了。孟德尔当年统计了上万株豌豆才敢下结论。</li>
+    </ul>
+  </div>
+
+  <div class="foot">
+    <p>所有理论比例由棋盘法程序计算，并与人教版必修二的标准结论逐一比对校验过
+       （6 种亲本组合，含亲本互换的对称性检查），校验脚本在仓库里。</p>
+    <p>模拟用的是真随机：每次点「种下去」结果都不一样，这正是重点。</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var GENOS = ['DD','Dd','dd'];
+  var SIZES = [4, 20, 100, 1000, 20000];
+  var p1 = 'Dd', p2 = 'Dd', size = 20, last = null;
+
+  function gametes(g){ return [g[0], g[1]]; }
+  function norm(g){ return g.split('').sort(function(a,b){
+    return (a!=='D') - (b!=='D'); }).join(''); }
+  function pheno(g){ return g.indexOf('D') >= 0 ? '高茎' : '矮茎'; }
+
+  function punnett(a, b){
+    var g1 = gametes(a), g2 = gametes(b), out = {}, n = 0;
+    g1.forEach(function(x){ g2.forEach(function(y){
+      var k = norm(x+y); out[k] = (out[k]||0) + 1; n++; }); });
+    return {counts: out, total: n};
+  }
+  function gcd(a,b){ return b ? gcd(b, a%b) : a; }
+  function ratio(obj, order){
+    var keys = order.filter(function(k){ return obj[k]; });
+    var vals = keys.map(function(k){ return obj[k]; });
+    var g = vals.reduce(function(a,b){ return gcd(a,b); }, 0);
+    if(g) vals = vals.map(function(v){ return v/g; });
+    return keys.map(function(k,i){ return k+' '+vals[i]; }).join(' : ');
+  }
+
+  function trait(g){ return pheno(g) + '（' + (g==='Dd' ? '杂合' : '纯合') + '）'; }
+
+  function renderTop(){
+    [['p1',p1,'t1'],['p2',p2,'t2']].forEach(function(a){
+      var box = document.getElementById(a[0]);
+      box.innerHTML = '';
+      GENOS.forEach(function(g){
+        var b = document.createElement('button');
+        b.className='gbtn'; b.textContent=g;
+        b.setAttribute('aria-pressed', String(g===a[1]));
+        b.onclick = function(){
+          if(a[0]==='p1') p1=g; else p2=g;
+          last=null; renderAll();
+        };
+        box.appendChild(b);
+      });
+      document.getElementById(a[2]).textContent = trait(a[1]);
+    });
+  }
+
+  function renderPunnett(){
+    var g1 = gametes(p1), g2 = gametes(p2);
+    var h = '<div class="hd"></div>';
+    g2.forEach(function(y){ h += '<div class="hd">'+y+'</div>'; });
+    g1.forEach(function(x){
+      h += '<div class="hd">'+x+'</div>';
+      g2.forEach(function(y){
+        var k = norm(x+y);
+        h += '<div class="cell '+(pheno(k)==='高茎'?'dom':'rec')+'">'+k+'</div>';
+      });
+    });
+    document.getElementById('pun').innerHTML = h;
+
+    var p = punnett(p1,p2);
+    document.getElementById('thGeno').textContent = ratio(p.counts, GENOS);
+    var ph = {};
+    Object.keys(p.counts).forEach(function(k){
+      var t = pheno(k); ph[t] = (ph[t]||0) + p.counts[k]; });
+    document.getElementById('thPheno').textContent = ratio(ph, ['高茎','矮茎']);
+  }
+
+  function simulate(n){
+    var g1 = gametes(p1), g2 = gametes(p2), res = {};
+    GENOS.forEach(function(g){ res[g] = 0; });
+    for(var i=0;i<n;i++){
+      var k = norm(g1[Math.random()<0.5?0:1] + g2[Math.random()<0.5?0:1]);
+      res[k]++;
+    }
+    return res;
+  }
+
+  function renderResult(){
+    var pl = document.getElementById('plants'),
+        pn = document.getElementById('pnote'),
+        bars = document.getElementById('bars'),
+        vd = document.getElementById('verdict');
+    if(!last){ pl.innerHTML=''; pn.textContent=''; bars.innerHTML=''; vd.innerHTML=''; return; }
+
+    var tall = last.res.DD + last.res.Dd, short = last.res.dd, n = last.n;
+    var shown = Math.min(n, 300), h = '';
+    for(var i=0;i<shown;i++){
+      var isTall = i < Math.round(tall/n*shown);
+      h += '<i class="'+(isTall?'t':'s')+'"></i>';
+    }
+    pl.innerHTML = h;
+    pn.textContent = n > shown ? '（只画出前 '+shown+' 株，按实际比例着色）' : '';
+
+    function row(name, val, cls){
+      var pct = n ? (val/n*100) : 0;
+      return '<div class="brow"><span class="bname">'+name+'</span>'
+        + '<span class="btrack"><span class="bfill '+cls+'" style="width:'+pct.toFixed(1)+'%"></span></span>'
+        + '<span class="bval">'+val+' 株 · '+pct.toFixed(1)+'%</span></div>';
+    }
+    bars.innerHTML = row('高茎', tall, 't') + row('矮茎', short, 's');
+
+    // 与理论比例的偏差
+    var p = punnett(p1,p2), thTall = 0;
+    Object.keys(p.counts).forEach(function(k){
+      if(pheno(k)==='高茎') thTall += p.counts[k]; });
+    var thPct = thTall / p.total * 100, gotPct = n ? tall/n*100 : 0;
+    var diff = Math.abs(gotPct - thPct);
+    var ratioTxt = short ? (tall/short).toFixed(2)+' : 1' : (tall ? '全是高茎' : '全是矮茎');
+
+    var msg;
+    if(thTall === p.total || thTall === 0){
+      msg = '<div class="verdict near">这组亲本的后代<b>只有一种表现型</b>，'
+          + '不管种多少株都一样 —— 没有分离现象。</div>';
+    } else if(diff <= 2){
+      msg = '<div class="verdict near">实际 <b>'+ratioTxt+'</b>，理论 <b>'
+          + (thPct/(100-thPct)).toFixed(0)+' : 1</b>。样本够大，已经很接近了。</div>';
+    } else {
+      msg = '<div class="verdict far">实际 <b>'+ratioTxt+'</b>，和理论差了 <b>'
+          + diff.toFixed(1)+' 个百分点</b>。'
+          + (n <= 20 ? '样本太小 —— 再点几次，你会发现每次结果都不一样。把株数调大试试。'
+                     : '随机波动，多跑几次或加大株数。')
+          + '</div>';
+    }
+    vd.innerHTML = msg;
+  }
+
+  function renderAll(){ renderTop(); renderPunnett(); renderResult(); }
+
+  var sw = document.getElementById('sizes');
+  SIZES.forEach(function(n){
+    var b = document.createElement('button');
+    b.className='sz'; b.textContent = n >= 1000 ? (n/1000)+'k 株' : n+' 株';
+    b.onclick = function(){
+      size = n; document.getElementById('szLabel').textContent = b.textContent.replace(' 株','');
+      Array.prototype.forEach.call(sw.children, function(x){
+        x.style.borderColor = x===b ? 'var(--leaf)' : ''; x.style.color = x===b ? 'var(--leaf)' : ''; });
+    };
+    sw.appendChild(b);
+  });
+  sw.children[1].click();
+
+  document.getElementById('run').onclick = function(){
+    last = {res: simulate(size), n: size};
+    renderResult();
+  };
+
+  renderAll();
+})();
+</script>
+</body>
+</html>
