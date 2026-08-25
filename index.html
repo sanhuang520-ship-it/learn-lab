@@ -223,6 +223,72 @@
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
   }
+
+/* ══════════════════════════════════════
+   筛选 · 搜索 · 学习记录（2026-08-21）
+   16 个页面已超过 ROADMAP 里写的「>12 个就该做搜索」的门槛。
+   筛选靠卡片上的 data-subject / data-level / data-kind 三个分面，
+   不用原来那些自由标签 —— 34 个标签里大半只出现一次，筛不动。
+══════════════════════════════════════ */
+.finder{position:sticky;top:0;z-index:30;margin:0 0 26px;padding:14px 0 12px;
+  background:linear-gradient(var(--bg,#07090f) 82%,transparent);backdrop-filter:blur(8px)}
+.fsearch{position:relative;margin-bottom:11px}
+.fsearch input{width:100%;background:#111823;border:1px solid rgba(140,170,220,.22);
+  border-radius:12px;color:#e8eef8;font:400 15px/1 inherit;padding:14px 40px 14px 42px;
+  min-height:50px;outline:none;transition:border-color .18s}
+.fsearch input:focus{border-color:#5eead4}
+.fsearch input::placeholder{color:#7d8da3}
+.fsearch .ico{position:absolute;left:15px;top:50%;transform:translateY(-50%);
+  color:#7d8da3;font-size:15px;pointer-events:none}
+.fsearch .clr{position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  border:none;background:transparent;color:#7d8da3;cursor:pointer;font-size:19px;
+  width:34px;height:34px;line-height:1;border-radius:8px}
+.fsearch .clr:hover{color:#fb7185}
+
+.frow{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
+.flabel{font:600 11px/1 "JetBrains Mono",monospace;color:#7d8da3;letter-spacing:.1em;
+  flex:0 0 42px}
+.fchip{font-size:12.5px;padding:7px 13px;border-radius:999px;border:1px solid rgba(140,170,220,.16);
+  background:transparent;color:#9aabc2;cursor:pointer;min-height:36px;font-family:inherit;
+  transition:all .16s}
+.fchip:hover{border-color:rgba(140,170,220,.34);color:#e8eef8}
+.fchip[aria-pressed=true]{background:#161f2c;border-color:#5eead4;color:#5eead4;font-weight:600}
+
+.fstat{display:flex;align-items:center;gap:10px;font-size:12.5px;color:#7d8da3;
+  margin-top:9px;flex-wrap:wrap}
+.fstat b{color:#e8eef8;font-family:"JetBrains Mono",monospace}
+.freset{border:none;background:transparent;color:#fb7185;cursor:pointer;font:inherit;
+  font-size:12.5px;text-decoration:underline;padding:5px 0;min-height:32px}
+
+.card{position:relative}
+.card .seen{position:absolute;top:10px;left:10px;z-index:2;display:none;
+  font:600 10.5px/1 "JetBrains Mono",monospace;letter-spacing:.06em;
+  color:#5eead4;background:rgba(7,9,15,.82);border:1px solid rgba(94,234,212,.42);
+  border-radius:999px;padding:5px 9px;backdrop-filter:blur(4px)}
+.card.visited .seen{display:block}
+.card[hidden]{display:none !important}
+section[hidden]{display:none !important}
+
+.fempty{border:1px dashed rgba(140,170,220,.3);border-radius:14px;padding:34px 20px;
+  text-align:center;color:#9aabc2;font-size:14.5px}
+.fempty b{color:#e8eef8}
+
+/* 最近打开 */
+.recent{margin-bottom:26px}
+.recent h2{font:600 11px/1 "JetBrains Mono",monospace;color:#5eead4;letter-spacing:.14em;
+  margin-bottom:11px}
+.recent .rl{display:flex;gap:8px;flex-wrap:wrap}
+.recent a{display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(140,170,220,.2);
+  border-radius:999px;background:#111823;color:#9aabc2;text-decoration:none;
+  padding:9px 15px;min-height:40px;font-size:13px;transition:all .16s}
+.recent a:hover{border-color:#5eead4;color:#5eead4}
+.recent a i{font-style:normal;font-size:10.5px;opacity:.6;font-family:"JetBrains Mono",monospace}
+
+@media(max-width:640px){
+  .finder{padding-top:10px}
+  .flabel{flex:0 0 100%;margin-bottom:2px}
+  .fchip{font-size:12px;padding:7px 11px}
+}
 </style>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://sanhuang520-ship-it.github.io/learn-lab/#website","name":"学习实验室 · Learn Lab","url":"https://sanhuang520-ship-it.github.io/learn-lab/","inLanguage":"zh-CN"},{"@type":"CollectionPage","name":"学习实验室 · Learn Lab","url":"https://sanhuang520-ship-it.github.io/learn-lab/","description":"把课本变成可以玩的实验台 — 元素周期表、恒星核合成、配平挑战。免费、免注册、手机可用。","inLanguage":"zh-CN","isPartOf":{"@id":"https://sanhuang520-ship-it.github.io/learn-lab/#website"},"mainEntity":{"@type":"ItemList","numberOfItems":16,"itemListElement":[{"@type":"ListItem","position":1,"item":{"@type":"LearningResource","name":"元素周期表","url":"https://sanhuang520-ship-it.github.io/learn-lab/chemistry/periodic-table/","description":"118 个元素，每一个都有实拍照片、发现故事和冷知识。还有焰色反应实验室、元素发现时间轴，和一个靠线索猜化合物的侦探小游戏。","inLanguage":"zh-CN","isAccessibleForFree":true}},{"@type":"ListItem","position":2,"item":{"@type":"LearningResource","name":"核时","url":"https://sanhuang520-ship-it.github.io/learn-lab/chemistry/atomic-clock/","description":"一节可以按播放键的课：看恒星怎么把氢一步步烧成铁，元素周期表在眼前被一格格点亮。","inLanguage":"zh-CN","isAccessibleForFree":true}},{"@type":"ListItem","position":3,"item":{"@type":"LearningResource","name":"元素番茄","url":"https://sanhuang520-ship-it.github.io/learn-lab/chemistry/pomodoro/","description":"一颗星的一生 = 一个番茄钟。专注的 25 分钟里，星球从氢云一路演化到超新星；休息时它慢慢冷却。","inLanguage":"zh-CN","isAccessibleForFree":true}},{"@type":"ListItem","position":4,"item":{"@type":"Article","name":"磷的一生","url":"https://sanhuang520-ship-it.github.io/learn-lab/chemistry/phosphorus/","description":"从 1669 年布兰德熬尿炼磷，到火柴厂磷毒性颌骨坏死、白磷弹、DNA 骨架、瑙鲁磷矿与超新星起源，九幕讲完磷元素。","inLanguage":"zh-CN","isAccessibleForFree":true}},{"@type":"ListItem","position":5,"item":{"@type":"LearningResource","name":"反应闪卡","url":"https://sanhuang520-ship-it.github.io/learn-lab/chemistry/flashcards/","description":"高一化学必修第一册第一章必背方程式抽卡：离子反应、氧化还原、物质分类共 32 张，答错的进错题堆。","inLanguage":"zh-CN","isAccessibleForFree":true}},{"@type":"ListItem","position":6,"item":{"@type":"LearningResource","name":"电子排布建造器","url":"https://sanhuang520-ship-it.github.io/learn-lab/chemistry/electron-shells/","description":"1–20 号元素核外电子排布交互练习，违反排布规律会被挡回并指出条目，排对后展示周期数与族序数的由来。","inLanguage":"zh-CN","isAccessibleForFree":true}},{"@type":"ListItem","position":7,"item":{"@type":"LearningResource","name":"摩尔计算闯关","url":"https://sanhuang520-ship-it.github.io/learn-lab/chemistry/mole/","description":"物质的量与质量、气体体积、粒子数的四向换算五关限时练习，含易错判断关。","inLanguage":"zh-CN","isAccessibleForFree":true}},{"@type":"ListItem","position":8,"item":{"@type":"LearningResource","name":"实验室安全判断","url":"https://sanhuang520-ship-it.github.io/learn-lab/chemistry/lab-safety/","description":"中学化学实验安全与基本操作 30 条判断题，每条标注教材依据。","inLanguage":"zh-CN","isAccessibleForFree":true}},{"@type":"ListItem","position":9,"item":{"@type":"LearningResource","name":"消化卫士","url":"https://sanhuang520-ship-it.github.io/learn-lab/biology/digestive-defense/","description":"消化道塔防。食物顺着口腔、胃、小肠一路往下流，你把淀粉酶、蛋白酶、脂肪酶、二糖酶架在沿途。每种酶只认自己那一种底物。","inLanguage":"zh-CN","isAccessibleForFree":true}},{"@type":"ListItem","position":10,"item":{"@type":"LearningResource","name":"配平大挑战","url":"https://balance-game-771.pages.dev","description":"老师喊你上黑板配平方程式。粉笔手写风，两边天平实时倾斜，配错了它就塌一边。","inLanguage":"zh-CN","isAccessibleForFree":true}},{"@type":"ListItem","position":11,"item":{"@type":"LearningResource","name":"孟德尔豌豆","url":"https://sanhuang520-ship-it.github.io/learn-lab/biology/mendel-pea/","description":"一对相对性状分离定律的交互模拟：棋盘法算理论比例，随机模拟 4 到 20000 株，看 3:1 如何随样本量显现。","inLanguage":"zh-CN","isAccessibleForFree":true}},{"@type":"ListItem","position":12,"item":{"@type":"LearningResource","name":"细胞器巡览","url":"https://sanhuang520-ship-it.github.io/learn-lab/biology/organelles/","description":"10 个细胞器的功能与分布，按膜结构分类，并串出分泌蛋白从核糖体到细胞外的完整路径。","inLanguage":"zh-CN","isAccessibleForFree":true}},{"@type":"ListItem","position":13,"item":{"@type":"LearningResource","name":"电路搭建台","url":"https://sanhuang520-ship-it.github.io/learn-lab/physics/circuit/","description":"交互式串并联电路计算：自由增删电阻与支路，实时求总电阻、干路电流与各段分压分流，并识别短路。","inLanguage":"zh-CN","isAccessibleForFree":true}},{"@type":"ListItem","position":14,"item":{"@type":"LearningResource","name":"力的合成","url":"https://sanhuang520-ship-it.github.io/learn-lab/physics/force/","description":"共点力合成的交互演示：改两力大小与夹角，实时画平行四边形并算合力，呈现合力范围与「合力可小于分力」。","inLanguage":"zh-CN","isAccessibleForFree":true}},{"@type":"ListItem","position":15,"item":{"@type":"LearningResource","name":"溶解度曲线","url":"https://sanhuang520-ship-it.github.io/learn-lab/chemistry/solubility/","description":"五种物质溶解度曲线交互对照，自动判定降温结晶或蒸发结晶，并换算饱和溶液质量分数。","inLanguage":"zh-CN","isAccessibleForFree":true}},{"@type":"ListItem","position":16,"item":{"@type":"LearningResource","name":"酸碱滴定","url":"https://sanhuang520-ship-it.github.io/learn-lab/chemistry/titration/","description":"强酸强碱滴定交互模拟：实时算 pH 绘曲线，展示突跃与指示剂选择依据。","inLanguage":"zh-CN","isAccessibleForFree":true}}]}}]}</script>
 </head>
@@ -245,6 +311,32 @@
   </header>
 
   <main>
+    
+    <div class="recent" id="recent" hidden>
+      <h2>最近打开</h2>
+      <div class="rl" id="recentList"></div>
+    </div>
+
+    <div class="finder">
+      <div class="fsearch">
+        <span class="ico" aria-hidden="true">🔍</span>
+        <input type="search" id="q" placeholder="搜索：摩尔、电路、遗传、滴定…"
+               autocomplete="off" aria-label="搜索页面">
+        <button class="clr" id="qClear" aria-label="清空搜索" hidden>×</button>
+      </div>
+      <div class="frow"><span class="flabel">学科</span><span id="fSubject"></span></div>
+      <div class="frow"><span class="flabel">学段</span><span id="fLevel"></span></div>
+      <div class="frow"><span class="flabel">类型</span><span id="fKind"></span></div>
+      <div class="fstat">
+        <span>显示 <b id="fCount">—</b> / <b id="fTotal">—</b> 个</span>
+        <button class="freset" id="fReset" hidden>清空筛选</button>
+      </div>
+    </div>
+
+    <div class="fempty" id="fEmpty" hidden>
+      没有匹配的页面。<b>换个关键词，或清空筛选。</b>
+    </div>
+
     <section aria-labelledby="sec-chem">
       <div class="sec-head">
         <h2 id="sec-chem">化学</h2>
@@ -254,7 +346,7 @@
 
       <div class="grid live">
 
-        <a class="card" style="--accent:#5eead4" href="chemistry/periodic-table/">
+        <a class="card" style="--accent:#5eead4" href="chemistry/periodic-table/" data-subject="化学" data-level="初中,高中" data-kind="工具" data-key="periodic-table">
           <div class="shot">
             <img src="assets/previews/periodic-table.webp" alt="" width="800" height="500" decoding="async" fetchpriority="high">
             <span class="badge">已上线</span>
@@ -268,7 +360,7 @@
           </div>
         </a>
 
-        <a class="card" style="--accent:#a78bfa" href="chemistry/atomic-clock/">
+        <a class="card" style="--accent:#a78bfa" href="chemistry/atomic-clock/" data-subject="化学" data-level="高中" data-kind="演示" data-key="atomic-clock">
           <div class="shot">
             <img src="assets/previews/atomic-clock.webp" alt="" width="800" height="500" decoding="async">
             <span class="badge">已上线</span>
@@ -282,7 +374,7 @@
           </div>
         </a>
 
-        <a class="card" style="--accent:#f5b942" href="chemistry/pomodoro/">
+        <a class="card" style="--accent:#f5b942" href="chemistry/pomodoro/" data-subject="化学" data-level="初中,高中" data-kind="工具" data-key="pomodoro">
           <div class="shot">
             <img src="assets/previews/pomodoro.webp" alt="" width="800" height="500" loading="lazy" decoding="async">
             <span class="badge">已上线</span>
@@ -296,7 +388,7 @@
           </div>
         </a>
 
-        <a class="card" style="--accent:#fb7185" href="https://balance-game-771.pages.dev" target="_blank" rel="noopener">
+        <a class="card" style="--accent:#fb7185" href="https://balance-game-771.pages.dev" target="_blank" rel="noopener" data-subject="化学" data-level="初中,高中" data-kind="游戏" data-key="balance">
           <div class="shot">
             <img src="assets/previews/balance.webp" alt="" width="800" height="500" loading="lazy" decoding="async">
             <span class="badge">已上线</span>
@@ -311,7 +403,7 @@
         </a>
 
       
-        <a class="card" style="--accent:#4fff9e" href="chemistry/phosphorus/">
+        <a class="card" style="--accent:#4fff9e" href="chemistry/phosphorus/" data-subject="化学" data-level="初中,高中" data-kind="长读" data-key="phosphorus">
           <div class="shot">
             <img src="assets/previews/phosphorus.webp" alt="" width="800" height="500" decoding="async" loading="lazy">
             <span class="badge">已上线</span>
@@ -325,7 +417,7 @@
           </div>
         </a>
 
-        <a class="card" style="--accent:#38bdf8" href="chemistry/flashcards/">
+        <a class="card" style="--accent:#38bdf8" href="chemistry/flashcards/" data-subject="化学" data-level="高中" data-kind="练习" data-key="flashcards">
           <div class="shot">
             <img src="assets/previews/flashcards.webp" alt="" width="800" height="500" decoding="async" loading="lazy">
             <span class="badge">已上线</span>
@@ -339,7 +431,7 @@
           </div>
         </a>
 
-        <a class="card" style="--accent:#a78bfa" href="chemistry/electron-shells/">
+        <a class="card" style="--accent:#a78bfa" href="chemistry/electron-shells/" data-subject="化学" data-level="高中" data-kind="练习" data-key="electron-shells">
           <div class="shot">
             <img src="assets/previews/electron-shells.webp" alt="" width="800" height="500" decoding="async" loading="lazy">
             <span class="badge">已上线</span>
@@ -353,7 +445,7 @@
           </div>
         </a>
 
-        <a class="card" style="--accent:#f5b942" href="chemistry/mole/">
+        <a class="card" style="--accent:#f5b942" href="chemistry/mole/" data-subject="化学" data-level="高中" data-kind="练习" data-key="mole">
           <div class="shot">
             <img src="assets/previews/mole.webp" alt="" width="800" height="500" decoding="async" loading="lazy">
             <span class="badge">已上线</span>
@@ -367,7 +459,7 @@
           </div>
         </a>
 
-        <a class="card" style="--accent:#fb7185" href="chemistry/lab-safety/">
+        <a class="card" style="--accent:#fb7185" href="chemistry/lab-safety/" data-subject="化学" data-level="初中,高中" data-kind="练习" data-key="lab-safety">
           <div class="shot">
             <img src="assets/previews/lab-safety.webp" alt="" width="800" height="500" decoding="async" loading="lazy">
             <span class="badge">已上线</span>
@@ -381,7 +473,7 @@
           </div>
         </a>
 
-        <a class="card" style="--accent:#38bdf8" href="chemistry/solubility/">
+        <a class="card" style="--accent:#38bdf8" href="chemistry/solubility/" data-subject="化学" data-level="初中" data-kind="演示" data-key="solubility">
           <div class="shot">
             <img src="assets/previews/solubility.webp" alt="" width="800" height="500" decoding="async" loading="lazy">
             <span class="badge">已上线</span>
@@ -395,7 +487,7 @@
           </div>
         </a>
 
-        <a class="card" style="--accent:#f9a8d4" href="chemistry/titration/">
+        <a class="card" style="--accent:#f9a8d4" href="chemistry/titration/" data-subject="化学" data-level="高中" data-kind="演示" data-key="titration">
           <div class="shot">
             <img src="assets/previews/titration.webp" alt="" width="800" height="500" decoding="async" loading="lazy">
             <span class="badge">已上线</span>
@@ -420,7 +512,7 @@
 
       <div class="grid live">
 
-        <a class="card" style="--accent:#a3e635" href="biology/digestive-defense/">
+        <a class="card" style="--accent:#a3e635" href="biology/digestive-defense/" data-subject="生物" data-level="初中" data-kind="游戏" data-key="digestive-defense">
           <div class="shot">
             <img src="assets/previews/digestive-defense.webp" alt="" width="800" height="500" decoding="async" loading="lazy">
             <span class="badge">已上线</span>
@@ -434,7 +526,7 @@
           </div>
         </a>
 
-        <a class="card" style="--accent:#5ec97a" href="biology/mendel-pea/">
+        <a class="card" style="--accent:#5ec97a" href="biology/mendel-pea/" data-subject="生物" data-level="高中" data-kind="演示" data-key="mendel-pea">
           <div class="shot">
             <img src="assets/previews/mendel-pea.webp" alt="" width="800" height="500" decoding="async" loading="lazy">
             <span class="badge">已上线</span>
@@ -448,7 +540,7 @@
           </div>
         </a>
 
-        <a class="card" style="--accent:#22d3ee" href="biology/organelles/">
+        <a class="card" style="--accent:#22d3ee" href="biology/organelles/" data-subject="生物" data-level="高中" data-kind="工具" data-key="organelles">
           <div class="shot">
             <img src="assets/previews/organelles.webp" alt="" width="800" height="500" decoding="async" loading="lazy">
             <span class="badge">已上线</span>
@@ -473,7 +565,7 @@
         <span class="sec-note">动手改参数看结果</span>
       </div>
       <div class="grid live">
-        <a class="card" style="--accent:#f5b942" href="physics/circuit/">
+        <a class="card" style="--accent:#f5b942" href="physics/circuit/" data-subject="物理" data-level="初中" data-kind="演示" data-key="circuit">
           <div class="shot">
             <img src="assets/previews/circuit.webp" alt="" width="800" height="500" decoding="async" loading="lazy">
             <span class="badge">已上线</span>
@@ -487,7 +579,7 @@
           </div>
         </a>
 
-        <a class="card" style="--accent:#a78bfa" href="physics/force/">
+        <a class="card" style="--accent:#a78bfa" href="physics/force/" data-subject="物理" data-level="初中,高中" data-kind="演示" data-key="force">
           <div class="shot">
             <img src="assets/previews/force.webp" alt="" width="800" height="500" decoding="async" loading="lazy">
             <span class="badge">已上线</span>
@@ -552,6 +644,124 @@
     document.querySelectorAll('.grid.live > .card').length;
   // 年份自动跟随，避免跨年后页面显示过期
   document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+<script>
+/* 筛选 · 搜索 · 最近打开 —— 全部在本机，不上传任何东西 */
+(function(){
+  'use strict';
+  var KEY = 'learnlab.recent.v1', MAX = 5;
+  var cards = [].slice.call(document.querySelectorAll('.grid.live > .card[data-subject]'));
+  var sections = [].slice.call(document.querySelectorAll('section[aria-labelledby]'));
+  var sel = {subject:'', level:'', kind:''}, q = '';
+
+  function uniq(attr, split){
+    var out = [];
+    cards.forEach(function(c){
+      (split ? c.dataset[attr].split(',') : [c.dataset[attr]]).forEach(function(v){
+        v = v.trim(); if(v && out.indexOf(v) < 0) out.push(v);
+      });
+    });
+    return out;
+  }
+  function text(c){
+    var h = c.querySelector('h3'), en = c.querySelector('.en'), p = c.querySelector('p');
+    var tg = [].slice.call(c.querySelectorAll('.tags i')).map(function(i){ return i.textContent; });
+    return ((h?h.textContent:'') + ' ' + (en?en.textContent:'') + ' ' +
+            (p?p.textContent:'') + ' ' + tg.join(' ')).toLowerCase();
+  }
+
+  function apply(){
+    var shown = 0;
+    cards.forEach(function(c){
+      var ok = true;
+      if(sel.subject && c.dataset.subject !== sel.subject) ok = false;
+      if(ok && sel.level && c.dataset.level.split(',').indexOf(sel.level) < 0) ok = false;
+      if(ok && sel.kind && c.dataset.kind !== sel.kind) ok = false;
+      if(ok && q && text(c).indexOf(q) < 0) ok = false;
+      c.hidden = !ok;
+      if(ok) shown++;
+    });
+    // 整组都被过滤掉的分区一并隐藏（含「正在做」，它没有分面卡）
+    sections.forEach(function(sec){
+      var own = [].slice.call(sec.querySelectorAll('.card'));
+      var live = own.filter(function(c){ return c.dataset.subject && !c.hidden; });
+      var filtering = !!(sel.subject || sel.level || sel.kind || q);
+      sec.hidden = own.length ? (own[0].dataset.subject ? !live.length
+                                 : filtering) : false;
+    });
+    document.getElementById('fCount').textContent = shown;
+    document.getElementById('fEmpty').hidden = shown > 0;
+    var any = !!(sel.subject || sel.level || sel.kind || q);
+    document.getElementById('fReset').hidden = !any;
+    document.getElementById('qClear').hidden = !q;
+  }
+
+  function chips(host, attr, values){
+    var box = document.getElementById(host);
+    values.forEach(function(v){
+      var b = document.createElement('button');
+      b.className = 'fchip'; b.textContent = v;
+      b.setAttribute('aria-pressed', 'false');
+      b.onclick = function(){
+        sel[attr] = (sel[attr] === v) ? '' : v;
+        [].slice.call(box.children).forEach(function(x){
+          x.setAttribute('aria-pressed', String(x === b && sel[attr] === v));
+        });
+        apply();
+      };
+      box.appendChild(b);
+    });
+  }
+  chips('fSubject', 'subject', uniq('subject', false));
+  chips('fLevel',   'level',   uniq('level', true));
+  chips('fKind',    'kind',    uniq('kind', false));
+
+  var qi = document.getElementById('q');
+  qi.oninput = function(){ q = qi.value.trim().toLowerCase(); apply(); };
+  document.getElementById('qClear').onclick = function(){
+    qi.value = ''; q = ''; qi.focus(); apply(); };
+  document.getElementById('fReset').onclick = function(){
+    sel = {subject:'', level:'', kind:''}; q = ''; qi.value = '';
+    document.querySelectorAll('.fchip').forEach(function(b){
+      b.setAttribute('aria-pressed','false'); });
+    apply();
+  };
+
+  /* ── 最近打开：点卡片时记一笔，只存本机 ── */
+  function load(){
+    try{ return JSON.parse(localStorage.getItem(KEY) || '[]'); }catch(e){ return []; }
+  }
+  function save(list){ try{ localStorage.setItem(KEY, JSON.stringify(list)); }catch(e){} }
+
+  var recent = load();
+  cards.forEach(function(c){
+    if(recent.some(function(r){ return r.k === c.dataset.key; })) c.classList.add('visited');
+    var tag = document.createElement('span');
+    tag.className = 'seen'; tag.textContent = '去过';
+    c.appendChild(tag);
+    c.addEventListener('click', function(){
+      var k = c.dataset.key, h = c.querySelector('h3');
+      var list = load().filter(function(r){ return r.k !== k; });
+      list.unshift({k:k, n:h ? h.textContent : k, u:c.getAttribute('href'), t:Date.now()});
+      save(list.slice(0, MAX));
+    });
+  });
+
+  if(recent.length){
+    var rl = document.getElementById('recentList');
+    recent.slice(0, MAX).forEach(function(r){
+      var a = document.createElement('a');
+      a.href = r.u;
+      a.innerHTML = r.n + ' <i>→</i>';
+      rl.appendChild(a);
+    });
+    document.getElementById('recent').hidden = false;
+  }
+
+  document.getElementById('fTotal').textContent = cards.length;
+  apply();
+})();
 </script>
 </body>
 </html>
